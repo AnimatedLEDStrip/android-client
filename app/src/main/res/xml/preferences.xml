@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:andriod="http://schemas.android.com/tools">
+    <EditTextPreference
+            android:key="ip"
+            andriod:title="@string/ip_title"
+            andriod:selectAllOnFocus="true"
+            android:inputType="number|text"
+    />
+</PreferenceScreen>

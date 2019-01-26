@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">AnimatedLEDStrip Control</string>
+    <string name="action_settings">Settings</string>
+    <string name="connecting">Connecting…</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="ip_title">IP</string>
+    <string name="non_repetitive">Non-Repetitive</string>
+    <string name="color">Color</string>
+    <string name="multicolor">Multicolor</string>
+    <string name="bounce_to_color">Bounce To Color</string>
+    <string name="multi_pixel_run_to_color">Multi-Pixel Run To Color</string>
+    <string name="sparkle_to_color">Sparkle To Color</string>
+    <string name="stack">Stack</string>
+    <string name="wipe">Wipe</string>
+    <string name="repetitive">Repetitive</string>
+    <string name="alternate">Alternate</string>
+    <string name="bounce">Bounce</string>
+    <string name="multi_pixel_run">Multi-Pixel Run</string>
+    <string name="pixel_marathon">Pixel Marathon</string>
+    <string name="pixel_run">Pixel Run</string>
+    <string name="pixel_run_with_trail">Pixel Run with Trail</string>
+    <string name="smooth_chase">Smooth Chase</string>
+    <string name="smooth_fade">Smooth Fade</string>
+    <string name="sparkle">Sparkle</string>
+    <string name="sparkle_fade">Sparkle Fade</string>
+    <string name="stack_overflow">Stack Overflow</string>
+    <string name="forward">Forward</string>
+    <string name="backward">Backward</string>
+    <string name="send_colors">Send Colors</string>
+</resources>
