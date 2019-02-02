@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 
 import android.os.Bundle
@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import animatedledstrip.androidclient.AnimationData
+import animatedledstrip.client.send
+import animatedledstrip.leds.AnimationData
 
 class DirectionSelectFragment : Fragment() {
 

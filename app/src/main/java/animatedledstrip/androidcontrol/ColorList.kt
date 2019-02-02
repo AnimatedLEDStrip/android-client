@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 
 val colorList = listOf(

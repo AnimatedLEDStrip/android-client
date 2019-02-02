@@ -1,12 +1,16 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 import android.content.SharedPreferences
-import animatedledstrip.androidclient.AndroidAnimationSenderFactory
-import animatedledstrip.androidclient.AnimationData
+import animatedledstrip.client.AnimationSenderFactory
+import animatedledstrip.leds.AnimationData
 
-var mainSender: AndroidAnimationSenderFactory.AndroidAnimationSender? = null
 var ip = "0.0.0.0"
 const val IP_KEY = "ip"
+var mainSender: AnimationSenderFactory.AnimationSender =
+    AnimationSenderFactory.create(ipAddress = ip, port = 6, connectAttemptLimit = 1)
+        .start()
+        .setAsDefaultSender()
+
 lateinit var mPreferences: SharedPreferences
 var connected = false
 

@@ -3,8 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="connecting">Connecting…</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="ip_title">IP</string>
+    <string name="ip_title">IP Address</string>
+
     <string name="non_repetitive">Non-Repetitive</string>
     <string name="color">Color</string>
     <string name="multicolor">Multicolor</string>

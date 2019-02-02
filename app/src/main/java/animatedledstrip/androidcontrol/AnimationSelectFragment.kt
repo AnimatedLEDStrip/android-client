@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import animatedledstrip.leds.Animation
 
 
 class AnimationSelectFragment : Fragment() {
@@ -81,83 +82,83 @@ class AnimationSelectFragment : Fragment() {
     fun setAnimation(view: View) {
         when (view) {
             colorButton -> {
-                animationData.animation("COL")
+                animationData.animation(Animation.ALTERNATE)
                 AnimationNeeds.numColors = 1
             }
             multicolorButton -> {
-                animationData.animation("MCOL")
+                animationData.animation(Animation.MULTICOLOR)
                 AnimationNeeds.numColors = -1
             }
             bouncetocolorButton -> {
-                animationData.animation("BTC")
+                animationData.animation(Animation.BOUNCETOCOLOR)
                 AnimationNeeds.numColors = 1
             }
             multipixelruntocolorButton -> {
-                animationData.animation("MTC")
+                animationData.animation(Animation.MULTIPIXELRUNTOCOLOR)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             sparkletocolorButton -> {
-                animationData.animation("STC")
+                animationData.animation(Animation.SPARKLETOCOLOR)
                 AnimationNeeds.numColors = 1
             }
             stackButton -> {
-                animationData.animation("STK")
+                animationData.animation(Animation.STACK)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             wipeButton -> {
-                animationData.animation("WIP")
+                animationData.animation(Animation.WIPE)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             alternateButton -> {
-                animationData.animation("ALT")
+                animationData.animation(Animation.ALTERNATE)
                 AnimationNeeds.numColors = 2
             }
             bounceButton -> {
-                animationData.animation("BNC")
+                animationData.animation(Animation.BOUNCE)
                 AnimationNeeds.numColors = 1
             }
             multipixelrunButton -> {
-                animationData.animation("MPR")
+                animationData.animation(Animation.MULTIPIXELRUN)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             pixelmarathonButton -> {
-                animationData.animation("PXM")
+                animationData.animation(Animation.PIXELMARATHON)
                 AnimationNeeds.numColors = 5
             }
             pixelrunButton -> {
-                animationData.animation("PXR")
+                animationData.animation(Animation.PIXELRUN)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             pixelrunwithtrailButton -> {
-                animationData.animation("PXRT")
+                animationData.animation(Animation.PIXELRUNWITHTRAIL)
                 AnimationNeeds.numColors = 1
                 AnimationNeeds.direction = true
             }
             smoothchaseButton -> {
-                animationData.animation("SCH")
+                animationData.animation(Animation.SMOOTHCHASE)
                 AnimationNeeds.numColors = -1
                 AnimationNeeds.direction = true
             }
             smoothfadeButton -> {
-                animationData.animation("SMF")
+                animationData.animation(Animation.SMOOTHFADE)
                 AnimationNeeds.numColors = -1
                 AnimationNeeds.direction = true
             }
             sparkleButton -> {
-                animationData.animation("SPK")
+                animationData.animation(Animation.SPARKLE)
                 AnimationNeeds.numColors = 1
             }
             sparklefadeButton -> {
-                animationData.animation("SPF")
+                animationData.animation(Animation.SPARKLEFADE)
                 AnimationNeeds.numColors = 1
             }
             stackoverflowButton -> {
-                animationData.animation("STO")
+                animationData.animation(Animation.STACKOVERFLOW)
                 AnimationNeeds.numColors = 2
             }
         }

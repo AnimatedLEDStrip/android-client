@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +10,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, SettingsFragment())
+            .replace(
+                R.id.fragment_container,
+                SettingsFragment()
+            )
             .commit()
     }
 }

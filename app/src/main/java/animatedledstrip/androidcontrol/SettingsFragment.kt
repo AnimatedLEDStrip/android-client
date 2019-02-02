@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 import android.content.SharedPreferences
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.animatedledstripcontrol
+package animatedledstrip.androidcontrol
 
 
 import android.content.res.ColorStateList
@@ -12,7 +12,9 @@ import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.Toast
-import animatedledstrip.androidclient.AnimationData
+import animatedledstrip.client.send
+import animatedledstrip.leds.AnimationData
+import animatedledstrip.leds.ColorContainer
 
 
 class ColorSelectFragment : Fragment() {
@@ -57,7 +59,10 @@ class ColorSelectFragment : Fragment() {
                     if (AnimationNeeds.direction) {
                         activity?.supportFragmentManager!!
                             .beginTransaction()
-                            .replace(R.id.startup_container, DirectionSelectFragment())
+                            .replace(
+                                R.id.startup_container,
+                                DirectionSelectFragment()
+                            )
                             .commit()
                     } else {
                         if (connected) {
@@ -88,12 +93,11 @@ class ColorSelectFragment : Fragment() {
                 backgroundTintList = ColorStateList.valueOf(c.toInt())
                 text = " "
                 setOnClickListener {
-                    val color = c and 0xFFFFFF
+                    val color = ColorContainer(c and 0xFFFFFF)
                     if (AnimationNeeds.numColors != 1 && (selectedcolorsContainer.childCount < AnimationNeeds.numColors || AnimationNeeds.numColors == -1)) {
-                        animationData.colorList.add(color)
+                        animationData.addToColorList(color)
                         selectedcolorsContainer.addView(Button(this.context).apply {
                             backgroundTintList = ColorStateList.valueOf(c.toInt())
-                            val color = c and 0xFFFFFF
                             setOnClickListener {
                                 animationData.colorList.remove(color)
                                 selectedcolorsContainer.removeView(this)
@@ -101,14 +105,17 @@ class ColorSelectFragment : Fragment() {
                             }
                         })
                     } else if (AnimationNeeds.numColors == 1) {
-                        animationData.color1 = color
+                        animationData.color1(color)
                         if (AnimationNeeds.numColors == 1) {
                             colorsSelected = 0
 
                             if (AnimationNeeds.direction) {
                                 activity?.supportFragmentManager!!
                                     .beginTransaction()
-                                    .replace(R.id.startup_container, DirectionSelectFragment())
+                                    .replace(
+                                        R.id.startup_container,
+                                        DirectionSelectFragment()
+                                    )
                                     .commit()
                             } else {
                                 if (connected) {
