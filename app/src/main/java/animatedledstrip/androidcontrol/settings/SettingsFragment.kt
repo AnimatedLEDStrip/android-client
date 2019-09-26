@@ -1,8 +1,13 @@
-package animatedledstrip.androidcontrol
+package animatedledstrip.androidcontrol.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.preference.Preference
+import android.util.Log
+import androidx.preference.Preference
+import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.IP_KEY
+import animatedledstrip.androidcontrol.utils.ip
+import animatedledstrip.androidcontrol.utils.mPreferences
 import com.takisoft.fix.support.v7.preference.EditTextPreference
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
@@ -21,6 +26,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 ipPreference -> {
                     ip = value
                     preferencesEditor.putString(IP_KEY, value).apply()
+                    Log.d("Settings", "Changed to $value $ip")
                 }
             }
             true

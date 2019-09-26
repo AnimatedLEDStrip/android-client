@@ -1,7 +1,8 @@
-package animatedledstrip.androidcontrol
+package animatedledstrip.androidcontrol.settings
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import animatedledstrip.androidcontrol.R
 
 class SettingsActivity : AppCompatActivity() {
 

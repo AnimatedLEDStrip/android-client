@@ -28,4 +28,30 @@
     <string name="forward">Forward</string>
     <string name="backward">Backward</string>
     <string name="send_colors">Send Colors</string>
+    <string name="title_activity_main">AnimatedLEDStrip</string>
+    <string name="tab_text_1">Non-Repetitive</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="continuous_animation">Continuous Animation</string>
+
+
+    <string-array name="animations">
+        <item>Color</item>
+        <item>Bounce to Color</item>
+        <item>Multi-pixel Run to Color</item>
+        <item>Sparkle to Color</item>
+        <item>Stack</item>
+        <item>Wipe</item>
+        <item>Alternate</item>
+        <item>Bounce</item>
+        <item>Multi-pixel Run</item>
+        <item>Pixel Marathon</item>
+        <item>Pixel Run</item>
+        <item>Smooth Chase</item>
+        <item>Smooth Fade</item>
+        <item>Sparkle</item>
+        <item>StackOverflow</item>
+    </string-array>
 </resources>

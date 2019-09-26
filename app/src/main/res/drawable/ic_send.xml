@@ -1,0 +1,10 @@
+<!-- Image credit: http://www.onlinewebfonts.com -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1000dp"
+    android:height="1000dp"
+    android:viewportWidth="1000"
+    android:viewportHeight="1000">
+  <path
+      android:fillColor="#FF000000"
+      android:pathData="M10,991.1l980,-493.2L10,8.9l101.1,415.7l532.7,73.4l-532.7,70.5L10,991.1z"/>
+</vector>

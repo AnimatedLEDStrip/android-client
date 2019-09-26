@@ -1,15 +1,18 @@
-package animatedledstrip.androidcontrol
+package animatedledstrip.androidcontrol.old
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import animatedledstrip.leds.Animation
+import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.AnimationNeeds
+import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.animationutils.Animation
+import animatedledstrip.animationutils.animation
 
 
-class AnimationSelectFragment : Fragment() {
+class AnimationSelectFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var colorButton: Button
     private lateinit var multicolorButton: Button
@@ -35,7 +38,7 @@ class AnimationSelectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val thisView = inflater.inflate(R.layout.fragment_animation_select, container, false)
+        val thisView = inflater.inflate(R.layout.fragment_animation_select_old, container, false)
 
         colorButton = thisView.findViewById<View>(R.id.color_button) as Button
         multicolorButton = thisView.findViewById<View>(R.id.multicolor_button) as Button
@@ -163,9 +166,9 @@ class AnimationSelectFragment : Fragment() {
             }
         }
 
-        activity?.supportFragmentManager!!
-            .beginTransaction()
-            .replace(R.id.startup_container, ColorSelectFragment())
-            .commit()
+//        activity?.supportFragmentManager!!
+//            .beginTransaction()
+//            .replace(R.id.startup_container, ColorSelectFragment())
+//            .commit()
     }
 }

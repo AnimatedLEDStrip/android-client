@@ -1,4 +1,4 @@
-package animatedledstrip.androidcontrol
+package animatedledstrip.androidcontrol.old
 
 import android.Manifest
 import android.content.Context
@@ -7,14 +7,17 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import animatedledstrip.androidcontrol.*
+import animatedledstrip.androidcontrol.settings.SettingsActivity
+import animatedledstrip.androidcontrol.utils.*
+import animatedledstrip.client.AnimationSenderFactory
+import kotlinx.android.synthetic.main.activity_main_old.*
 
 class Startup : AppCompatActivity() {
 
@@ -25,20 +28,9 @@ class Startup : AppCompatActivity() {
             false -> {
                 fab.backgroundTintList = ColorStateList.valueOf(Color.YELLOW)
                 Log.d("Socket", "Connecting")
-                try {
-                    mainSender.setOnConnectCallback {
-                        fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
-                        connected = true
-                    }.setOnDisconnectCallback {
-                        fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                        connected = false
-                    }
-                } catch (e: Exception) {
-                    Log.d("Socket", "Exception $e")
-                    fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                }
-                Log.d("Socket", "Connected to ${mainSender.ipAddress}")
-
+                if (ip != mainSender.ipAddress)
+                    mainSender = AnimationSenderFactory.create(ipAddress = ip, port = 6, connectAttemptLimit = 1)
+                mainSender.start()
             }
             true -> {
                 mainSender.end()
@@ -49,8 +41,8 @@ class Startup : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setContentView(R.layout.activity_main_old)
+//        setSupportActionBar(toolbar)
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -66,13 +58,27 @@ class Startup : AppCompatActivity() {
             ip
         ) ?: ip
 
+        mainSender
+            .setAsDefaultSender()
+            .setOnConnectCallback {
+                fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
+                connected = true
+            }.setOnDisconnectCallback {
+                fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+                connected = false
+            }
+            .start()
+
         fab.backgroundTintList = ColorStateList.valueOf(if (connected) Color.GREEN else Color.GRAY)
 
         fab.setOnClickListener(fabOnClickListener)
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.startup_container, AnimationSelectFragment())
+            .replace(
+                R.id.startup_container,
+                AnimationSelectFragment()
+            )
             .commit()
 
     }
