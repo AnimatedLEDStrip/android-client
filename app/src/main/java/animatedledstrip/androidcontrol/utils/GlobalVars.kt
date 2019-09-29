@@ -14,14 +14,14 @@ var connected = false
 
 var animationData = AnimationData()
 
-object AnimationNeeds {
-    var numColors = 0
-    var colorList = false
-    var direction = false
-
-    fun reset() {
-        numColors = 0
-        colorList = false
-        direction = false
-    }
+val onConnectCallback = {
+    onConnectCallbacks.forEach { it() }
 }
+
+val onConnectCallbacks = mutableListOf<() -> Unit>()
+
+val onDisconnectCallback = {
+    onDisconnectCallbacks.forEach { it() }
+}
+
+val onDisconnectCallbacks = mutableListOf<() -> Unit>()

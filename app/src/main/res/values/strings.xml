@@ -16,10 +16,10 @@
     <string name="repetitive">Repetitive</string>
     <string name="alternate">Alternate</string>
     <string name="bounce">Bounce</string>
+    <string name="meteor">Meteor</string>
     <string name="multi_pixel_run">Multi-Pixel Run</string>
     <string name="pixel_marathon">Pixel Marathon</string>
     <string name="pixel_run">Pixel Run</string>
-    <string name="pixel_run_with_trail">Pixel Run with Trail</string>
     <string name="smooth_chase">Smooth Chase</string>
     <string name="smooth_fade">Smooth Fade</string>
     <string name="sparkle">Sparkle</string>
@@ -29,29 +29,36 @@
     <string name="backward">Backward</string>
     <string name="send_colors">Send Colors</string>
     <string name="title_activity_main">AnimatedLEDStrip</string>
-    <string name="tab_text_1">Non-Repetitive</string>
-    <string name="tab_text_2">Tab 2</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_text_1">Servers</string>
+    <string name="tab_text_2">Send Animation</string>
     <string name="continuous_animation">Continuous Animation</string>
+    <string name="connect">Connect</string>
+    <string name="center">Center</string>
+    <string name="distance">Distance</string>
+    <string name="disconnect">Disconnect</string>
 
+    <string name="hello_blank_fragment">Hello Blank Fragment</string>
 
     <string-array name="animations">
         <item>Color</item>
         <item>Bounce to Color</item>
         <item>Multi-pixel Run to Color</item>
         <item>Sparkle to Color</item>
+        <item>Splat</item>
         <item>Stack</item>
         <item>Wipe</item>
         <item>Alternate</item>
         <item>Bounce</item>
+        <item>Meteor</item>
         <item>Multi-pixel Run</item>
         <item>Pixel Marathon</item>
         <item>Pixel Run</item>
+        <item>Ripple</item>
         <item>Smooth Chase</item>
         <item>Smooth Fade</item>
         <item>Sparkle</item>
+        <item>Sparkle Fade</item>
         <item>StackOverflow</item>
     </string-array>
 </resources>

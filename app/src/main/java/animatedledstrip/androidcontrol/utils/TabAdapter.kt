@@ -1,9 +1,10 @@
-package animatedledstrip.androidcontrol.tabs
+package animatedledstrip.androidcontrol.utils
 
 import android.content.Context
 import androidx.fragment.app.FragmentPagerAdapter
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelect
+import animatedledstrip.androidcontrol.connections.ConnectFragment
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -18,10 +19,9 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
 
     override fun getItem(position: Int): androidx.fragment.app.Fragment {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
         return when (position) {
-            0 -> AnimationSelect.newInstance()
-            1 -> PlaceholderFragment.newInstance(2)
+            0 -> ConnectFragment.newInstance()
+            1 -> AnimationSelect.newInstance()
             else -> throw Exception()
         }
     }

@@ -53,12 +53,12 @@ class ColorSelect : Fragment() {
         }
 
         override fun onColorSelectionStart(color: Int) {
-            (colorPicker.parent.parent.parent.parent as LockableScrollView).scrollingEnabled = false
+            (colorPicker.parent.parent.parent.parent.parent as LockableScrollView).scrollingEnabled = false
             super.onColorSelectionStart(color)
         }
 
         override fun onColorSelectionEnd(color: Int) {
-            (colorPicker.parent.parent.parent.parent as LockableScrollView).scrollingEnabled = true
+            (colorPicker.parent.parent.parent.parent.parent as LockableScrollView).scrollingEnabled = true
             Log.d("Color", animationData.colors.toString())
             super.onColorSelectionEnd(color)
         }

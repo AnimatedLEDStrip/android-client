@@ -89,6 +89,10 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
                 animationData.animation = Animation.SPARKLETOCOLOR
                 addAnimationOptions(SparkleToColor)
             }
+            "Splat" -> {
+                animationData.animation = Animation.SPLAT
+                addAnimationOptions(Splat)
+            }
             "Stack" -> {
                 animationData.animation = Animation.STACK
                 addAnimationOptions(Stack)
@@ -106,6 +110,10 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
                 animationData.animation = Animation.BOUNCE
                 addAnimationOptions(Bounce)
             }
+            "Meteor" -> {
+                animationData.animation = Animation.METEOR
+                addAnimationOptions(Meteor)
+            }
             "Multi-pixel Run" -> {
                 animationData.animation = Animation.MULTIPIXELRUN
                 addAnimationOptions(MultiPixelRun)
@@ -117,6 +125,10 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
             "Pixel Run" -> {
                 animationData.animation = Animation.PIXELRUN
                 addAnimationOptions(PixelRun)
+            }
+            "Ripple" -> {
+                animationData.animation = Animation.RIPPLE
+                addAnimationOptions(Ripple)
             }
             "Smooth Chase" -> {
                 animationData.animation = Animation.SMOOTHCHASE
@@ -144,35 +156,48 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     private fun addAnimationOptions(info: animatedledstrip.animationutils.AnimationInfo) {
         if (info.repetitive)
             fragmentManager?.beginTransaction()
-                ?.add(animationOptions.id,
+                ?.add(
+                    animationOptions.id,
                     ContinuousSelect.newInstance()
                 )
                 ?.commit()
 
         for (i in 0 until info.numColors)
             fragmentManager?.beginTransaction()
-                ?.add(animationOptions.id,
+                ?.add(
+                    animationOptions.id,
                     ColorSelect.newInstance()
+                )
+                ?.commit()
+
+        if (info.center != ReqLevel.NOTUSED)
+            fragmentManager?.beginTransaction()
+                ?.add(
+                    animationOptions.id,
+                    CenterSelect.newInstance()
+                )
+                ?.commit()
+
+        if (info.distance != ReqLevel.NOTUSED)
+            fragmentManager?.beginTransaction()
+                ?.add(
+                    animationOptions.id,
+                    DistanceSelect.newInstance()
                 )
                 ?.commit()
 
         if (info.direction != ReqLevel.NOTUSED)
             fragmentManager?.beginTransaction()
-                ?.add(animationOptions.id,
+                ?.add(
+                    animationOptions.id,
                     DirectionSelect.newInstance()
-                )
-                ?.commit()
-
-        if (info === PixelRun)
-            fragmentManager?.beginTransaction()
-                ?.add(animationOptions.id,
-                    FadeSelect.newInstance()
                 )
                 ?.commit()
 
         if (info.spacing != ReqLevel.NOTUSED)
             fragmentManager?.beginTransaction()
-                ?.add(animationOptions.id,
+                ?.add(
+                    animationOptions.id,
                     SpacingSelect.newInstance()
                 )
                 ?.commit()
@@ -181,31 +206,11 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AnimationSelect.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() = AnimationSelect()
     }

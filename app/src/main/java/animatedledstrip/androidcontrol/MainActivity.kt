@@ -16,9 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.settings.SettingsActivity
-import animatedledstrip.androidcontrol.tabs.TabAdapter
+import animatedledstrip.androidcontrol.utils.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
-import animatedledstrip.client.AnimationSenderFactory
 import animatedledstrip.client.send
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -35,40 +34,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
         when (connected) {
             false -> {
-                fab.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this,
-                        R.drawable.ic_search_connection
-                    )
-                )
-                fab.backgroundTintList = ColorStateList.valueOf(Color.YELLOW)
-                Log.d("Socket", "Connecting")
-                if (ip != mainSender.ipAddress)
-                    mainSender = AnimationSenderFactory.create(
-                        ipAddress = ip,
-                        port = 6,
-                        connectAttemptLimit = 1
-                    )
-                mainSender.start()
+
             }
             true -> {
+                Log.d("FAB", "Sending $animationData")
                 animationData.send()
             }
         }
-
-//        when (connected) {
-//            false -> {
-//                fab.backgroundTintList = ColorStateList.valueOf(Color.YELLOW)
-//                Log.d("Socket", "Connecting")
-//                if (ip != mainSender.ipAddress)
-//                    mainSender = AnimationSenderFactory.create(ipAddress = ip, port = 6, connectAttemptLimit = 1)
-//                mainSender.start()
-//            }
-//            true -> {
-//                mainSender.end()
-//                fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-//            }
-//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,13 +73,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback {
+                connected = true
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-                connected = true
             }.setOnDisconnectCallback {
+                connected = false
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
-                connected = false
                 mainSender.end()
             }.setOnReceiveCallback {
                 Log.d("Server", it.toString())

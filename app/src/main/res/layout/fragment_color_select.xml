@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/color_buttons"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        app:cardBackgroundColor="#eeeeee"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="3dp"
         tools:context="animatedledstrip.androidcontrol.animation.ColorSelect">
 
-    <TextView
-            android:id="@+id/color_text"
+    <LinearLayout
+            android:id="@+id/color_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:orientation="vertical">
 
-    <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/color_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/color"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="0dp"
+                    tools:layout_conversion_absoluteWidth="34dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <LinearLayout
-                android:id="@+id/color_buttons_container"
-                android:layout_width="match_parent"
+                    android:id="@+id/color_buttons_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:orientation="horizontal"
+                    tools:layout_conversion_absoluteHeight="0dp"
+                    tools:layout_editor_absoluteY="0dp"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_conversion_absoluteWidth="402dp" />
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/color_picker_container"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-    </ScrollView>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/color_picker_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp">
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+                tools:layout_conversion_absoluteHeight="722dp"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_conversion_absoluteWidth="402dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
