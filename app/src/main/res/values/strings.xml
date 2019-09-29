@@ -28,17 +28,17 @@
     <string name="forward">Forward</string>
     <string name="backward">Backward</string>
     <string name="send_colors">Send Colors</string>
-    <string name="title_activity_main">AnimatedLEDStrip</string>
+    <string name="title_activity_main">AnimatedLEDStrip (Disconnected)</string>
 
     <string name="tab_text_1">Servers</string>
     <string name="tab_text_2">Send Animation</string>
+    <string name="tab_text_3">Running Animations</string>
+
     <string name="continuous_animation">Continuous Animation</string>
     <string name="connect">Connect</string>
     <string name="center">Center</string>
     <string name="distance">Distance</string>
     <string name="disconnect">Disconnect</string>
-
-    <string name="hello_blank_fragment">Hello Blank Fragment</string>
 
     <string-array name="animations">
         <item>Color</item>
@@ -61,4 +61,22 @@
         <item>Sparkle Fade</item>
         <item>StackOverflow</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="end_anim">End</string>
+    <string name="ending_anim">Ending</string>
+
+    <string name="animation_label">Animation: %1$s</string>
+    <string name="center_label">Center: %1$s</string>
+    <string name="continuous_label">Continuous: %1$s</string>
+    <string name="delay_label">Delay: %1$s</string>
+    <string name="delaymod_label">DelayMod: %1$s</string>
+    <string name="direction_label">Direction: %1$s</string>
+    <string name="distance_label">Distance: %1$s</string>
+    <string name="spacing_label">Spacing: %1$s</string>
+    <string name="id_label">ID</string>
+    <string name="color_label">Color:</string>
+    <string name="action_disconnect">Disconnect</string>
 </resources>

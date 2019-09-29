@@ -15,18 +15,6 @@ import kotlinx.android.synthetic.main.fragment_connection.*
  */
 class ConnectionFragment(val name: String, val ip: String) : Fragment() {
 
-    private val disconnectedListener: (View) -> Unit = {
-        mainSender.setIPAddress(ip)
-        connect_button.setOnClickListener(connectedListener)
-        Unit
-    }
-
-    private val connectedListener: (View) -> Unit = {
-        mainSender.end()
-        connect_button.setOnClickListener(disconnectedListener)
-        Unit
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,9 +25,11 @@ class ConnectionFragment(val name: String, val ip: String) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        server_name.text = name
-        ip_address.text = ip
-        connect_button.setOnClickListener(disconnectedListener)
+        server_name.text = ip
+        connect_button.setOnClickListener {
+            if (mainSender.ipAddress != ip)
+                mainSender.setIPAddress(ip)
+        }
     }
 
     companion object {

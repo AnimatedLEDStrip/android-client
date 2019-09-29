@@ -16,11 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.settings.SettingsActivity
-import animatedledstrip.androidcontrol.utils.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.client.send
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
@@ -50,7 +48,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             TabAdapter(this, supportFragmentManager)
         val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         val fab: FloatingActionButton = findViewById(R.id.fab)
         setSupportActionBar(toolbar)
@@ -76,15 +73,44 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 connected = true
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
+                runOnUiThread {
+                    supportActionBar?.title = "AnimatedLEDStrip (${mainSender.ipAddress})"
+                }
             }.setOnDisconnectCallback {
                 connected = false
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
+                runOnUiThread {
+                    supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
+                    mainSender.runningAnimations.forEach { (id, _) ->
+                        supportFragmentManager.beginTransaction()
+                            .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
+                            .commit()
+                    }
+                }
                 mainSender.end()
             }.setOnReceiveCallback {
                 Log.d("Server", it.toString())
             }
-            .start()
+
+//        onDisconnectCallbacks += {
+//            connected = true
+//            fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
+//            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
+//            runOnUiThread{
+//                supportActionBar?.title = "AnimatedLEDStrip (${mainSender.ipAddress})"
+//            }
+//        }
+//
+//        onConnectCallbacks += {
+//            connected = false
+//            fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+//            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
+//            runOnUiThread {
+//                supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
+//            }
+//            mainSender.end()
+//        }
 
         fab.setOnClickListener(fabOnClickListener)
     }
@@ -103,6 +129,10 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         return when (item.itemId) {
             R.id.action_settings -> {
                 openSettings()
+                true
+            }
+            R.id.action_disconnect -> {
+                mainSender.end()
                 true
             }
             else -> super.onOptionsItemSelected(item)

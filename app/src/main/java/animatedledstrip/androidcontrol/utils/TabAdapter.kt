@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.connections.ConnectFragment
+import animatedledstrip.androidcontrol.running.RunningAnimations
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -14,7 +15,8 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
 
     private val tabTitles = arrayOf(
         R.string.tab_text_1,
-        R.string.tab_text_2
+        R.string.tab_text_2,
+        R.string.tab_text_3
     )
 
     override fun getItem(position: Int): androidx.fragment.app.Fragment {
@@ -22,6 +24,7 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
         return when (position) {
             0 -> ConnectFragment.newInstance()
             1 -> AnimationSelect.newInstance()
+            2 -> RunningAnimations.newInstance()
             else -> throw Exception()
         }
     }
@@ -30,5 +33,5 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
         return context.resources.getString(tabTitles[position])
     }
 
-    override fun getCount() = 2
+    override fun getCount() = 3
 }

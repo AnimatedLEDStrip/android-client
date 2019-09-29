@@ -155,52 +155,52 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun addAnimationOptions(info: animatedledstrip.animationutils.AnimationInfo) {
         if (info.repetitive)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     ContinuousSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
         for (i in 0 until info.numColors)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     ColorSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
         if (info.center != ReqLevel.NOTUSED)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     CenterSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
         if (info.distance != ReqLevel.NOTUSED)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     DistanceSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
         if (info.direction != ReqLevel.NOTUSED)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     DirectionSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
         if (info.spacing != ReqLevel.NOTUSED)
-            fragmentManager?.beginTransaction()
-                ?.add(
+            childFragmentManager.beginTransaction()
+                .add(
                     animationOptions.id,
                     SpacingSelect.newInstance()
                 )
-                ?.commit()
+                .commit()
 
 
     }
