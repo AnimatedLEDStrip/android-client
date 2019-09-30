@@ -11,9 +11,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
@@ -26,23 +28,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
-        Log.d("FragInt", "Activation")
     }
 
     private val sharedPrefFile = "ledprefs"
-
-    private val fabOnClickListener = View.OnClickListener {
-
-        when (connected) {
-            false -> {
-
-            }
-            true -> {
-                Log.d("FAB", "Sending $animationData")
-                animationData.send()
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +53,15 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         }
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-        ip = mPreferences.getString(
-            IP_KEY,
-            ip
-        ) ?: ip
+        AppCompatDelegate.setDefaultNightMode(
+            when (mPreferences.getString(DARK_KEY, null)) {
+                "Light" -> MODE_NIGHT_NO
+                "Dark" -> MODE_NIGHT_YES
+                else ->
+                    if (android.os.Build.VERSION.SDK_INT >= 29) AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+            }
+        )
 
         mainSender
             .setAsDefaultSender()
@@ -100,7 +93,10 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 Log.d("Server", it.toString())
             }
 
-        fab.setOnClickListener(fabOnClickListener)
+        fab.setOnClickListener {
+            if (connected) animationData.send()
+            else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onPause() {
@@ -115,9 +111,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_settings -> {
+                openSettings()
+                true
+            }
             R.id.action_add_ip -> {
 //                startActivity(Intent(this, AddConnectionActivity::class.java))
-                Toast.makeText(this, "Feature Under Development", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Feature Under Development", Toast.LENGTH_SHORT).show()
                 true
             }
             R.id.action_disconnect -> {

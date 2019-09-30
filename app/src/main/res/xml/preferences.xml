@@ -1,7 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-            android:key="ip"
-            android:inputType="number|text"
-            android:title="@string/ip_title"
-            android:selectAllOnFocus="true"/>
+    <ListPreference
+            android:defaultValue="System Default"
+            android:entries="@array/dark_options"
+            android:entryValues="@array/dark_options"
+            android:key="dark_setting"
+            android:title="@string/dark_mode" />
 </PreferenceScreen>

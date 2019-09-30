@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
@@ -19,37 +17,28 @@ import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.AnimationInfo
 import animatedledstrip.animationutils.ReqLevel
 import animatedledstrip.animationutils.animationinfo.*
+import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 
 class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     private var listener: OnFragmentInteractionListener? = null
 
-    private lateinit var animationSelect: Spinner
-    lateinit var animationOptions: LinearLayout
-    lateinit var animationOptionsScroll: ScrollView
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val thisView = inflater.inflate(R.layout.fragment_animation_select, container, false)
+        return inflater.inflate(R.layout.fragment_animation_select, container, false)
+    }
 
-        animationSelect = thisView.findViewById(R.id.animation_list)
-        animationOptions = thisView.findViewById(R.id.animation_options)
-        animationOptionsScroll = thisView.findViewById(R.id.animation_options_scroll)
-
-        animationSelect.onItemSelectedListener = this
-
-        return thisView
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        animation_list.onItemSelectedListener = this
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnFragmentInteractionListener")
-        }
+        check(context is OnFragmentInteractionListener)
+        listener = context
     }
 
     override fun onDetach() {
@@ -59,7 +48,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when {
-            parent === animationSelect -> animationSelected(parent, position)
+            parent === animation_list -> animationSelected(parent, position)
         }
     }
 
@@ -69,7 +58,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     private fun animationSelected(spinner: Spinner, pos: Int) {
         Log.d("AnimationSelect", "${spinner.getItemAtPosition(pos)}")
 
-        animationOptions.removeAllViews()
+        animation_options.removeAllViews()
         animationData = AnimationData()
 
         when (spinner.getItemAtPosition(pos)) {
@@ -157,7 +146,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.repetitive)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     ContinuousSelect.newInstance()
                 )
                 .commit()
@@ -165,7 +154,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         for (i in 0 until info.numColors)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     ColorSelect.newInstance()
                 )
                 .commit()
@@ -173,7 +162,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.center != ReqLevel.NOTUSED)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     CenterSelect.newInstance()
                 )
                 .commit()
@@ -181,7 +170,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.distance != ReqLevel.NOTUSED)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     DistanceSelect.newInstance()
                 )
                 .commit()
@@ -189,7 +178,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.direction != ReqLevel.NOTUSED)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     DirectionSelect.newInstance()
                 )
                 .commit()
@@ -197,7 +186,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.spacing != ReqLevel.NOTUSED)
             childFragmentManager.beginTransaction()
                 .add(
-                    animationOptions.id,
+                    animation_options.id,
                     SpacingSelect.newInstance()
                 )
                 .commit()

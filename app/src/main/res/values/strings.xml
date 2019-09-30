@@ -84,4 +84,11 @@
     <string name="action_add_ip">Add Server</string>
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
+    <string name="dark_mode">Dark Mode</string>
+
+    <string-array name="dark_options">
+        <item>System Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
 </resources>
