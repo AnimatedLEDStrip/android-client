@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
+import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
@@ -93,25 +94,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 Log.d("Server", it.toString())
             }
 
-//        onDisconnectCallbacks += {
-//            connected = true
-//            fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
-//            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-//            runOnUiThread{
-//                supportActionBar?.title = "AnimatedLEDStrip (${mainSender.ipAddress})"
-//            }
-//        }
-//
-//        onConnectCallbacks += {
-//            connected = false
-//            fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-//            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
-//            runOnUiThread {
-//                supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
-//            }
-//            mainSender.end()
-//        }
-
         fab.setOnClickListener(fabOnClickListener)
     }
 
@@ -133,6 +115,10 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             }
             R.id.action_disconnect -> {
                 mainSender.end()
+                true
+            }
+            R.id.action_clear -> {
+                AnimationData().send()
                 true
             }
             else -> super.onOptionsItemSelected(item)

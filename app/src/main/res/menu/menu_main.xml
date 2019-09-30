@@ -3,13 +3,18 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:context=".MainActivity">
     <item
-            android:id="@+id/action_settings"
-            android:orderInCategory="100"
-            android:title="@string/action_settings"
-            app:showAsAction="never" />
-    <item
             android:id="@+id/action_disconnect"
             android:orderInCategory="100"
             android:title="@string/action_disconnect"
+            app:showAsAction="never" />
+    <item
+            android:id="@+id/action_clear"
+            android:orderInCategory="100"
+            android:title="@string/action_clear_strip"
+            app:showAsAction="never" />
+    <item
+            android:id="@+id/action_settings"
+            android:orderInCategory="100"
+            android:title="@string/action_settings"
             app:showAsAction="never" />
 </menu>

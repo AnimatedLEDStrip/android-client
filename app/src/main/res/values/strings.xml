@@ -79,4 +79,5 @@
     <string name="id_label">ID</string>
     <string name="color_label">Color:</string>
     <string name="action_disconnect">Disconnect</string>
+    <string name="action_clear_strip">Clear Strip</string>
 </resources>
