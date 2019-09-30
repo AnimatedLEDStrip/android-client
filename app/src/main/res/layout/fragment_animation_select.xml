@@ -1,101 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context=".AnimationSelectFragment"
-                                             android:id="@+id/animation_select_layout">
-    <ScrollView
-            android:layout_width="239dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="81dp"
-            android:layout_marginEnd="81dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:orientation="vertical">
-            <TextView
-                    android:text="@string/non_repetitive"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView3" android:textStyle="bold"
-                    android:textSize="30sp" android:textAlignment="textStart"/>
-            <Button
-                    android:text="@string/color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/color_button"/>
-            <Button
-                    android:text="@string/multicolor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/multicolor_button"/>
-            <Button
-                    android:text="@string/bounce_to_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/bouncetocolor_button"/>
-            <Button
-                    android:text="@string/multi_pixel_run_to_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/multipixelruntocolor_button"/>
-            <Button
-                    android:text="@string/sparkle_to_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/sparkletocolor_button"/>
-            <Button
-                    android:text="@string/stack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/stack_button"/>
-            <Button
-                    android:text="@string/wipe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/wipe_button"/>
-            <TextView
-                    android:text="@string/repetitive"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView4" android:textStyle="bold"
-                    android:textSize="30sp"/>
-            <Button
-                    android:text="@string/alternate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/alternate_button"/>
-            <Button
-                    android:text="@string/bounce"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/bounce_button"/>
-            <Button
-                    android:text="@string/multi_pixel_run"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/multipixelrun_button"/>
-            <Button
-                    android:text="@string/pixel_marathon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/pixelmarathon_button"/>
-            <Button
-                    android:text="@string/pixel_run"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/pixelrun_button"/>
-            <Button
-                    android:text="@string/pixel_run_with_trail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/pixelrunwithtrail_button"/>
-            <Button
-                    android:text="@string/smooth_chase"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/smoothchase_button"/>
-            <Button
-                    android:text="@string/smooth_fade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/smoothfade_button"/>
-            <Button
-                    android:text="@string/sparkle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/sparkle_button"/>
-            <Button
-                    android:text="@string/sparkle_fade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/sparklefade_button"/>
-            <Button
-                    android:text="@string/stack_overflow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/stackoverflow_button"/>
-        </LinearLayout>
-    </ScrollView>
-</android.support.constraint.ConstraintLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".animation.AnimationSelect">
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="#eeeeee"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="3dp">
+
+        <Spinner
+                android:id="@+id/animation_list"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:entries="@array/animations"
+                android:textSize="18sp"
+                android:spinnerMode="dropdown" />
+    </androidx.cardview.widget.CardView>
+
+    <animatedledstrip.androidcontrol.utils.LockableScrollView
+            android:id="@+id/animation_options_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp">
+
+        <LinearLayout
+                android:id="@+id/animation_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+    </animatedledstrip.androidcontrol.utils.LockableScrollView>
+
+</LinearLayout>
