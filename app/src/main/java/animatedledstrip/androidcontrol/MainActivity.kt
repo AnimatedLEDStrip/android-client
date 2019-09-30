@@ -12,10 +12,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
-import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
@@ -116,15 +116,20 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add_ip -> {
-                startActivity(Intent(this, AddConnectionActivity::class.java))
+//                startActivity(Intent(this, AddConnectionActivity::class.java))
+                Toast.makeText(this, "Feature Under Development", Toast.LENGTH_SHORT)
                 true
             }
             R.id.action_disconnect -> {
-                mainSender.end()
+                if (mainSender.connected)
+                    mainSender.end()
+                else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
                 true
             }
             R.id.action_clear -> {
-                AnimationData().send()
+                if (mainSender.connected)
+                    AnimationData().send()
+                else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
