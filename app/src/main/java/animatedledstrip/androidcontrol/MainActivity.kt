@@ -15,6 +15,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
+import animatedledstrip.androidcontrol.connections.AddConnectionActivity
+import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
@@ -70,17 +72,20 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
         mainSender
             .setAsDefaultSender()
-            .setOnConnectCallback {
+            .setOnConnectCallback { ip ->
                 connected = true
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
+                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment
                 runOnUiThread {
-                    supportActionBar?.title = "AnimatedLEDStrip (${mainSender.ipAddress})"
+                    supportActionBar?.title = "AnimatedLEDStrip ($ip)"
+                    ipFrag.connectButton.text = getString(R.string.connected)
                 }
-            }.setOnDisconnectCallback {
+            }.setOnDisconnectCallback { ip ->
                 connected = false
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
+                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment
                 runOnUiThread {
                     supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
                     mainSender.runningAnimations.forEach { (id, _) ->
@@ -88,6 +93,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                             .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
                             .commit()
                     }
+                    ipFrag.connectButton.text = getString(R.string.disconnected)
                 }
                 mainSender.end()
             }.setOnReceiveCallback {
@@ -109,8 +115,8 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                openSettings()
+            R.id.action_add_ip -> {
+                startActivity(Intent(this, AddConnectionActivity::class.java))
                 true
             }
             R.id.action_disconnect -> {

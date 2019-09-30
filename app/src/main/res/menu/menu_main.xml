@@ -13,8 +13,8 @@
             android:title="@string/action_clear_strip"
             app:showAsAction="never" />
     <item
-            android:id="@+id/action_settings"
+            android:id="@+id/action_add_ip"
             android:orderInCategory="100"
-            android:title="@string/action_settings"
+            android:title="@string/action_add_ip"
             app:showAsAction="never" />
 </menu>

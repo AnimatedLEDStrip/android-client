@@ -14,6 +14,7 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootkey: String?) {
+        EditTextPreference(this.context)
         setPreferencesFromResource(R.xml.preferences, rootkey)
         val ipPreference = findPreference("ip") as EditTextPreference
 

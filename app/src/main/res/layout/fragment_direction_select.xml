@@ -8,7 +8,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#eeeeee"
+        app:cardBackgroundColor="@color/colorViewBack"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
         tools:context="animatedledstrip.androidcontrol.animation.DirectionSelect">
@@ -18,8 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            app:chipBackgroundColor="@color/colorViewBack"
             android:text="@string/forward"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textAlignment="center"
             android:textAppearance="@style/text18"
             />

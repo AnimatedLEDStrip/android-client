@@ -8,7 +8,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="#eeeeee"
+        app:cardBackgroundColor="@color/colorViewBack"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
         tools:context=".animation.DistanceSelect">
@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/distance"
-                android:textColor="#000000"
+                android:textColor="@color/colorText"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
