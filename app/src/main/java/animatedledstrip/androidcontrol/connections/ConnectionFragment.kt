@@ -29,9 +29,12 @@ class ConnectionFragment(val name: String, val ip: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         server_name.text = ip
+        connect_button.text =
+            if (mainSender.ipAddress == ip && mainSender.connected) getString(R.string.connected)
+            else getString(R.string.disconnected)
         connectButton = connect_button
         connect_button.setOnClickListener {
-            if (mainSender.ipAddress != ip)
+            if (mainSender.ipAddress != ip || !mainSender.connected)
                 mainSender.setIPAddress(ip)
         }
     }
