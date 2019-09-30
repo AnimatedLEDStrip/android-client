@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_connection.*
 /**
  * A simple [Fragment] subclass.
  */
-class ConnectionFragment(val name: String, val ip: String) : Fragment() {
+class ConnectionFragment(val name: String, private val ip: String) : Fragment() {
 
     lateinit var connectButton: Button
 

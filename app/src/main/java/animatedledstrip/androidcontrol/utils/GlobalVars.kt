@@ -4,8 +4,6 @@ import android.content.SharedPreferences
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.AnimationSenderFactory
 
-var ip = "10.0.0.91"
-const val IP_KEY = "ip"
 const val DARK_KEY = "dark_mode"
 
 val IPs = listOf(
@@ -14,22 +12,10 @@ val IPs = listOf(
     "10.44.157.2"
 )
 var mainSender: AnimationSenderFactory.AnimationSender =
-    AnimationSenderFactory.create(ipAddress = ip, port = 6, connectAttemptLimit = 1)
+    AnimationSenderFactory.create(ipAddress = IPs[0], port = 6, connectAttemptLimit = 1)
 
 lateinit var mPreferences: SharedPreferences
 var connected = false
 
 var animationData = AnimationData()
-
-val onConnectCallback = {
-    onConnectCallbacks.forEach { it() }
-}
-
-val onConnectCallbacks = mutableListOf<() -> Unit>()
-
-val onDisconnectCallback = {
-    onDisconnectCallbacks.forEach { it() }
-}
-
-val onDisconnectCallbacks = mutableListOf<() -> Unit>()
 

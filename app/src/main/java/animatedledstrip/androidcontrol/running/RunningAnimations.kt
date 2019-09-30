@@ -51,10 +51,6 @@ class RunningAnimations : Fragment() {
 
     }
 
-    fun removeAnimation() {
-
-    }
-
     companion object {
         @JvmStatic
         fun newInstance() = RunningAnimations()

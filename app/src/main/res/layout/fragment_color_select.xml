@@ -14,7 +14,6 @@
         tools:context="animatedledstrip.androidcontrol.animation.ColorSelect">
 
     <LinearLayout
-            android:id="@+id/color_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
