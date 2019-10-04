@@ -63,4 +63,9 @@
         <item>Light</item>
         <item>Dark</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="server_edit">Edit</string>
+    <string name="server_remove">X</string>
 </resources>

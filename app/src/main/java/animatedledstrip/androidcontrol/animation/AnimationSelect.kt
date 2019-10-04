@@ -3,7 +3,6 @@ package animatedledstrip.androidcontrol.animation
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +15,13 @@ import animatedledstrip.animationutils.Animation
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.AnimationInfo
 import animatedledstrip.animationutils.ReqLevel
-import animatedledstrip.animationutils.animationinfo.*
+import animatedledstrip.animationutils.animationinfo.animationInfoMap
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 
 class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     private var listener: OnFragmentInteractionListener? = null
-
+    private lateinit var spinner: Spinner
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +32,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         animation_list.onItemSelectedListener = this
+        spinner = animation_list
     }
 
     override fun onAttach(context: Context) {
@@ -48,150 +48,64 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when {
-            parent === animation_list -> animationSelected(parent, position)
+            parent === animation_list -> resetView()
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    private fun animationSelected(spinner: Spinner, pos: Int) {
-        Log.d("AnimationSelect", "${spinner.getItemAtPosition(pos)}")
+    private val animMap = mapOf(
+        "Bounce to Color" to Animation.BOUNCETOCOLOR,
+        "Multi-pixel Run To Color" to Animation.MULTIPIXELRUNTOCOLOR,
+        "Sparkle to Color" to Animation.SPARKLETOCOLOR,
+        "Splat" to Animation.SPLAT,
+        "Stack" to Animation.STACK,
+        "Wipe" to Animation.WIPE,
+        "Alternate" to Animation.ALTERNATE,
+        "Bounce" to Animation.BOUNCE,
+        "Meteor" to Animation.METEOR,
+        "Multi-pixel Run" to Animation.MULTIPIXELRUN,
+        "Pixel Marathon" to Animation.PIXELMARATHON,
+        "Pixel Run" to Animation.PIXELRUN,
+        "Ripple" to Animation.RIPPLE,
+        "Smooth Chase" to Animation.SMOOTHCHASE,
+        "Smooth Fade" to Animation.SMOOTHFADE,
+        "Sparkle" to Animation.SPARKLE,
+        "Sparkle Fade" to Animation.SPARKLEFADE,
+        "StackOverflow" to Animation.STACKOVERFLOW
+    )
 
+    fun resetView() {
         animation_options.removeAllViews()
         animationData = AnimationData()
+        addAnimationOptions(getAnimInfo(spinner.selectedItem.toString()))
+    }
 
-        when (spinner.getItemAtPosition(pos)) {
-            "Color" -> {
-                animationData.animation = Animation.COLOR
-                addAnimationOptions(AnimationInfo(numReqColors = 1))
-            }
-            "Bounce to Color" -> {
-                animationData.animation = Animation.BOUNCETOCOLOR
-                addAnimationOptions(BounceToColor)
-            }
-            "Multi-pixel Run to Color" -> {
-                animationData.animation = Animation.MULTIPIXELRUNTOCOLOR
-                addAnimationOptions(MultiPixelRunToColor)
-            }
-            "Sparkle to Color" -> {
-                animationData.animation = Animation.SPARKLETOCOLOR
-                addAnimationOptions(SparkleToColor)
-            }
-            "Splat" -> {
-                animationData.animation = Animation.SPLAT
-                addAnimationOptions(Splat)
-            }
-            "Stack" -> {
-                animationData.animation = Animation.STACK
-                addAnimationOptions(Stack)
-            }
-            "Wipe" -> {
-                animationData.animation = Animation.WIPE
-                addAnimationOptions(Wipe)
-            }
-
-            "Alternate" -> {
-                animationData.animation = Animation.ALTERNATE
-                addAnimationOptions(Alternate)
-            }
-            "Bounce" -> {
-                animationData.animation = Animation.BOUNCE
-                addAnimationOptions(Bounce)
-            }
-            "Meteor" -> {
-                animationData.animation = Animation.METEOR
-                addAnimationOptions(Meteor)
-            }
-            "Multi-pixel Run" -> {
-                animationData.animation = Animation.MULTIPIXELRUN
-                addAnimationOptions(MultiPixelRun)
-            }
-            "Pixel Marathon" -> {
-                animationData.animation = Animation.PIXELMARATHON
-                addAnimationOptions(PixelMarathon)
-            }
-            "Pixel Run" -> {
-                animationData.animation = Animation.PIXELRUN
-                addAnimationOptions(PixelRun)
-            }
-            "Ripple" -> {
-                animationData.animation = Animation.RIPPLE
-                addAnimationOptions(Ripple)
-            }
-            "Smooth Chase" -> {
-                animationData.animation = Animation.SMOOTHCHASE
-                addAnimationOptions(SmoothChase)
-            }
-            "Smooth Fade" -> {
-                animationData.animation = Animation.SMOOTHFADE
-                addAnimationOptions(SmoothFade)
-            }
-            "Sparkle" -> {
-                animationData.animation = Animation.SPARKLE
-                addAnimationOptions(Sparkle)
-            }
-            "Sparkle Fade" -> {
-                animationData.animation = Animation.SPARKLEFADE
-                addAnimationOptions(SparkleFade)
-            }
-            "StackOverflow" -> {
-                animationData.animation = Animation.STACKOVERFLOW
-                addAnimationOptions(StackOverflow)
-            }
-        }
+    private fun getAnimInfo(item: String): animatedledstrip.animationutils.AnimationInfo {
+        val animation = animMap[item] ?: Animation.COLOR
+        animationData.animation = animation
+        return if (animation != Animation.COLOR)
+            animationInfoMap[animation] ?: AnimationInfo(numReqColors = 1)
+        else
+            AnimationInfo(numReqColors = 1)
     }
 
     private fun addAnimationOptions(info: animatedledstrip.animationutils.AnimationInfo) {
-        if (info.repetitive)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    ContinuousSelect.newInstance()
-                )
+
+        fun addOptionFrag(frag: Fragment) {
+            childFragmentManager
+                .beginTransaction()
+                .add(animation_options.id, frag)
                 .commit()
+        }
 
-        for (i in 0 until info.numColors)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    ColorSelect.newInstance()
-                )
-                .commit()
-
-        if (info.center != ReqLevel.NOTUSED)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    CenterSelect.newInstance()
-                )
-                .commit()
-
-        if (info.distance != ReqLevel.NOTUSED)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    DistanceSelect.newInstance()
-                )
-                .commit()
-
-        if (info.direction != ReqLevel.NOTUSED)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    DirectionSelect.newInstance()
-                )
-                .commit()
-
-        if (info.spacing != ReqLevel.NOTUSED)
-            childFragmentManager.beginTransaction()
-                .add(
-                    animation_options.id,
-                    SpacingSelect.newInstance()
-                )
-                .commit()
-
-
+        if (info.repetitive) addOptionFrag(ContinuousSelect.newInstance())
+        for (i in 0 until info.numColors) addOptionFrag(ColorSelect.newInstance())
+        if (info.center != ReqLevel.NOTUSED) addOptionFrag(CenterSelect.newInstance())
+        if (info.distance != ReqLevel.NOTUSED) addOptionFrag(DistanceSelect.newInstance())
+        if (info.direction != ReqLevel.NOTUSED) addOptionFrag(DirectionSelect.newInstance())
+        if (info.spacing != ReqLevel.NOTUSED) addOptionFrag(SpacingSelect.newInstance())
     }
 
 

@@ -3,7 +3,7 @@ package animatedledstrip.androidcontrol.utils
 import android.content.Context
 import androidx.fragment.app.FragmentPagerAdapter
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.animation.AnimationSelect
+import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
 import animatedledstrip.androidcontrol.connections.ConnectFragment
 import animatedledstrip.androidcontrol.running.RunningAnimations
 
@@ -23,7 +23,7 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
         // getItem is called to instantiate the fragment for the given page.
         return when (position) {
             0 -> ConnectFragment.newInstance()
-            1 -> AnimationSelect.newInstance()
+            1 -> AnimationSelectContainer.newInstance()
             2 -> RunningAnimations.newInstance()
             else -> throw Exception()
         }
