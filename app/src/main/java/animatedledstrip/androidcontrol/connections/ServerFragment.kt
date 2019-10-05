@@ -2,44 +2,42 @@ package animatedledstrip.androidcontrol.connections
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.IPs
-import kotlinx.android.synthetic.main.fragment_connect.*
+import kotlinx.android.synthetic.main.fragment_server.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class ConnectFragment : Fragment() {
+class ServerFragment(var ip: String) : Fragment() {
+
+    private fun showEditDialog() {
+        val dialog = ServerEditFragment(ip)
+        dialog.show(fragmentManager ?: return, "ServerEditFragment")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_connect, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_server, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        IPs.forEachIndexed { index, ip ->
-            fragmentManager?.beginTransaction()
-                ?.add(
-                    connections.id,
-                    ConnectionFragment.newInstance("Server $index", ip),
-                    ip
-                )
-                ?.commit()
+        server_name.text = ip
+        server_edit.setOnClickListener {
+            showEditDialog()
         }
     }
 
-
     companion object {
         @JvmStatic
-        fun newInstance() = ConnectFragment()
+        fun newInstance(ip: String) = ServerFragment(ip)
     }
 
 }

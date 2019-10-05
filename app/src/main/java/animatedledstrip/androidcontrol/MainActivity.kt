@@ -122,7 +122,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             }
             R.id.action_add_ip -> {
                 startActivity(Intent(this, AddConnectionActivity::class.java))
-//                Toast.makeText(this, "Feature Under Development", Toast.LENGTH_SHORT).show()
                 true
             }
             R.id.action_disconnect -> {

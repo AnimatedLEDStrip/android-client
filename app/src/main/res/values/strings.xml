@@ -52,8 +52,8 @@
     <string name="color_label">Color:</string>
     <string name="action_disconnect">Disconnect</string>
     <string name="action_clear_strip">Clear Strip</string>
-    <string name="title_activity_add_connection">AddConnectionActivity</string>
-    <string name="action_add_ip">Add Server</string>
+    <string name="title_activity_add_connection">Edit Servers</string>
+    <string name="action_add_ip">Edit Servers</string>
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="dark_mode">Dark Mode</string>
@@ -64,8 +64,8 @@
         <item>Dark</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="server_edit">Edit</string>
     <string name="server_remove">X</string>
+    <string name="ip">IP</string>
+    <string name="default_ip">0.0.0.0</string>
 </resources>

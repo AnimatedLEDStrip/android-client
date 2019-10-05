@@ -8,8 +8,15 @@
         tools:context=".connections.AddConnectionActivity"
         tools:showIn="@layout/activity_add_connection">
 
-    <com.woxthebox.draglistview.DragListView
-            android:id="@+id/ip_list"
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/ip_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
