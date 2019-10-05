@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
+import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
@@ -69,16 +70,16 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 connected = true
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment
+                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     supportActionBar?.title = "AnimatedLEDStrip ($ip)"
-                    ipFrag.connectButton.text = getString(R.string.connected)
+                    ipFrag?.connectButton?.text = getString(R.string.connected)
                 }
             }.setOnDisconnectCallback { ip ->
                 connected = false
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
-                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment
+                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
                     mainSender.runningAnimations.forEach { (id, _) ->
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                             .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
                             .commit()
                     }
-                    ipFrag.connectButton.text = getString(R.string.disconnected)
+                    ipFrag?.connectButton?.text = getString(R.string.disconnected)
                 }
                 mainSender.end()
             }.setOnReceiveCallback {
@@ -94,8 +95,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             }
 
         fab.setOnClickListener {
-            if (connected) animationData.send()
-            else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+            if (connected) {
+                animationData.send()
+                val selectFrag =
+                    supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
+                selectFrag?.resetView() ?: Log.d("FAB", "Error")
+            } else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -116,8 +121,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 true
             }
             R.id.action_add_ip -> {
-//                startActivity(Intent(this, AddConnectionActivity::class.java))
-                Toast.makeText(this, "Feature Under Development", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, AddConnectionActivity::class.java))
                 true
             }
             R.id.action_disconnect -> {

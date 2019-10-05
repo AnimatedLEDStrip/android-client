@@ -6,7 +6,7 @@ import animatedledstrip.client.AnimationSenderFactory
 
 const val DARK_KEY = "dark_mode"
 
-val IPs = listOf(
+val IPs = mutableListOf(
     "10.44.36.53",
     "10.44.38.85",
     "10.44.157.2"

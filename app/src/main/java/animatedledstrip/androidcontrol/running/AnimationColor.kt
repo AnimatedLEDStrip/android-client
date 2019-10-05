@@ -29,8 +29,13 @@ class AnimationColor(private val colors: List<Long>) : Fragment() {
         color_gradient.background = GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             mutableListOf<Long>().apply {
-                addAll(colors)
-                add(colors[0])
+                if (colors.isEmpty()) {
+                    add(0L)
+                    add(0L)
+                } else {
+                    addAll(colors)
+                    add(colors[0])
+                }
             }.map { it.toARGB() }.toIntArray()
         )
     }
