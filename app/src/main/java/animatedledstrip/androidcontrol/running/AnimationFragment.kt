@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.AnimationColor
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.ReqLevel
 import animatedledstrip.animationutils.animationinfo.animationInfoMap

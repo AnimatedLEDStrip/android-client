@@ -68,4 +68,7 @@
     <string name="server_remove">X</string>
     <string name="ip">IP</string>
     <string name="default_ip">0.0.0.0</string>
+    <string name="pre_text">PRESETS</string>
+
+    <string name="color_clear">Clear</string>
 </resources>

@@ -1,4 +1,4 @@
-package animatedledstrip.androidcontrol.running
+package animatedledstrip.androidcontrol.utils
 
 
 import android.graphics.drawable.GradientDrawable
@@ -42,7 +42,8 @@ class AnimationColor(private val colors: List<Long>) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(colors: List<Long>) = AnimationColor(colors)
+        fun newInstance(colors: List<Long>) =
+            AnimationColor(colors)
     }
 
 }

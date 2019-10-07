@@ -14,7 +14,7 @@
         tools:context="animatedledstrip.androidcontrol.animation.ColorSelect">
 
     <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -34,31 +34,62 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_conversion_absoluteHeight="0dp"
-                    tools:layout_conversion_absoluteWidth="34dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                    android:id="@+id/color_clear_button"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#ff0000"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:padding="2dp"
+                    android:text="@string/color_clear"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
                     android:id="@+id/color_buttons_container"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/preset_color_sets_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:layout_conversion_absoluteHeight="0dp"
-                    tools:layout_editor_absoluteY="0dp"
-                    tools:layout_editor_absoluteX="0dp"
                     tools:layout_conversion_absoluteWidth="402dp" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/preset_color_sets_button"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
                 android:id="@+id/color_picker_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_conversion_absoluteHeight="722dp"
-                tools:layout_editor_absoluteY="0dp"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_conversion_absoluteWidth="402dp" />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                    android:id="@+id/color_picker_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+        </ScrollView>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
