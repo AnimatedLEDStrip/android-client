@@ -9,7 +9,8 @@ const val DARK_KEY = "dark_mode"
 val IPs = mutableListOf(
     "10.44.36.53",
     "10.44.38.85",
-    "10.44.157.2"
+    "10.44.157.2",
+    "10.44.103.233"
 )
 var mainSender: AnimationSenderFactory.AnimationSender =
     AnimationSenderFactory.create(ipAddress = IPs[0], port = 6, connectAttemptLimit = 1)
