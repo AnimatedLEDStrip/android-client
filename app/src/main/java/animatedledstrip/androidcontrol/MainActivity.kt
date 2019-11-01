@@ -62,6 +62,18 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             }
         )
 
+        IPs.clear()
+        val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
+
+        for (ip in ipList.split(",")) {
+            val ipFormatted =
+                ip.removePrefix("[")
+                    .removeSuffix("]")
+                    .removePrefix(" ")
+
+            if (ip != "") IPs.add(ipFormatted)
+        }
+
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback { ip ->

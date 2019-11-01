@@ -13,9 +13,6 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.animationutils.center
 import kotlinx.android.synthetic.main.fragment_center_select.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class CenterSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {
@@ -33,7 +30,6 @@ class CenterSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_center_select, container, false)
     }
 

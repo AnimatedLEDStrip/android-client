@@ -1,10 +1,13 @@
 package animatedledstrip.androidcontrol.connections
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.IP_KEY
 import animatedledstrip.androidcontrol.utils.IPs
+import animatedledstrip.androidcontrol.utils.mPreferences
 import kotlinx.android.synthetic.main.activity_add_connection.*
 import kotlinx.android.synthetic.main.content_add_connection.*
 
@@ -13,7 +16,9 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEdit
         val index = IPs.indexOf(oldIp)
         IPs.remove(oldIp)
         if (index == -1) IPs.add(newIp) else IPs.add(index, newIp)
+        saveServerIPs()
         loadServers()
+        Log.d("IPs", IPs.toString())
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
@@ -22,6 +27,7 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEdit
 
     override fun onRemoveClick(dialog: DialogFragment, ip: String) {
         IPs.remove(ip)
+        saveServerIPs()
         loadServers()
     }
 
@@ -32,6 +38,7 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEdit
 
     private fun loadServers() {
         ip_list.removeAllViews()
+        Log.d("IPs", "Load called")
         IPs.forEach { ip ->
             supportFragmentManager.beginTransaction()
                 .add(
@@ -41,6 +48,10 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEdit
                 )
                 .commit()
         }
+    }
+
+    private fun saveServerIPs() {
+        mPreferences.edit().putStringSet(IP_KEY, IPs.toSet()).apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

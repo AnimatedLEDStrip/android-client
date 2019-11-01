@@ -55,17 +55,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <LinearLayout
-                    android:id="@+id/color_buttons_container"
+            <ScrollView
                     android:layout_width="0dp"
                     android:layout_height="70dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="5dp"
+                    android:fillViewport="true"
                     app:layout_constraintEnd_toStartOf="@+id/preset_button_container"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_conversion_absoluteHeight="0dp"
-                    tools:layout_conversion_absoluteWidth="402dp" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                        android:id="@+id/color_buttons_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:orientation="horizontal" />
+            </ScrollView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/preset_button_container"

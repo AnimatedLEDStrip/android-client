@@ -1,5 +1,6 @@
 package animatedledstrip.androidcontrol.animation
 
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -11,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
@@ -25,7 +25,6 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.color.colorChooser
 import kotlinx.android.synthetic.main.fragment_color_select.*
 import top.defaults.drawabletoolbox.DrawableBuilder
-import kotlin.math.roundToInt
 
 class ColorSelect : Fragment() {
 
@@ -38,19 +37,26 @@ class ColorSelect : Fragment() {
         color_buttons_container
     }
 
+
     /* Button Sizes */
 
-    private var colorButtonSize: Int = 0
-    private var presetListHeight: Int = 0
-    private var presetColorWidth: Int = 0
-    private var presetColorHeight: Int = 0
+    private val colorButtonSize: Int by lazy {
+        resources.getDimensionPixelSize(R.dimen.color_button_size)
+    }
+    private val presetListHeight: Int by lazy {
+        resources.getDimensionPixelSize(R.dimen.preset_list_height)
+    }
+    private val presetColorWidth: Int by lazy {
+        resources.getDimensionPixelSize(R.dimen.preset_color_width)
+    }
+    private val presetColorHeight: Int by lazy {
+        resources.getDimensionPixelSize(R.dimen.preset_color_height)
+    }
 
     private val presetLayout: LinearLayout.LayoutParams by lazy {
         LinearLayout.LayoutParams(presetColorWidth, presetColorHeight).apply {
             gravity = Gravity.CENTER_HORIZONTAL
-            bottomMargin = TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
-                .roundToInt()
+            bottomMargin = resources.getDimensionPixelSize(R.dimen.preset_color_margin)
         }
     }
 
@@ -73,7 +79,8 @@ class ColorSelect : Fragment() {
             ?: 0x0).toInt()
 
     private val presetButtonColor: Long by lazy {
-        ResourcesCompat.getColor(resources, R.color.colorPrimary, null).toLong()
+        resources.getColor(R.color.colorPrimary, null).toLong()
+//        ResourcesCompat.getColor(resources, R.color.colorPrimary, null).toLong()
     }
 
 
@@ -140,17 +147,25 @@ class ColorSelect : Fragment() {
 
     /* Color button management functions */
 
+    private fun colorButton(
+        context: Context?,
+        newButton: Boolean,
+        color: Long = CCBlack.color
+    ): Button =
+        Button(context).apply {
+            background = buttonDrawable(color)
+            text = if (newButton) "+" else ""
+            setTextColor(0xffffffff.toInt())
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f)
+            typeface = Typeface.DEFAULT_BOLD
+            layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
+            setOnClickListener(if (newButton) newColorListener else colorListener)
+        }
+
     private fun addColorButton(color: Long = CCBlack.color) {
         clear_colors_button.visibility = Button.VISIBLE
-        colorButtons.addView(
-            Button(this.context).apply {
-                background = buttonDrawable(color)
-                colorContainer.colors += color
-                text = ""
-                layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
-                setOnClickListener(colorListener)
-            }
-        )
+        colorButtons.addView(colorButton(this.context, newButton = false, color = color))
+        colorContainer += color
     }
 
     private fun addColorButtons(colors: List<Long>) {
@@ -160,17 +175,7 @@ class ColorSelect : Fragment() {
     }
 
     private fun addNewColorButton() {
-        colorButtons.addView(
-            Button(this.context).apply {
-                background = buttonDrawable()
-                text = "+"
-                setTextColor(0xffffffff.toInt())
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f)
-                typeface = Typeface.DEFAULT_BOLD
-                layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
-                setOnClickListener(newColorListener)
-            }
-        )
+        colorButtons.addView(colorButton(this.context, newButton = true))
     }
 
     private fun removeColorButtons() {
@@ -190,7 +195,7 @@ class ColorSelect : Fragment() {
     /* Color choice functions */
 
     private fun chooseColor() {
-        MaterialDialog(this.context!!, BottomSheet()).show {
+        MaterialDialog(this.context ?: return, BottomSheet()).show {
             colorChooser(
                 colors,
                 allowCustomArgb = true,
@@ -221,22 +226,6 @@ class ColorSelect : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val thisView = inflater.inflate(R.layout.fragment_color_select, container, false)
-
-        colorButtonSize = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics)
-            .roundToInt()
-
-        presetListHeight = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 325f, resources.displayMetrics)
-            .roundToInt()
-
-        presetColorHeight = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, resources.displayMetrics)
-            .roundToInt()
-
-        presetColorWidth = TypedValue
-            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 375f, resources.displayMetrics)
-            .roundToInt()
 
         animationData.colors += colorContainer
 

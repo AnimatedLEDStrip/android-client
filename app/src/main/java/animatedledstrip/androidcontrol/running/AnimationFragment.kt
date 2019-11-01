@@ -11,20 +11,16 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.AnimationColor
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.ReqLevel
-import animatedledstrip.animationutils.animationinfo.animationInfoMap
 import animatedledstrip.client.endAnimation
+import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class AnimationFragment(private val data: AnimationData) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_animation, container, false)
     }
 
@@ -43,7 +39,6 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
         animation_end.setOnClickListener {
             check(it is Button)
             data.endAnimation()
-//            it.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
             it.text = getString(R.string.ending_anim)
         }
 
@@ -60,7 +55,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
                 .commit()
         }
 
-        val info = animationInfoMap[data.animation] ?: return
+        val info = data.animation.infoOrNull() ?: return
 
         removeExcessData(animation_center, info.center)
         removeExcessData(animation_delay, info.delay)

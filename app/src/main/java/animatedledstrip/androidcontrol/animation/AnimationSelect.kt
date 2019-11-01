@@ -7,21 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.animationutils.Animation
 import animatedledstrip.animationutils.AnimationData
-import animatedledstrip.animationutils.AnimationInfo
 import animatedledstrip.animationutils.ReqLevel
-import animatedledstrip.animationutils.animationinfo.animationInfoMap
+import animatedledstrip.utils.getAnimationOrNull
+import animatedledstrip.utils.info
+import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 
 class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
+
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var spinner: Spinner
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +33,6 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         animation_list.onItemSelectedListener = this
-        spinner = animation_list
     }
 
     override fun onAttach(context: Context) {
@@ -55,44 +55,17 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    private val animMap = mapOf(
-        "Bounce to Color" to Animation.BOUNCETOCOLOR,
-        "Multi-pixel Run To Color" to Animation.MULTIPIXELRUNTOCOLOR,
-        "Sparkle to Color" to Animation.SPARKLETOCOLOR,
-        "Splat" to Animation.SPLAT,
-        "Stack" to Animation.STACK,
-        "Wipe" to Animation.WIPE,
-        "Alternate" to Animation.ALTERNATE,
-        "Bounce" to Animation.BOUNCE,
-        "Cat" to Animation.CATTOY,
-        "Meteor" to Animation.METEOR,
-        "Multi-pixel Run" to Animation.MULTIPIXELRUN,
-        "Pixel Marathon" to Animation.PIXELMARATHON,
-        "Pixel Run" to Animation.PIXELRUN,
-        "Ripple" to Animation.RIPPLE,
-        "Smooth Chase" to Animation.SMOOTHCHASE,
-        "Smooth Fade" to Animation.SMOOTHFADE,
-        "Sparkle" to Animation.SPARKLE,
-        "Sparkle Fade" to Animation.SPARKLEFADE,
-        "StackOverflow" to Animation.STACKOVERFLOW
-    )
-
     fun resetView() {
         animation_options.removeAllViews()
         animationData = AnimationData()
-        addAnimationOptions(getAnimInfo(spinner.selectedItem.toString()))
-    }
-
-    private fun getAnimInfo(item: String): animatedledstrip.animationutils.AnimationInfo {
-        val animation = animMap[item] ?: Animation.COLOR
-        animationData.animation = animation
-        return if (animation != Animation.COLOR)
-            animationInfoMap[animation] ?: AnimationInfo(numReqColors = 1)
-        else
-            AnimationInfo(numReqColors = 1)
+        addAnimationOptions(
+            animation_list.selectedItem.toString().getAnimationOrNull()?.infoOrNull()
+                ?: Animation.COLOR.info()
+        )
     }
 
     private fun addAnimationOptions(info: animatedledstrip.animationutils.AnimationInfo) {
+        animationData.animation = info.animation
 
         fun addOptionFrag(frag: Fragment) {
             childFragmentManager

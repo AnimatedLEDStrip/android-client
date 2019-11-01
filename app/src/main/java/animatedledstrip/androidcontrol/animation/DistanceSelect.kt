@@ -13,9 +13,6 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.animationutils.distance
 import kotlinx.android.synthetic.main.fragment_distance_select.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {
@@ -33,7 +30,6 @@ class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_distance_select, container, false)
     }
 
