@@ -64,6 +64,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         "Wipe" to Animation.WIPE,
         "Alternate" to Animation.ALTERNATE,
         "Bounce" to Animation.BOUNCE,
+        "Cat" to Animation.CATTOY,
         "Meteor" to Animation.METEOR,
         "Multi-pixel Run" to Animation.MULTIPIXELRUN,
         "Pixel Marathon" to Animation.PIXELMARATHON,

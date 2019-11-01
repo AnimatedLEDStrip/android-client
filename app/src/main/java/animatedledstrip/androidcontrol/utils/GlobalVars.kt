@@ -1,11 +1,14 @@
 package animatedledstrip.androidcontrol.utils
 
 import android.content.SharedPreferences
+import android.view.View
+import android.widget.LinearLayout
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.AnimationSenderFactory
 
 const val DARK_KEY = "dark_mode"
 
+// TODO: Save to disk instead of hard-coding
 val IPs = mutableListOf(
     "10.44.36.53",
     "10.44.38.85",
@@ -20,6 +23,7 @@ var connected = false
 
 var animationData = AnimationData()
 
+// TODO: Add more presets
 val presetColors = listOf(
     listOf<Long>(
         0xFF0000,
@@ -40,3 +44,5 @@ val presetColors = listOf(
         0xD5002B
     )
 )
+
+fun LinearLayout?.indexOfChildOrNull(view: View?) = this?.indexOfChild(view)

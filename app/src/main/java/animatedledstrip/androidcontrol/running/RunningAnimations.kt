@@ -10,9 +10,7 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.mainSender
 import kotlinx.android.synthetic.main.fragment_running_animations.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class RunningAnimations : Fragment() {
 
 

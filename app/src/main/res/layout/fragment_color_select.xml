@@ -37,7 +37,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                    android:id="@+id/color_clear_button"
+                    android:id="@+id/clear_colors_button"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#ff0000"
@@ -61,14 +61,14 @@
                     android:layout_height="70dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/preset_color_sets_button"
+                    app:layout_constraintEnd_toStartOf="@+id/preset_button_container"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:layout_conversion_absoluteHeight="0dp"
                     tools:layout_conversion_absoluteWidth="402dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/preset_color_sets_button"
+                    android:id="@+id/preset_button_container"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +78,7 @@
 
 
         <ScrollView
-                android:id="@+id/color_picker_container"
+                android:id="@+id/presets_container"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:fillViewport="true"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                    android:id="@+id/color_picker_list"
+                    android:id="@+id/presets_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />

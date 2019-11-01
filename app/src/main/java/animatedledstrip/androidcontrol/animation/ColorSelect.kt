@@ -1,6 +1,7 @@
 package animatedledstrip.androidcontrol.animation
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.TypedValue
@@ -10,62 +11,210 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.LockableScrollView
 import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.indexOfChildOrNull
 import animatedledstrip.androidcontrol.utils.presetColors
 import animatedledstrip.colors.ColorContainer
-import animatedledstrip.colors.ccpresets.CCBlack
+import animatedledstrip.colors.ccpresets.*
 import animatedledstrip.utils.toARGB
-import com.madrapps.pikolo.ColorPicker
-import com.madrapps.pikolo.RGBColorPicker
-import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.color.colorChooser
 import kotlinx.android.synthetic.main.fragment_color_select.*
 import top.defaults.drawabletoolbox.DrawableBuilder
 import kotlin.math.roundToInt
 
 class ColorSelect : Fragment() {
 
-    enum class State { NONE, PICKER, PRESETS }
+    /* Buttons */
 
-    private var currentState = State.NONE
-    lateinit var text: TextView
-    lateinit var colorButtonsContainer: LinearLayout
-    private lateinit var colorPickerContainer: ScrollView
-    private lateinit var colorPicker: ColorPicker
-    private lateinit var colorPickerList: LinearLayout
-    private var selectedColor: Button? = null
+    private var selectedColorButton: Button? = null
+    private val presetButtons = mutableMapOf<Button, List<Long>>()
+
+    private val colorButtons: LinearLayout by lazy {
+        color_buttons_container
+    }
+
+    /* Button Sizes */
+
+    private var colorButtonSize: Int = 0
+    private var presetListHeight: Int = 0
+    private var presetColorWidth: Int = 0
+    private var presetColorHeight: Int = 0
+
+    private val presetLayout: LinearLayout.LayoutParams by lazy {
+        LinearLayout.LayoutParams(presetColorWidth, presetColorHeight).apply {
+            gravity = Gravity.CENTER_HORIZONTAL
+            bottomMargin = TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+                .roundToInt()
+        }
+    }
+
+
+    /* Colors */
+
     private val colorContainer = ColorContainer()
-    private var buttonSize: Int = 0
-    private var pickerSize: Int = 0
-    private var colorWidth: Int = 0
-    private var colorHeight: Int = 0
 
+    private val primaryColors =
+        listOf(CCBlack, CCRed, CCGreen, CCBlue, CCYellow, CCCyan, CCMagenta)
+
+    private val colors =
+        (primaryColors + CCPresets.minus(primaryColors).minus(CCAqua))
+            .map { it.color.toARGB() }
+            .toIntArray()
+
+    private val currentColor: Int
+        get() = (colorContainer.colors
+            .getOrNull(colorButtons.indexOfChildOrNull(selectedColorButton) ?: -1)
+            ?: 0x0).toInt()
+
+    private val presetButtonColor: Long by lazy {
+        ResourcesCompat.getColor(resources, R.color.colorPrimary, null).toLong()
+    }
+
+
+    /* Listeners */
 
     private val presetListener = View.OnClickListener {
-        changeState(if (currentState == State.PRESETS) State.NONE else State.PRESETS)
+        togglePresets()
     }
 
     private val colorListener = View.OnClickListener {
         require(it is Button)
+        changeCurrentButton(it)
+        chooseColor()
+    }
 
-        if (selectedColor === it)
-            when (currentState) {
-                State.PICKER -> changeState(State.NONE)
-                else -> changeState(State.PICKER)
+    private val newColorListener = View.OnClickListener {
+        require(it is Button)
+        colorContainer += 0x0
+        clear_colors_button.visibility = Button.VISIBLE
+        changeCurrentButton(it)
+        it.setOnClickListener(colorListener)
+        it.text = ""
+        chooseColor()
+        addNewColorButton()
+    }
+
+    private val clearColorsListener = View.OnClickListener {
+        require(it is Button)
+        resetColorButtons()
+        colorContainer.colors.clear()
+        it.visibility = Button.INVISIBLE
+    }
+
+    private val presetColorListener = View.OnClickListener {
+        require(it is Button)
+        removeColorButtons()
+        addColorButtons(presetButtons[it] ?: throw IllegalStateException())
+        addNewColorButton()
+    }
+
+
+    /* Drawable creation functions */
+
+    private fun buttonDrawable(color: Long = CCBlack.color): Drawable =
+        DrawableBuilder()
+            .size(60)
+            .oval()
+            .solidColor(color.toARGB())
+            .ripple()
+            .build()
+
+    private fun presetDrawable(colors: List<Long>): Drawable =
+        GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            mutableListOf<Long>()
+                .apply {
+                    addAll(colors)
+                    add(colors[0])
+                }
+                .map { it.toARGB() }
+                .toIntArray()
+        )
+
+
+    /* Color button management functions */
+
+    private fun addColorButton(color: Long = CCBlack.color) {
+        clear_colors_button.visibility = Button.VISIBLE
+        colorButtons.addView(
+            Button(this.context).apply {
+                background = buttonDrawable(color)
+                colorContainer.colors += color
+                text = ""
+                layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
+                setOnClickListener(colorListener)
             }
-        else {
-            changeState(State.PICKER)
-            changeCurrentButton(it)
+        )
+    }
+
+    private fun addColorButtons(colors: List<Long>) {
+        for (c in colors) {
+            addColorButton(c)
         }
     }
 
-    private val presetButtons = mutableMapOf<Button, List<Long>>()
+    private fun addNewColorButton() {
+        colorButtons.addView(
+            Button(this.context).apply {
+                background = buttonDrawable()
+                text = "+"
+                setTextColor(0xffffffff.toInt())
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f)
+                typeface = Typeface.DEFAULT_BOLD
+                layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
+                setOnClickListener(newColorListener)
+            }
+        )
+    }
 
+    private fun removeColorButtons() {
+        colorButtons.removeAllViews()
+    }
+
+    private fun resetColorButtons() {
+        removeColorButtons()
+        addNewColorButton()
+    }
+
+    private fun changeCurrentButton(button: Button) {
+        selectedColorButton = button
+    }
+
+
+    /* Color choice functions */
+
+    private fun chooseColor() {
+        MaterialDialog(this.context!!, BottomSheet()).show {
+            colorChooser(
+                colors,
+                allowCustomArgb = true,
+                initialSelection = currentColor,
+                waitForPositiveButton = false
+            ) { _, color: Int ->
+                selectedColorButton?.background = buttonDrawable(color.toLong())
+
+                colorContainer.colors[colorButtons.indexOfChild(selectedColorButton)] =
+                    color.toLong()
+            }
+            positiveButton(text = "Add")
+        }
+    }
+
+    private fun togglePresets() {
+        presets_container.layoutParams.height =
+            if (presets_container.layoutParams.height != 0) 0
+            else presetListHeight
+        presets_container.layoutParams = presets_container.layoutParams     // So changes are shown
+    }
+
+
+    /* OnCreation overrides */
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,22 +222,21 @@ class ColorSelect : Fragment() {
     ): View? {
         val thisView = inflater.inflate(R.layout.fragment_color_select, container, false)
 
-        buttonSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics)
+        colorButtonSize = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60f, resources.displayMetrics)
             .roundToInt()
-        pickerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 325f, resources.displayMetrics)
-            .roundToInt()
-        colorHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources.displayMetrics)
-            .roundToInt()
-        colorWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 375f, resources.displayMetrics)
-            .roundToInt()
-        colorPickerContainer =
-            thisView.findViewById(R.id.color_picker_container)
-        colorButtonsContainer =
-            thisView.findViewById(R.id.color_buttons_container)
-        colorPicker = RGBColorPicker(this.context!!)
-        colorPicker.setColorSelectionListener(ColorListener())
 
-        addNewColorButton()
+        presetListHeight = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 325f, resources.displayMetrics)
+            .roundToInt()
+
+        presetColorHeight = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, resources.displayMetrics)
+            .roundToInt()
+
+        presetColorWidth = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 375f, resources.displayMetrics)
+            .roundToInt()
 
         animationData.colors += colorContainer
 
@@ -99,163 +247,37 @@ class ColorSelect : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val presets = Button(this.context).apply {
-            background = DrawableBuilder()
-                .size(60)
-                .oval()
-                .solidColor(ResourcesCompat.getColor(resources, R.color.colorPrimary, null))
-                .ripple()
-                .build()
+            background = buttonDrawable(presetButtonColor)
             text = context.getString(R.string.pre_text)
             setTextColor(0xffffffff.toInt())
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f)
             typeface = Typeface.DEFAULT_BOLD
-            layoutParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
+            layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
             setOnClickListener(presetListener)
         }
 
-        preset_color_sets_button.addView(presets)
-        colorPickerList = color_picker_list
+        preset_button_container.addView(presets)
 
         presetColors.forEach { presetColor ->
-            val presetButton = Button(this.context!!).apply {
-                background = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT,
-                    mutableListOf<Long>().apply {
-                        addAll(presetColor)
-                        add(presetColor[0])
-                    }.map { it.toARGB() }.toIntArray()
-                )
-                layoutParams = LinearLayout.LayoutParams(colorWidth, colorHeight).apply {
-                    gravity = Gravity.CENTER_HORIZONTAL
-                }
-                setOnClickListener {
-                    colorButtonsContainer.removeAllViews()
-                    presetButtons[this]?.forEach {
-                        addColorButton(it)
-                    }
-                    addNewColorButton()
-                    changeState(State.NONE)
-                }
-            }
-            presetButtons[presetButton] = presetColor
-        }
-
-        color_clear_button.setOnClickListener {
-            require(it is Button)
-            it.setOnClickListener { b ->
-                resetColorButtons()
-                b.visibility = Button.INVISIBLE
+            Button(this.context ?: throw IllegalStateException()).apply {
+                background = presetDrawable(presetColor)
+                layoutParams = presetLayout
+                setOnClickListener(presetColorListener)
+                presetButtons[this] = presetColor
             }
         }
 
-    }
+        clear_colors_button.setOnClickListener(clearColorsListener)
 
-    private fun addColorButton(color: Long = CCBlack.color) {
-        colorButtonsContainer.addView(
-            Button(this.context).apply {
-                background = DrawableBuilder()
-                    .size(60)
-                    .oval()
-                    .solidColor(color.toARGB())
-                    .ripple()
-                    .build()
-                colorContainer.colors += color
-                text = ""
-                layoutParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
-                setOnClickListener(colorListener)
-            }
-        )
-    }
+        presetButtons.forEach { (b, _) ->
+            presets_list.addView(b)
+        }
 
-    private fun addNewColorButton() {
-        colorButtonsContainer.addView(
-            Button(this.context).apply {
-                background = DrawableBuilder()
-                    .size(60)
-                    .oval()
-                    .solidColor(CCBlack.color.toARGB())
-                    .ripple()
-                    .build()
-                text = "+"
-                setTextColor(0xffffffff.toInt())
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24.0f)
-                typeface = Typeface.DEFAULT_BOLD
-                layoutParams = LinearLayout.LayoutParams(buttonSize, buttonSize)
-                setOnClickListener {
-                    require(it is Button)
-                    colorContainer += 0x0
-                    color_clear_button.visibility = Button.VISIBLE
-                    changeState(State.PICKER)
-                    changeCurrentButton(it)
-                    it.setOnClickListener(colorListener)
-                    it.text = ""
-                    addNewColorButton()
-                }
-            }
-        )
-    }
-
-    private fun resetColorButtons() {
-        colorButtonsContainer.removeAllViews()
         addNewColorButton()
-        changeState(State.NONE)
-    }
-
-    private fun changeState(newState: State) {
-        if (newState == currentState) return
-        if (currentState != State.NONE) color_picker_list.removeAllViews()
-
-        when (newState) {
-            State.NONE -> colorPickerContainer.layoutParams.height = 0
-            State.PICKER -> {
-                colorPickerContainer.layoutParams.height = pickerSize
-                colorPickerList.addView(colorPicker)
-            }
-            State.PRESETS -> {
-                colorPickerContainer.layoutParams.height = pickerSize
-                presetButtons.forEach { (b, _) ->
-                    color_picker_list.addView(b)
-                }
-            }
-        }
-        currentState = newState
-    }
-
-    private fun changeCurrentButton(button: Button) {
-        selectedColor = button
-        colorPicker.setColor(colorContainer.colors[colorButtonsContainer.indexOfChild(button)].toInt())
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = ColorSelect()
-    }
-
-    inner class ColorListener : SimpleColorSelectionListener() {
-        override fun onColorSelected(color: Int) {
-            if (selectedColor != null) {
-                selectedColor!!.background =
-                    DrawableBuilder()
-                        .size(60)
-                        .oval()
-                        .solidColor(color.toARGB())
-                        .ripple()
-                        .build()
-                colorContainer.colors[colorButtonsContainer.indexOfChild(selectedColor)] =
-                    color + 0x1000000L
-            }
-        }
-
-        override fun onColorSelectionStart(color: Int) {
-            (colorPicker.parent.parent.parent.parent.parent.parent as LockableScrollView).scrollingEnabled =
-                false
-            super.onColorSelectionStart(color)
-        }
-
-        override fun onColorSelectionEnd(color: Int) {
-            (colorPicker.parent.parent.parent.parent.parent.parent as LockableScrollView).scrollingEnabled =
-                true
-            super.onColorSelectionEnd(color)
-        }
     }
 }

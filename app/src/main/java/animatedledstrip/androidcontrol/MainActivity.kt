@@ -24,7 +24,6 @@ import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
@@ -41,7 +40,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
         setSupportActionBar(toolbar)
 
 
