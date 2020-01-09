@@ -102,6 +102,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 mainSender.end()
             }.setOnReceiveCallback {
                 Log.d("Server", it.toString())
+            }.setOnUnableToConnectCallback {ip ->
+                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+                runOnUiThread {
+                    Toast.makeText(this, "Could not connect to $ip", Toast.LENGTH_SHORT).show()
+                    ipFrag?.connectButton?.text = getString(R.string.disconnected)
+                }
             }
 
         fab.setOnClickListener {

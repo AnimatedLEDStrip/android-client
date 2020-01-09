@@ -34,10 +34,15 @@ class ConnectionFragment(val name: String, private val ip: String) : Fragment() 
             else getString(R.string.disconnected)
         connectButton = connect_button
         connect_button.setOnClickListener {
-            if (mainSender.ipAddress != ip)
-                mainSender.setIPAddress(ip)
-            else if (!mainSender.connected)
-                mainSender.start()
+            if (mainSender.ipAddress == ip && mainSender.connected)
+                mainSender.end()
+            else {
+                connectButton.text = getString(R.string.connecting)
+                if (mainSender.ipAddress != ip) {
+                    mainSender.setIPAddress(ip)         // Also starts connection
+                } else if (!mainSender.connected)
+                    mainSender.start()
+            }
         }
     }
 
