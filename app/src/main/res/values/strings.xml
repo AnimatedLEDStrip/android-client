@@ -18,6 +18,7 @@
     <string-array name="animations">
         <item>Color</item>
         <item>Bounce to Color</item>
+        <item>Cat Toy to Color</item>
         <item>Multi-pixel Run to Color</item>
         <item>Sparkle to Color</item>
         <item>Splat</item>
@@ -26,6 +27,7 @@
         <item>Alternate</item>
         <item>Bounce</item>
         <item>Cat Toy</item>
+        <item>Fireworks</item>
         <item>Meteor</item>
         <item>Multi-pixel Run</item>
         <item>Pixel Marathon</item>
@@ -72,5 +74,4 @@
     <string name="pre_text">PRESETS</string>
 
     <string name="color_clear">Clear</string>
-    <string name="connecting">Connecting…</string>
 </resources>
