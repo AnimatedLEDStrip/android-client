@@ -42,6 +42,7 @@ class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
         distance_select.progress =
             if (info?.distance != ReqLevel.NOTUSED && info?.distanceDefault != 0) info!!.distanceDefault
             else distance_select.max
+        animationData.distance = distance_select.progress
         distance_select.setOnSeekBarChangeListener(this)
         distance_value.text = distance_select.progress.toString()
     }
