@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.androidcontrol.utils.mainSender
+import animatedledstrip.animationutils.ReqLevel
 import animatedledstrip.animationutils.distance
+import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_distance_select.*
 
 class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
@@ -36,10 +38,14 @@ class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         distance_select.max = mainSender.stripInfo?.numLEDs ?: 240
-        distance_select.progress = distance_select.max
+        val info = animationData.animation.infoOrNull()
+        distance_select.progress =
+            if (info?.distance != ReqLevel.NOTUSED && info?.distanceDefault != 0) info!!.distanceDefault
+            else distance_select.max
         distance_select.setOnSeekBarChangeListener(this)
         distance_value.text = distance_select.progress.toString()
     }
+
     companion object {
         @JvmStatic
         fun newInstance() = DistanceSelect()
