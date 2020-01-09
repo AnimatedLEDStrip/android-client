@@ -11,8 +11,9 @@ const val DARK_KEY = "dark_mode"
 const val IP_KEY = "ip_addrs"
 
 val IPs = mutableListOf<String>()
+const val defaultPort = 6
 var mainSender: AnimationSenderFactory.AnimationSender =
-    AnimationSenderFactory.create(ipAddress = "", port = 6, connectAttemptLimit = 1)
+    AnimationSenderFactory.create(ipAddress = "", port = defaultPort)
 
 lateinit var mPreferences: SharedPreferences
 var connected = false
@@ -20,7 +21,7 @@ var connected = false
 var animationData = AnimationData()
 
 val presetColors = listOf(
-    listOf<Long>(           // RainbowColors from FastLED
+    listOf<Long>(                   // RainbowColors from FastLED
         0xFF0000,
         0xD52A00,
         0xAB5500,
@@ -38,7 +39,7 @@ val presetColors = listOf(
         0xAB0055,
         0xD5002B
     ),
-    listOf(                 // CloudColors from FastLED
+    listOf(                         // CloudColors from FastLED
         CCBlue.color,
         CCDarkBlue.color,
         CCDarkBlue.color,
@@ -56,7 +57,7 @@ val presetColors = listOf(
         CCLightBlue.color,
         CCSkyBlue.color
     ),
-    listOf(                 // LavaColors from FastLED
+    listOf(                         // LavaColors from FastLED
         CCBlack.color,
         CCMaroon.color,
         CCBlack.color,
@@ -73,7 +74,7 @@ val presetColors = listOf(
         CCRed.color,
         CCDarkRed.color
     ),
-    listOf(                 // OceanColors from FastLED
+    listOf(                         // OceanColors from FastLED
         CCMidnightBlue.color,
         CCDarkBlue.color,
         CCMidnightBlue.color,
@@ -91,7 +92,7 @@ val presetColors = listOf(
         CCAqua.color,
         CCLightSkyBlue.color
     ),
-    listOf(                 // ForestColors from FastLED
+    listOf(                         // ForestColors from FastLED
         CCDarkGreen.color,
         CCDarkGreen.color,
         CCDarkOliveGreen.color,
@@ -107,7 +108,7 @@ val presetColors = listOf(
         CCMediumAquamarine.color,
         CCForestGreen.color
     ),
-    listOf<Long>(                 // CCRainbowStripesColors from FastLED
+    listOf<Long>(                  // CCRainbowStripesColors from FastLED
         0xFF0000,
         0x000000,
         0xAB5500,
@@ -125,7 +126,7 @@ val presetColors = listOf(
         0xAB0055,
         0x000000
     ),
-    listOf<Long>(                       // PartyColors from FastLED
+    listOf<Long>(                  // PartyColors from FastLED
         0x5500AB,
         0x84007C,
         0xB5004B,

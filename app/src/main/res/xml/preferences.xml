@@ -5,4 +5,8 @@
             android:entryValues="@array/dark_options"
             android:key="dark_setting"
             android:title="@string/dark_mode" />
+    <EditTextPreference
+        android:inputType="number"
+        android:key="port_setting"
+        android:title="Port" />
 </PreferenceScreen>

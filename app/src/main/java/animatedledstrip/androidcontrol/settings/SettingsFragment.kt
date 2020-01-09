@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.DARK_KEY
 import animatedledstrip.androidcontrol.utils.mPreferences
+import animatedledstrip.androidcontrol.utils.mainSender
 import com.takisoft.fix.support.v7.preference.EditTextPreference
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
@@ -17,6 +18,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         EditTextPreference(this.context)
         setPreferencesFromResource(R.xml.preferences, rootkey)
         val darkPreference = findPreference("dark_setting") as ListPreference
+        val portPreference = findPreference("port_setting") as EditTextPreference
+
+        portPreference.text = mainSender.port.toString()
+
         val preferenceListener = Preference.OnPreferenceChangeListener { preference, value ->
             preference.summary = value as String
             val preferencesEditor: SharedPreferences.Editor = mPreferences.edit()
@@ -40,10 +45,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         }
                     ).apply()
                 }
+                portPreference -> {
+                    mainSender.setPort(value.toInt())
+                }
             }
             true
         }
 
+        portPreference.summary = portPreference.text
+
         darkPreference.onPreferenceChangeListener = preferenceListener
+        portPreference.onPreferenceChangeListener = preferenceListener
     }
 }

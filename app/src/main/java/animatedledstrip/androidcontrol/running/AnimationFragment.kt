@@ -11,6 +11,7 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.AnimationColor
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.ReqLevel
+import animatedledstrip.animationutils.isContinuous
 import animatedledstrip.client.endAnimation
 import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation.*
@@ -29,7 +30,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
         animation_id.text = data.id
         animation_name.text = getString(R.string.animation_label, data.animation.toString())
         animation_center.text = getString(R.string.center_label, data.center.toString())
-        animation_continuous.text = getString(R.string.continuous_label, data.continuous.toString())
+        animation_continuous.text = getString(R.string.continuous_label, data.isContinuous().toString())
         animation_delay.text = getString(R.string.delay_label, data.delay.toString())
         animation_delay_mod.text = getString(R.string.delaymod_label, data.delayMod.toString())
         animation_direction.text = getString(R.string.direction_label, data.direction.toString())
