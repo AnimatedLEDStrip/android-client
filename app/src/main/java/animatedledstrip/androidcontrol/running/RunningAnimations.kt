@@ -31,7 +31,9 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.mainSender
 import kotlinx.android.synthetic.main.fragment_running_animations.*
 
-
+/**
+ * The list of running animations.
+ */
 class RunningAnimations : Fragment() {
     private fun addCurrentAnimations() {
         mainSender.runningAnimations.forEach { (id, data) ->

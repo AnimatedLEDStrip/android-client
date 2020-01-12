@@ -32,6 +32,9 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.utils.toARGB
 import kotlinx.android.synthetic.main.fragment_animation_color.*
 
+/**
+ * Represents a ColorContainer for a running animation listing.
+ */
 class AnimationColor(private val colors: List<Long>) : Fragment() {
 
     override fun onCreateView(

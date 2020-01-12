@@ -48,6 +48,9 @@ import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Starting point for the app and the container for most fragments.
+ */
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
     private val sharedPrefFile = "ledprefs"
 

@@ -33,6 +33,9 @@ import animatedledstrip.androidcontrol.utils.mPreferences
 import kotlinx.android.synthetic.main.activity_add_connection.*
 import kotlinx.android.synthetic.main.content_add_connection.*
 
+/**
+ * Add, edit and remove servers from the list shown in the connections list.
+ */
 class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEditListener {
     override fun onDialogPositiveClick(dialog: DialogFragment, oldIp: String, newIp: String) {
         val index = IPs.indexOf(oldIp)

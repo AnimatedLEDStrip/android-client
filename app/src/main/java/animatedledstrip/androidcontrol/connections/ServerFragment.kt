@@ -31,7 +31,7 @@ import animatedledstrip.androidcontrol.R
 import kotlinx.android.synthetic.main.fragment_server.*
 
 /**
- * A simple [Fragment] subclass.
+ * Shows a single connection in the edit servers list.
  */
 class ServerFragment(var ip: String) : Fragment() {
 

@@ -48,6 +48,12 @@ import com.afollestad.materialdialogs.color.colorChooser
 import kotlinx.android.synthetic.main.fragment_color_select.*
 import top.defaults.drawabletoolbox.DrawableBuilder
 
+/**
+ * Select the colors for the animation.
+ *
+ * One fragment is created for each required and optional color as specified
+ * in the AnimationInfo for that animation.
+ */
 class ColorSelect : Fragment() {
 
     /* Buttons */

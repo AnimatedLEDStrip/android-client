@@ -28,6 +28,10 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.viewpager.widget.ViewPager
 
+/**
+ * Custom implementation of [ViewPager] that doesn't allow swiping right/left
+ * to change tabs.
+ */
 class CustomViewPager(context: Context, attributeSet: AttributeSet) :
     ViewPager(context, attributeSet) {
 

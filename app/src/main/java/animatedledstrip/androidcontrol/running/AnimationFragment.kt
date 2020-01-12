@@ -37,6 +37,10 @@ import animatedledstrip.client.endAnimation
 import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation.*
 
+/**
+ * Shows a single running animation along with its parameters and a button
+ * for ending it.
+ */
 class AnimationFragment(private val data: AnimationData) : Fragment() {
 
     override fun onCreateView(

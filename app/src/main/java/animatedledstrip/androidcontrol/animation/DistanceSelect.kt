@@ -36,6 +36,9 @@ import animatedledstrip.animationutils.distance
 import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_distance_select.*
 
+/**
+ * Set the distance property of the animation.
+ */
 class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {

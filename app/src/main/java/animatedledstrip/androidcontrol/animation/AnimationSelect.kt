@@ -40,7 +40,11 @@ import animatedledstrip.utils.info
 import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
-
+/**
+ * Select the animation type.
+ *
+ * Adds the corresponding fragments for configuring that animation.
+ */
 class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var listener: OnFragmentInteractionListener? = null

@@ -34,6 +34,9 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.animationutils.center
 import kotlinx.android.synthetic.main.fragment_center_select.*
 
+/**
+ * Set the center property of the animation.
+ */
 class CenterSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {

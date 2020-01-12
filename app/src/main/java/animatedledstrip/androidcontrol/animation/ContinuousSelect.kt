@@ -31,6 +31,9 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 
+/**
+ * Set the continuous property of the animation.
+ */
 class ContinuousSelect : Fragment() {
 
     private lateinit var continuousAnimation: CheckBox

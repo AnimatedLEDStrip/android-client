@@ -29,6 +29,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 
+/**
+ * Set the spacing property of the animation.
+ */
 class SpacingSelect : Fragment() {
 
     override fun onCreateView(

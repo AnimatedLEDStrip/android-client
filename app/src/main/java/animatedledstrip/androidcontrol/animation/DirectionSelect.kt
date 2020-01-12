@@ -33,6 +33,9 @@ import animatedledstrip.animationutils.direction
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_direction_select.*
 
+/**
+ * Set the direction property of the animation.
+ */
 class DirectionSelect : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(

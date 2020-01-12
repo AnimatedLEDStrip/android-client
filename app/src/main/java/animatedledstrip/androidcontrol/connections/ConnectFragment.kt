@@ -32,7 +32,7 @@ import animatedledstrip.androidcontrol.utils.IPs
 import kotlinx.android.synthetic.main.fragment_connect.*
 
 /**
- * A simple [Fragment] subclass.
+ * List of all servers
  */
 class ConnectFragment : Fragment() {
 

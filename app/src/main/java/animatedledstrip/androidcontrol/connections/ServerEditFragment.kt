@@ -37,6 +37,9 @@ import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 
+/**
+ * Pops up to create, edit or remove a server from the list.
+ */
 class ServerEditFragment(val ip: String) : DialogFragment() {
 
     lateinit var listener: ServerEditListener

@@ -33,7 +33,7 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import kotlinx.android.synthetic.main.fragment_connection.*
 
 /**
- * A simple [Fragment] subclass.
+ * Shows a single server, with a button for connecting to it.
  */
 class ConnectionFragment(val name: String, private val ip: String) : Fragment() {
 

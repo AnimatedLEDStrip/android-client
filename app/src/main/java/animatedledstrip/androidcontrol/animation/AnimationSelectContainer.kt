@@ -30,6 +30,9 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import kotlinx.android.synthetic.main.fragment_animation_select_container.*
 
+/**
+ * Holds all the fragments for creating an animation to send to the server.
+ */
 class AnimationSelectContainer : Fragment() {
 
     override fun onCreateView(

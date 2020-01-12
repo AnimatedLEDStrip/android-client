@@ -35,6 +35,9 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import com.takisoft.fix.support.v7.preference.EditTextPreference
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
+/**
+ * Settings menu.
+ */
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootkey: String?) {
         EditTextPreference(this.context)
