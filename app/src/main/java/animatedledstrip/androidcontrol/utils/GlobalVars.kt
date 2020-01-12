@@ -9,6 +9,7 @@ import animatedledstrip.colors.ccpresets.*
 
 const val DARK_KEY = "dark_mode"
 const val IP_KEY = "ip_addrs"
+const val PORT_KEY = "port_sel"
 
 val IPs = mutableListOf<String>()
 const val defaultPort = 6

@@ -39,7 +39,7 @@ class ConnectionFragment(val name: String, private val ip: String) : Fragment() 
             else {
                 connectButton.text = getString(R.string.connecting)
                 if (mainSender.ipAddress != ip) {
-                    mainSender.setIPAddress(ip)         // Also starts connection
+                    mainSender.setIPAddress(ip, start = true)         // Also starts connection
                 } else if (!mainSender.connected)
                     mainSender.start()
             }

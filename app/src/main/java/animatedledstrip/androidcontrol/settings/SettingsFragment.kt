@@ -7,6 +7,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.DARK_KEY
+import animatedledstrip.androidcontrol.utils.PORT_KEY
 import animatedledstrip.androidcontrol.utils.mPreferences
 import animatedledstrip.androidcontrol.utils.mainSender
 import com.takisoft.fix.support.v7.preference.EditTextPreference
@@ -47,11 +48,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
                 portPreference -> {
                     mainSender.setPort(value.toInt())
+                    preferencesEditor.putInt(PORT_KEY, value.toInt()).apply()
                 }
             }
             true
         }
 
+        darkPreference.summary = darkPreference.value.toString()
         portPreference.summary = portPreference.text
 
         darkPreference.onPreferenceChangeListener = preferenceListener

@@ -27,31 +27,17 @@ import animatedledstrip.client.send
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
-    override fun onFragmentInteraction(uri: Uri) {
-    }
-
     private val sharedPrefFile = "ledprefs"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter =
-            TabAdapter(this, supportFragmentManager)
-        val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        tabs.setupWithViewPager(viewPager)
-        setSupportActionBar(toolbar)
 
+    private fun checkPermissions() {
+        if (
+            ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+            != PackageManager.PERMISSION_GRANTED
+        ) requestPermissions(arrayOf(Manifest.permission.INTERNET), 1)
+    }
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.INTERNET
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(Manifest.permission.INTERNET), 1)
-        }
-
-        mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+    private fun setNightMode() {
         AppCompatDelegate.setDefaultNightMode(
             when (mPreferences.getString(DARK_KEY, null)) {
                 "Light" -> MODE_NIGHT_NO
@@ -61,7 +47,9 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
             }
         )
+    }
 
+    private fun retrieveIPs() {
         IPs.clear()
         val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
 
@@ -73,7 +61,15 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
             if (ip != "") IPs.add(ipFormatted)
         }
+    }
 
+    private fun retrievePort() {
+        val port = mPreferences.getInt(PORT_KEY, 6)
+        mainSender.port = port
+        mPreferences.edit().putInt(PORT_KEY, port).apply()
+    }
+
+    private fun setConnectionCallbacks() {
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback { ip ->
@@ -102,14 +98,16 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 mainSender.end()
             }.setOnReceiveCallback {
                 Log.d("Server", it.toString())
-            }.setOnUnableToConnectCallback {ip ->
+            }.setOnUnableToConnectCallback { ip ->
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     Toast.makeText(this, "Could not connect to $ip", Toast.LENGTH_SHORT).show()
                     ipFrag?.connectButton?.text = getString(R.string.disconnected)
                 }
             }
+    }
 
+    private fun setFABOnClick() {
         fab.setOnClickListener {
             if (connected) {
                 animationData.send()
@@ -118,6 +116,27 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 selectFrag?.resetView() ?: Log.d("FAB", "Error")
             } else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val sectionsPagerAdapter = TabAdapter(this, supportFragmentManager)
+        val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
+        viewPager.adapter = sectionsPagerAdapter
+        tabs.setupWithViewPager(viewPager)
+        setSupportActionBar(toolbar)
+
+        checkPermissions()
+
+        mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+
+        setNightMode()
+        retrieveIPs()
+        retrievePort()
+        setConnectionCallbacks()
+        setFABOnClick()
     }
 
     override fun onPause() {
@@ -133,7 +152,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                openSettings()
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             R.id.action_add_ip -> {
@@ -156,8 +175,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         }
     }
 
-    private fun openSettings() {
-        val intent = Intent(this, SettingsActivity::class.java)
-        startActivity(intent)
+    override fun onFragmentInteraction(uri: Uri) {
     }
 }
