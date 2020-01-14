@@ -103,8 +103,8 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
-                    supportActionBar?.title = "AnimatedLEDStrip ($ip)"
-                    ipFrag?.connectButton?.text = getString(R.string.connected)
+                    supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
+                    ipFrag?.connectButton?.text = getString(R.string.server_button_connected)
                 }
             }.setOnDisconnectCallback { ip ->
                 connected = false
@@ -112,13 +112,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
-                    supportActionBar?.title = "AnimatedLEDStrip (Disconnected)"
+                    supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
                     mainSender.runningAnimations.forEach { (id, _) ->
                         supportFragmentManager.beginTransaction()
                             .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
                             .commit()
                     }
-                    ipFrag?.connectButton?.text = getString(R.string.disconnected)
+                    ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
                 }
                 mainSender.end()
             }.setOnReceiveCallback {
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     Toast.makeText(this, "Could not connect to $ip", Toast.LENGTH_SHORT).show()
-                    ipFrag?.connectButton?.text = getString(R.string.disconnected)
+                    ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
                 }
             }
     }

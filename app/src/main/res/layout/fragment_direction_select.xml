@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:chipBackgroundColor="@color/colorViewBack"
-            android:text="@string/forward"
+            android:text="@string/param_direction_forward"
             android:textColor="@color/colorText"
             android:textAlignment="center"
             android:textAppearance="@style/text18"

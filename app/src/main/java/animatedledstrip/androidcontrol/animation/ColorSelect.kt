@@ -265,7 +265,7 @@ class ColorSelect : Fragment() {
 
         val presets = Button(this.context).apply {
             background = buttonDrawable(presetButtonColor)
-            text = context.getString(R.string.pre_text)
+            text = context.getString(R.string.preset_button_text)
             setTextColor(0xffffffff.toInt())
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f)
             typeface = Typeface.DEFAULT_BOLD

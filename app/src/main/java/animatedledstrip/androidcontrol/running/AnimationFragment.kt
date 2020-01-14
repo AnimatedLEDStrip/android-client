@@ -65,7 +65,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
         animation_end.setOnClickListener {
             check(it is Button)
             data.endAnimation()
-            it.text = getString(R.string.ending_anim)
+            it.text = getString(R.string.end_anim_button_ending)
         }
 
         fun removeExcessData(view: View, reqLevel: ReqLevel) {

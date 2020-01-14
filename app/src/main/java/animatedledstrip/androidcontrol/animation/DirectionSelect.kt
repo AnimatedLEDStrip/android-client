@@ -52,11 +52,11 @@ class DirectionSelect : androidx.fragment.app.Fragment() {
             when(it.text.toString()) {
                 "Forward" -> {
                     animationData.direction(Direction.BACKWARD)
-                    it.text = getString(R.string.backward)
+                    it.text = getString(R.string.param_direction_backward)
                 }
                 "Backward" -> {
                     animationData.direction(Direction.FORWARD)
-                    it.text = getString(R.string.forward)
+                    it.text = getString(R.string.param_direction_forward)
                 }
             }
         }

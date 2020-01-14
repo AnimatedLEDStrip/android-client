@@ -24,7 +24,7 @@
                 android:checkable="true"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/continuous_animation"
+                android:text="@string/param_continuous_animation"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:chipBackgroundColor="@color/colorViewBack"

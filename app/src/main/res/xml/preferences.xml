@@ -1,12 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
             android:defaultValue="System Default"
-            android:entries="@array/dark_options"
-            android:entryValues="@array/dark_options"
+            android:entries="@array/setting_dark_mode_options"
+            android:entryValues="@array/setting_dark_mode_options"
             android:key="dark_setting"
-            android:title="@string/dark_mode" />
+            android:title="@string/setting_dark_mode" />
     <EditTextPreference
         android:inputType="number"
         android:key="port_setting"
-        android:title="Port" />
+        android:title="@string/setting_port" />
 </PreferenceScreen>

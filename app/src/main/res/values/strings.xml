@@ -1,19 +1,47 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">AnimatedLEDStrip Control</string>
+    <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
+    <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
+    <string name="title_activity_add_connection">Edit Servers</string>
+
+
+    <!-- Menu -->
+
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_clear_strip">Clear Strip</string>
+    <string name="action_add_ip">Edit Servers</string>
     <string name="action_settings">Settings</string>
 
-    <string name="color">Color</string>
-    <string name="forward">Forward</string>
-    <string name="backward">Backward</string>
-    <string name="title_activity_main">AnimatedLEDStrip (Disconnected)</string>
 
-    <string name="tab_text_1">Servers</string>
-    <string name="tab_text_2">Send Animation</string>
-    <string name="tab_text_3">Running Animations</string>
+    <!-- Tabs -->
 
-    <string name="continuous_animation">Continuous Animation</string>
-    <string name="center">Center</string>
-    <string name="distance">Distance</string>
+    <string name="tab_text_1_server">Servers</string>
+    <string name="tab_text_2_send">Send Animation</string>
+    <string name="tab_text_3_running">Running Animations</string>
+
+
+    <!-- Server List -->
+
+    <string name="server_button_disconnected">Disconnected</string>
+    <string name="server_button_connected">Connected</string>
+    <string name="server_button_connecting">Connecting…</string>
+
+
+    <!-- Animation Options -->
+
+    <string name="param_center">Center</string>
+    <string name="param_color">Color</string>
+    <string name="param_continuous_animation">Continuous Animation</string>
+    <string name="param_distance">Distance</string>
+    <string name="param_direction_forward">Forward</string>
+    <string name="param_direction_backward">Backward</string>
+
+    <string name="preset_button_text">PRESETS</string>
+    <string name="clear_colors_button_text">Clear</string>
+
+
+    <!-- Animations -->
 
     <string-array name="animations">
         <item>Color</item>
@@ -41,10 +69,14 @@
         <item>StackOverflow</item>
     </string-array>
 
-    <string name="end_anim">End</string>
-    <string name="ending_anim">Ending</string>
+
+    <!-- Running Animations -->
+
+    <string name="end_anim_button_end">End</string>
+    <string name="end_anim_button_ending">Ending</string>
 
     <string name="animation_label">Animation: %1$s</string>
+    <string name="color_label">Color:</string>
     <string name="center_label">Center: %1$s</string>
     <string name="continuous_label">Continuous: %1$s</string>
     <string name="delay_label">Delay: %1$s</string>
@@ -53,27 +85,23 @@
     <string name="distance_label">Distance: %1$s</string>
     <string name="spacing_label">Spacing: %1$s</string>
     <string name="id_label">ID</string>
-    <string name="color_label">Color:</string>
-    <string name="action_disconnect">Disconnect</string>
-    <string name="action_clear_strip">Clear Strip</string>
-    <string name="title_activity_add_connection">Edit Servers</string>
-    <string name="action_add_ip">Edit Servers</string>
-    <string name="connected">Connected</string>
-    <string name="disconnected">Disconnected</string>
-    <string name="dark_mode">Dark Mode</string>
 
-    <string-array name="dark_options">
+
+    <!-- Settings -->
+
+    <string name="setting_dark_mode">Dark Mode</string>
+    <string-array name="setting_dark_mode_options">
         <item>System Default</item>
         <item>Light</item>
         <item>Dark</item>
     </string-array>
+    <string name="setting_port">Port</string>
+
+
+    <!-- Server Edit -->
 
     <string name="server_edit">Edit</string>
     <string name="server_remove">X</string>
-    <string name="ip">IP</string>
+    <string name="server_ip">IP</string>
     <string name="default_ip">0.0.0.0</string>
-    <string name="pre_text">PRESETS</string>
-
-    <string name="color_clear">Clear</string>
-    <string name="connecting">Connecting…</string>
 </resources>

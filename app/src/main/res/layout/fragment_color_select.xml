@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/color"
+                    android:text="@string/param_color"
                     android:textColor="@color/colorText"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:padding="2dp"
-                    android:text="@string/color_clear"
+                    android:text="@string/clear_colors_button_text"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

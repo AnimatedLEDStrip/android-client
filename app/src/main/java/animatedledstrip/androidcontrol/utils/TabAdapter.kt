@@ -36,9 +36,9 @@ import animatedledstrip.androidcontrol.running.RunningAnimations
 class TabAdapter(private val context: Context, fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
 
     private val tabTitles = arrayOf(
-        R.string.tab_text_1,
-        R.string.tab_text_2,
-        R.string.tab_text_3
+        R.string.tab_text_1_server,
+        R.string.tab_text_2_send,
+        R.string.tab_text_3_running
     )
 
     override fun getItem(position: Int): androidx.fragment.app.Fragment {
