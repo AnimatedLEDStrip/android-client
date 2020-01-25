@@ -108,7 +108,6 @@ class ColorSelect : Fragment() {
 
     private val presetButtonColor: Long by lazy {
         resources.getColor(R.color.colorPrimary, null).toLong()
-//        ResourcesCompat.getColor(resources, R.color.colorPrimary, null).toLong()
     }
 
 
@@ -135,6 +134,12 @@ class ColorSelect : Fragment() {
         addNewColorButton()
     }
 
+    private val removeColorListener = View.OnLongClickListener {
+        require(it is Button)
+        colorButtons.removeView(it)
+        true
+    }
+
     private val clearColorsListener = View.OnClickListener {
         require(it is Button)
         resetColorButtons()
@@ -145,6 +150,7 @@ class ColorSelect : Fragment() {
     private val presetColorListener = View.OnClickListener {
         require(it is Button)
         removeColorButtons()
+        colorContainer.colors.clear()
         addColorButtons(presetButtons[it] ?: throw IllegalStateException())
         addNewColorButton()
     }
@@ -188,6 +194,7 @@ class ColorSelect : Fragment() {
             typeface = Typeface.DEFAULT_BOLD
             layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
             setOnClickListener(if (newButton) newColorListener else colorListener)
+            setOnLongClickListener(if (newButton) null else removeColorListener)
         }
 
     private fun addColorButton(color: Long = CCBlack.color) {
@@ -271,6 +278,7 @@ class ColorSelect : Fragment() {
             typeface = Typeface.DEFAULT_BOLD
             layoutParams = LinearLayout.LayoutParams(colorButtonSize, colorButtonSize)
             setOnClickListener(presetListener)
+
         }
 
         preset_button_container.addView(presets)
