@@ -131,22 +131,30 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
                     ipFrag?.connectButton?.text = getString(R.string.server_button_connected)
 
-                    val disconnectIntent =
-                        Intent(this, DisconnectSenderBroadcastReceiver::class.java).apply {
-                            action = "Disconnect"
-                        }
+                    val disconnectIntent = Intent(this, DisconnectSenderBroadcastReceiver::class.java)
+                    val clearIntent = Intent(this, ClearStripBroadcastReceiver::class.java)
 
                     val builder = NotificationCompat.Builder(this, "Connection Active")
                         .setSmallIcon(R.drawable.ic_led)
                         .setContentTitle(getString(R.string.led_control_notification_title))
-                        .setContentText(getString(R.string.connected_to_notification_body, mainSender.ipAddress))
+                        .setContentText(
+                            getString(
+                                R.string.connected_to_notification_body,
+                                mainSender.ipAddress
+                            )
+                        )
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setOngoing(true)
                         .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
                         .addAction(
                             R.drawable.ic_led,
-                            "Disconnect",
+                            getString(R.string.action_disconnect),
                             PendingIntent.getBroadcast(this, 0, disconnectIntent, 0)
+                        )
+                        .addAction(
+                            R.drawable.ic_led,
+                            getString(R.string.action_clear_strip),
+                            PendingIntent.getBroadcast(this, 0, clearIntent, 0)
                         )
 
                     with(notificationManager) {

@@ -34,13 +34,14 @@
         </activity>
         <activity
                 android:name=".settings.SettingsActivity"
-                android:label="Settings"
+                android:label="@string/title_activity_settings"
                 android:parentActivityName=".MainActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="animatedledstrip.androidcontrol.MainActivity" />
         </activity>
         <receiver android:name=".utils.DisconnectSenderBroadcastReceiver" android:exported="true" />
+        <receiver android:name=".utils.ClearStripBroadcastReceiver" android:exported="true" />
     </application>
 
 </manifest>
