@@ -23,21 +23,28 @@
 package animatedledstrip.androidcontrol
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
@@ -47,6 +54,7 @@ import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 /**
  * Starting point for the app and the container for most fragments.
@@ -62,13 +70,30 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         ) requestPermissions(arrayOf(Manifest.permission.INTERNET), 1)
     }
 
+    private fun createNotificationChannel() {
+        notificationManager = NotificationManagerCompat.from(this)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val activeConnectionChannel = NotificationChannel(
+                CONNECTION_ACTIVE_ID,
+                "Connection Active",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Report an active connection"
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(activeConnectionChannel)
+        }
+    }
+
     private fun setNightMode() {
         AppCompatDelegate.setDefaultNightMode(
             when (mPreferences.getString(DARK_KEY, null)) {
                 "Light" -> MODE_NIGHT_NO
                 "Dark" -> MODE_NIGHT_YES
                 else ->
-                    if (android.os.Build.VERSION.SDK_INT >= 29) AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    if (Build.VERSION.SDK_INT >= 29) AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                     else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
             }
         )
@@ -105,6 +130,28 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 runOnUiThread {
                     supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
                     ipFrag?.connectButton?.text = getString(R.string.server_button_connected)
+
+                    val disconnectIntent =
+                        Intent(this, DisconnectSenderBroadcastReceiver::class.java).apply {
+                            action = "Disconnect"
+                        }
+
+                    val builder = NotificationCompat.Builder(this, "Connection Active")
+                        .setSmallIcon(R.drawable.ic_led)
+                        .setContentTitle(getString(R.string.led_control_notification_title))
+                        .setContentText(getString(R.string.connected_to_notification_body, mainSender.ipAddress))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setOngoing(true)
+                        .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
+                        .addAction(
+                            R.drawable.ic_led,
+                            "Disconnect",
+                            PendingIntent.getBroadcast(this, 0, disconnectIntent, 0)
+                        )
+
+                    with(notificationManager) {
+                        notify(activeNotificationId, builder.build())
+                    }
                 }
             }.setOnDisconnectCallback { ip ->
                 connected = false
@@ -121,6 +168,8 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
                 }
                 mainSender.end()
+                cancelActiveNotification()
+                resetOptionList()
             }.setOnReceiveCallback {
                 Log.d("Server", it)
             }.setOnDefinedAnimationCallback {
@@ -171,6 +220,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         setSupportActionBar(toolbar)
 
         checkPermissions()
+        createNotificationChannel()
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 
@@ -180,11 +230,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         retrievePort()
         setConnectionCallbacks()
         setFABOnClick()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mainSender.end()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -218,6 +263,5 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         }
     }
 
-    override fun onFragmentInteraction(uri: Uri) {
-    }
+    override fun onFragmentInteraction(uri: Uri) {}
 }

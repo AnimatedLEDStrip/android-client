@@ -24,14 +24,29 @@ package animatedledstrip.androidcontrol.utils
 
 import android.content.SharedPreferences
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import androidx.core.app.NotificationManagerCompat
 import animatedledstrip.animationutils.AnimationData
+import animatedledstrip.client.AnimationSender
 import animatedledstrip.client.AnimationSenderFactory
 import animatedledstrip.colors.ccpresets.*
 
 const val DARK_KEY = "dark_mode"
 const val IP_KEY = "ip_addrs"
 const val PORT_KEY = "port_sel"
+
+const val CONNECTION_ACTIVE_ID = "Connection Active"
+
+const val activeNotificationId = 0
+
+lateinit var notificationManager: NotificationManagerCompat
+
+fun cancelActiveNotification() {
+    with(notificationManager) {
+        cancel(activeNotificationId)
+    }
+}
 
 val IPs = mutableListOf<String>()
 const val defaultPort = 6
