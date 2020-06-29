@@ -24,43 +24,32 @@ package animatedledstrip.androidcontrol.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.SwitchPreference
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.DARK_KEY
-import animatedledstrip.androidcontrol.utils.PORT_KEY
-import animatedledstrip.androidcontrol.utils.mPreferences
-import animatedledstrip.androidcontrol.utils.mainSender
+import animatedledstrip.androidcontrol.utils.*
 import com.takisoft.fix.support.v7.preference.EditTextPreference
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
 /**
- * Settings menu.
+ * Settings menu
  */
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferencesFix(savedInstanceState: Bundle?, rootkey: String?) {
-        EditTextPreference(this.context)
         setPreferencesFromResource(R.xml.preferences, rootkey)
+
         val darkPreference = findPreference("dark_setting") as ListPreference
         val portPreference = findPreference("port_setting") as EditTextPreference
+        val notificationPreference = findPreference("notification_setting") as SwitchPreference
 
         portPreference.text = mainSender.port.toString()
 
         val preferenceListener = Preference.OnPreferenceChangeListener { preference, value ->
-            preference.summary = value as String
             val preferencesEditor: SharedPreferences.Editor = mPreferences.edit()
             when (preference) {
                 darkPreference -> {
-                    setDefaultNightMode(
-                        when (value) {
-                            "Light" -> MODE_NIGHT_NO
-                            "Dark" -> MODE_NIGHT_YES
-                            else ->
-                                if (android.os.Build.VERSION.SDK_INT >= 29) MODE_NIGHT_FOLLOW_SYSTEM
-                                else MODE_NIGHT_AUTO_BATTERY
-                        }
-                    )
+                    preference.summary = value as String
                     preferencesEditor.putString(
                         DARK_KEY,
                         when (value) {
@@ -69,10 +58,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
                             else -> "Default"
                         }
                     ).apply()
+                    setNightModeFromPreferences()
                 }
                 portPreference -> {
+                    preference.summary = value as String
                     mainSender.setPort(value.toInt())
                     preferencesEditor.putInt(PORT_KEY, value.toInt()).apply()
+                }
+                notificationPreference -> {
+                    showNotification = value as Boolean
+                    preferencesEditor.putBoolean(NOTIFICATION_KEY, value)
                 }
             }
             true
@@ -83,5 +78,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         darkPreference.onPreferenceChangeListener = preferenceListener
         portPreference.onPreferenceChangeListener = preferenceListener
+        notificationPreference.onPreferenceChangeListener = preferenceListener
     }
 }

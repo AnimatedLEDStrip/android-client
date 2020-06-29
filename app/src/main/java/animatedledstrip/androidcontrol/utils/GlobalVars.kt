@@ -22,46 +22,34 @@
 
 package animatedledstrip.androidcontrol.utils
 
-import android.content.SharedPreferences
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import androidx.core.app.NotificationManagerCompat
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.AnimationSender
-import animatedledstrip.client.AnimationSenderFactory
 import animatedledstrip.colors.ccpresets.*
 
-const val DARK_KEY = "dark_mode"
-const val IP_KEY = "ip_addrs"
-const val PORT_KEY = "port_sel"
-
-const val CONNECTION_ACTIVE_ID = "Connection Active"
-
-const val activeNotificationId = 0
-
-lateinit var notificationManager: NotificationManagerCompat
-
-fun cancelActiveNotification() {
-    with(notificationManager) {
-        cancel(activeNotificationId)
-    }
-}
-
+// Configured IPs
 val IPs = mutableListOf<String>()
+
+// Default port
 const val defaultPort = 6
+
+// Main Animation Sender
 var mainSender: AnimationSender = AnimationSender(ipAddress = "", port = defaultPort)
 
-lateinit var mPreferences: SharedPreferences
 var connected = false
 
+// AnimationData instance that will be sent and recreated as needed
 var animationData = AnimationData()
 
+// List of supported animations
 val animationOptions: MutableList<String>
     get() = mainSender.supportedAnimations.keys.sorted().toMutableList()
 
 lateinit var animationOptionAdapter: ArrayAdapter<String>
 
+// Color presets
 val presetColors = listOf(
     listOf<Long>(                   // RainbowColors from FastLED
         0xFF0000,

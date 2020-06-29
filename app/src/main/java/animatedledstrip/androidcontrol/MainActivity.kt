@@ -54,12 +54,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 /**
- * Starting point for the app and the container for most fragments.
+ * Starting point for the app
  */
 class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
-    private val sharedPrefFile = "ledprefs"
 
+    /**
+     * Name of the preferences file
+     */
+    private val sharedPrefFile = "led_prefs"
 
+    /**
+     * Check for permissions and ask for them if necessary
+     */
     private fun checkPermissions() {
         if (
             ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
@@ -67,9 +73,14 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         ) requestPermissions(arrayOf(Manifest.permission.INTERNET), 1)
     }
 
-    private fun createNotificationChannel() {
+    /**
+     * Create the active connection notification channel
+     */
+    private fun createActiveConnectionNotificationChannel() {
+        // Create the notification manager that will be used by the whole application
         notificationManager = NotificationManagerCompat.from(this)
 
+        // Only add the channel if build version is Oreo or newer
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val activeConnectionChannel = NotificationChannel(
                 channelID,
@@ -84,85 +95,64 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         }
     }
 
-    private fun setNightMode() {
-        AppCompatDelegate.setDefaultNightMode(
-            when (mPreferences.getString(DARK_KEY, null)) {
-                "Light" -> MODE_NIGHT_NO
-                "Dark" -> MODE_NIGHT_YES
-                else ->
-                    if (Build.VERSION.SDK_INT >= 29) AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    else AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-            }
-        )
-    }
-
-    private fun retrieveIPs() {
-        IPs.clear()
-        val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
-
-        for (ip in ipList.split(",")) {
-            val ipFormatted =
-                ip.removePrefix("[")
-                    .removeSuffix("]")
-                    .removePrefix(" ")
-
-            if (ip != "") IPs.add(ipFormatted)
-        }
-    }
-
-    private fun retrievePort() {
-        val port = mPreferences.getInt(PORT_KEY, 6)
-        mainSender.port = port
-        mPreferences.edit().putInt(PORT_KEY, port).apply()
-    }
-
     private fun setConnectionCallbacks() {
+        val disconnectIntent = Intent(this, DisconnectSenderBroadcastReceiver::class.java)
+        val clearIntent = Intent(this, ClearStripBroadcastReceiver::class.java)
+
+        val notification = NotificationCompat.Builder(this, channelID)
+            .setSmallIcon(R.drawable.ic_led)
+            .setContentTitle(getString(R.string.notification_title))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setOngoing(true)
+            .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
+            .addAction(
+                R.drawable.ic_led,
+                getString(R.string.action_disconnect),
+                PendingIntent.getBroadcast(this, 0, disconnectIntent, 0)
+            )
+            .addAction(
+                R.drawable.ic_led,
+                getString(R.string.action_clear_strip),
+                PendingIntent.getBroadcast(this, 0, clearIntent, 0)
+            )
+
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback { ip ->
                 connected = true
+
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+
+                val ipFrag =
+                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
-                    ipFrag?.connectButton?.text = getString(R.string.server_button_connected)
-
-                    val disconnectIntent = Intent(this, DisconnectSenderBroadcastReceiver::class.java)
-                    val clearIntent = Intent(this, ClearStripBroadcastReceiver::class.java)
-
-                    val builder = NotificationCompat.Builder(this, "Connection Active")
-                        .setSmallIcon(R.drawable.ic_led)
-                        .setContentTitle(getString(R.string.led_control_notification_title))
-                        .setContentText(
-                            getString(
-                                R.string.connected_to_notification_body,
-                                mainSender.ipAddress
-                            )
-                        )
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setOngoing(true)
-                        .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
-                        .addAction(
-                            R.drawable.ic_led,
-                            getString(R.string.action_disconnect),
-                            PendingIntent.getBroadcast(this, 0, disconnectIntent, 0)
-                        )
-                        .addAction(
-                            R.drawable.ic_led,
-                            getString(R.string.action_clear_strip),
-                            PendingIntent.getBroadcast(this, 0, clearIntent, 0)
-                        )
-
-                    with(notificationManager) {
-                        notify(activeNotificationId, builder.build())
-                    }
+                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
                 }
-            }.setOnDisconnectCallback { ip ->
+
+                if (showNotification) with(notificationManager) {
+                    notify(
+                        activeNotificationId,
+                        notification
+                            .setContentText(
+                                getString(
+                                    R.string.notification_body_connected_to,
+                                    mainSender.ipAddress
+                                )
+                            )
+                            .build()
+                    )
+                }
+            }
+            .setOnDisconnectCallback { ip ->
                 connected = false
+
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
-                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+
+                val ipFrag =
+                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
                     mainSender.runningAnimations.forEach { (id, _) ->
@@ -170,17 +160,24 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                             .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
                             .commit()
                     }
-                    ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
+                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_disconnected)
                 }
+
                 mainSender.end()
+
                 cancelActiveNotification()
+
                 resetOptionList()
-            }.setOnReceiveCallback {
+            }
+            .setOnReceiveCallback {
                 Log.d("Server", it)
-            }.setOnDefinedAnimationCallback {
+            }
+            .setOnDefinedAnimationCallback {
                 resetOptionList()
-            }.setOnUnableToConnectCallback { ip ->
-                val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+            }
+            .setOnUnableToConnectCallback { ip ->
+                val ipFrag =
+                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
                     Toast.makeText(
                         this,
@@ -234,14 +231,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         setSupportActionBar(toolbar)
 
         checkPermissions()
-        createNotificationChannel()
+        createActiveConnectionNotificationChannel()
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 
         resetOptionList()
-        setNightMode()
-        retrieveIPs()
-        retrievePort()
+        loadPreferences()
         setConnectionCallbacks()
         setFABOnClick()
     }
