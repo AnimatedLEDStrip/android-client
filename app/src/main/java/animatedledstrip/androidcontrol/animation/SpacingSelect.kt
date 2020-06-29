@@ -26,19 +26,49 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.mainSender
+import animatedledstrip.animationutils.ParamUsage
+import animatedledstrip.animationutils.findAnimation
+import animatedledstrip.animationutils.spacing
+import kotlinx.android.synthetic.main.fragment_spacing_select.*
 
 /**
  * Set the spacing property of the animation.
  */
-class SpacingSelect : Fragment() {
+class SpacingSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
+
+    override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {
+        spacing_value.text = progress.toString()
+        animationData.spacing(progress)
+    }
+
+    override fun onStartTrackingTouch(p0: SeekBar?) {
+    }
+
+    override fun onStopTrackingTouch(p0: SeekBar?) {
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_spacing_select, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        spacing_select.max = mainSender.stripInfo?.numLEDs ?: 240
+        val info = findAnimation(animationData.animation)?.info
+        spacing_select.progress =
+            if (info?.spacing != ParamUsage.NOTUSED) info!!.spacingDefault
+            else spacing_select.max
+        animationData.spacing = spacing_select.progress
+        spacing_select.setOnSeekBarChangeListener(this)
+        spacing_value.text = spacing_select.progress.toString()
     }
 
     companion object {
