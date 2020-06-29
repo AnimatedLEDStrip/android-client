@@ -51,14 +51,14 @@ class ConnectionFragment(val name: String, private val ip: String) : Fragment() 
         super.onViewCreated(view, savedInstanceState)
         server_name.text = ip
         connect_button.text =
-            if (mainSender.ipAddress == ip && mainSender.connected) getString(R.string.server_button_connected)
-            else getString(R.string.server_button_disconnected)
+            if (mainSender.ipAddress == ip && mainSender.connected) getString(R.string.server_list_button_connected)
+            else getString(R.string.server_list_button_disconnected)
         connectButton = connect_button
         connect_button.setOnClickListener {
             if (mainSender.ipAddress == ip && mainSender.connected)
                 mainSender.end()
             else {
-                connectButton.text = getString(R.string.server_button_connecting)
+                connectButton.text = getString(R.string.server_list_button_connecting)
                 if (mainSender.ipAddress != ip) {
                     mainSender.setIPAddress(ip, start = true)         // Also starts connection
                 } else if (!mainSender.connected)

@@ -80,21 +80,21 @@ class ServerEditFragment(val ip: String) : DialogFragment() {
             }
             val container = FrameLayout(this.context!!)
             container.addView(textIn)
-            val builder = AlertDialog.Builder(it)
-            builder.setView(container)
-                .setTitle(if (ip == "") "New Server" else "Edit Server")
-                .setPositiveButton("Save") { _, _ ->
-                    listener.onDialogPositiveClick(
-                        this,
-                        ip,
-                        textIn.text.toString()
-                    )
+
+            AlertDialog.Builder(it)
+                .setView(container)
+                .setTitle(
+                    if (ip == "") getString(R.string.server_edit_dialog_header_new_server)
+                    else getString(R.string.server_edit_dialog_header_edit_server)
+                )
+                .setPositiveButton(getString(R.string.server_edit_dialog_button_save)) { _, _ ->
+                    listener.onDialogPositiveClick(this, ip, textIn.text.toString())
                 }
-                .setNegativeButton("Cancel") { _, _ -> listener.onDialogNegativeClick(this) }
-                .setNeutralButton("Remove") { _, _ ->
-                    listener.onRemoveClick(
-                        this, textIn.text.toString()
-                    )
+                .setNegativeButton(getString(R.string.server_edit_dialog_button_cancel)) { _, _ ->
+                    listener.onDialogNegativeClick(this)
+                }
+                .setNeutralButton(getString(R.string.server_edit_dialog_button_remove)) { _, _ ->
+                    listener.onRemoveClick(this, textIn.text.toString())
                 }
                 .create()
         } ?: throw IllegalStateException("Activity cannot be null")

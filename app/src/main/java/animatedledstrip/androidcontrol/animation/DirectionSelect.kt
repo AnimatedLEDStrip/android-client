@@ -50,13 +50,13 @@ class DirectionSelect : androidx.fragment.app.Fragment() {
         direction_toggle.setOnClickListener {
             check(it is Chip)
             when(it.text.toString()) {
-                "Forward" -> {
+                getString(R.string.anim_param_direction_forward) -> {
                     animationData.direction(Direction.BACKWARD)
-                    it.text = getString(R.string.param_direction_backward)
+                    it.text = getString(R.string.anim_param_direction_backward)
                 }
-                "Backward" -> {
+                getString(R.string.anim_param_direction_backward) -> {
                     animationData.direction(Direction.FORWARD)
-                    it.text = getString(R.string.param_direction_forward)
+                    it.text = getString(R.string.anim_param_direction_forward)
                 }
             }
         }

@@ -242,7 +242,7 @@ class ColorSelect : Fragment() {
                 colorContainer.colors[colorButtons.indexOfChild(selectedColorButton)] =
                     color.toLong()
             }
-            positiveButton(text = "Add")
+            positiveButton(text = getString(R.string.anim_color_button_add))
         }
     }
 
@@ -272,7 +272,7 @@ class ColorSelect : Fragment() {
 
         val presets = Button(this.context).apply {
             background = buttonDrawable(presetButtonColor)
-            text = context.getString(R.string.preset_button_text)
+            text = context.getString(R.string.anim_color_button_presets)
             setTextColor(0xffffffff.toInt())
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f)
             typeface = Typeface.DEFAULT_BOLD

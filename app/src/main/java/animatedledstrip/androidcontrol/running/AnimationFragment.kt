@@ -52,22 +52,22 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         animation_id.text = data.id
-        animation_name.text = getString(R.string.animation_label, data.animation.toString())
-        animation_center.text = getString(R.string.center_label, data.center.toString())
+        animation_name.text = getString(R.string.run_anim_label_animation, data.animation.toString())
+        animation_center.text = getString(R.string.run_anim_label_center, data.center.toString())
         animation_continuous.text = getString(
-            R.string.continuous_label,
+            R.string.run_anim_label_continuous,
             (data.continuous ?: findAnimation(data.animation)?.info?.repetitive).toString()
         )
-        animation_delay.text = getString(R.string.delay_label, data.delay.toString())
-        animation_delay_mod.text = getString(R.string.delaymod_label, data.delayMod.toString())
-        animation_direction.text = getString(R.string.direction_label, data.direction.toString())
-        animation_distance.text = getString(R.string.distance_label, data.distance.toString())
-        animation_spacing.text = getString(R.string.spacing_label, data.spacing.toString())
+        animation_delay.text = getString(R.string.run_anim_label_delay, data.delay.toString())
+        animation_delay_mod.text = getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
+        animation_direction.text = getString(R.string.run_anim_label_direction, data.direction.toString())
+        animation_distance.text = getString(R.string.run_anim_label_distance, data.distance.toString())
+        animation_spacing.text = getString(R.string.run_anim_label_spacing, data.spacing.toString())
 
         animation_end.setOnClickListener {
             check(it is Button)
             data.endAnimation()
-            it.text = getString(R.string.end_anim_button_ending)
+            it.text = getString(R.string.run_anim_end_anim_button_ending)
         }
 
         fun removeExcessData(view: View, reqLevel: ParamUsage) {

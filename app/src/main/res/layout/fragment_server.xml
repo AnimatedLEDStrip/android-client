@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/default_ip"
+                android:text="@string/server_edit_default_ip"
                 android:textColor="@color/colorText"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="2dp"
-                android:text="@string/server_edit"
+                android:text="@string/server_edit_button_edit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

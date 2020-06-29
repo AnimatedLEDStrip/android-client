@@ -40,9 +40,6 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -75,11 +72,11 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val activeConnectionChannel = NotificationChannel(
-                CONNECTION_ACTIVE_ID,
-                "Connection Active",
+                channelID,
+                getString(R.string.notification_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "Report an active connection"
+                description = getString(R.string.notification_channel_description)
             }
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -185,8 +182,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             }.setOnUnableToConnectCallback { ip ->
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
-                    Toast.makeText(this, "Could not connect to $ip", Toast.LENGTH_SHORT).show()
-                    ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.toast_body_could_not_connect, ip),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_disconnected)
                 }
             }
     }
@@ -213,7 +214,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 val selectFrag =
                     supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
                 selectFrag?.resetView() ?: Log.d("FAB", "Error")
-            } else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(
+                this,
+                getString(R.string.toast_body_not_connected),
+                Toast.LENGTH_SHORT
+            )
+                .show()
         }
     }
 
@@ -258,13 +264,23 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
             R.id.action_disconnect -> {
                 if (mainSender.connected)
                     mainSender.end()
-                else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+                else Toast.makeText(
+                    this,
+                    getString(R.string.toast_body_not_connected),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
                 true
             }
             R.id.action_clear -> {
                 if (mainSender.connected)
                     AnimationData().send()
-                else Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show()
+                else Toast.makeText(
+                    this,
+                    getString(R.string.toast_body_not_connected),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

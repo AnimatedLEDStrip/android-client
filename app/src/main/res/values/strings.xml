@@ -1,7 +1,7 @@
 <resources>
     <!-- Titles -->
 
-    <string name="app_name">AnimatedLEDStrip Control</string>
+    <string name="app_name">LED Control</string>
     <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
     <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
     <string name="title_activity_add_connection">Edit Servers</string>
@@ -18,53 +18,62 @@
 
     <!-- Notifications -->
 
-    <string name="led_control_notification_title">LED Control</string>
-    <string name="connected_to_notification_body">Connected to %1$s</string>
+    <string name="notification_title">LED Control</string>
+    <string name="notification_body_connected_to">Connected to %1$s</string>
+    <string name="notification_channel_name">Active Connection</string>
+    <string name="notification_channel_description">Report an active connection</string>
+
+
+    <!-- Toasts -->
+
+    <string name="toast_body_not_connected">Not Connected</string>
+    <string name="toast_body_could_not_connect">Could not connect to %1$s</string>
 
 
     <!-- Tabs -->
 
-    <string name="tab_text_1_server">Servers</string>
-    <string name="tab_text_2_send">Send Animation</string>
-    <string name="tab_text_3_running">Running Animations</string>
+    <string name="tab_1_server">Servers</string>
+    <string name="tab_2_send">Send Animation</string>
+    <string name="tab_3_running">Running Animations</string>
 
 
     <!-- Server List -->
 
-    <string name="server_button_disconnected">Disconnected</string>
-    <string name="server_button_connected">Connected</string>
-    <string name="server_button_connecting">Connecting…</string>
+    <string name="server_list_button_disconnected">Disconnected</string>
+    <string name="server_list_button_connected">Connected</string>
+    <string name="server_list_button_connecting">Connecting…</string>
 
 
     <!-- Animation Options -->
 
-    <string name="param_center">Center</string>
-    <string name="param_color">Color</string>
-    <string name="param_continuous_animation">Continuous Animation</string>
-    <string name="param_distance">Distance</string>
-    <string name="param_direction_forward">Forward</string>
-    <string name="param_direction_backward">Backward</string>
-    <string name="param_spacing">Spacing</string>
+    <string name="anim_param_center">Center</string>
+    <string name="anim_param_color">Color</string>
+    <string name="anim_param_continuous_animation">Continuous Animation</string>
+    <string name="anim_param_distance">Distance</string>
+    <string name="anim_param_direction_forward">Forward</string>
+    <string name="anim_param_direction_backward">Backward</string>
+    <string name="anim_param_spacing">Spacing</string>
 
-    <string name="preset_button_text">PRESETS</string>
-    <string name="clear_colors_button_text">Clear</string>
+    <string name="anim_color_button_presets">PRESETS</string>
+    <string name="anim_color_button_clear_colors">Clear</string>
+    <string name="anim_color_button_add">Add</string>
 
 
     <!-- Running Animations -->
 
-    <string name="end_anim_button_end">End</string>
-    <string name="end_anim_button_ending">Ending</string>
+    <string name="run_anim_end_anim_button_end">End</string>
+    <string name="run_anim_end_anim_button_ending">Ending</string>
 
-    <string name="animation_label">Animation: %1$s</string>
-    <string name="color_label">Color:</string>
-    <string name="center_label">Center: %1$s</string>
-    <string name="continuous_label">Continuous: %1$s</string>
-    <string name="delay_label">Delay: %1$s</string>
-    <string name="delaymod_label">DelayMod: %1$s</string>
-    <string name="direction_label">Direction: %1$s</string>
-    <string name="distance_label">Distance: %1$s</string>
-    <string name="spacing_label">Spacing: %1$s</string>
-    <string name="id_label">ID</string>
+    <string name="run_anim_label_animation">Animation: %1$s</string>
+    <string name="run_anim_label_color">Color:</string>
+    <string name="run_anim_label_center">Center: %1$s</string>
+    <string name="run_anim_label_continuous">Continuous: %1$s</string>
+    <string name="run_anim_label_delay">Delay: %1$s</string>
+    <string name="run_anim_label_delay_mod">DelayMod: %1$s</string>
+    <string name="run_anim_label_direction">Direction: %1$s</string>
+    <string name="run_anim_label_distance">Distance: %1$s</string>
+    <string name="run_anim_label_spacing">Spacing: %1$s</string>
+    <string name="run_anim_label_id">ID</string>
 
 
     <!-- Settings -->
@@ -75,14 +84,19 @@
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string name="setting_port">Port</string>
+    <string name="setting_port">Port</string>1
+    <string name="setting_enable_notifications">Enable Notification</string>
 
 
     <!-- Server Edit -->
 
-    <string name="server_edit">Edit</string>
-    <string name="server_remove">X</string>
-    <string name="server_ip">IP</string>
-    <string name="default_ip">0.0.0.0</string>
+    <string name="server_edit_button_edit">Edit</string>
+    <string name="server_edit_label_ip">IP</string>
+    <string name="server_edit_default_ip">0.0.0.0</string>
+    <string name="server_edit_dialog_header_new_server">New Server</string>
+    <string name="server_edit_dialog_header_edit_server">Edit Server</string>
+    <string name="server_edit_dialog_button_save">Save</string>
+    <string name="server_edit_dialog_button_cancel">Cancel</string>
+    <string name="server_edit_dialog_button_remove">Remove</string>
 
 </resources>
