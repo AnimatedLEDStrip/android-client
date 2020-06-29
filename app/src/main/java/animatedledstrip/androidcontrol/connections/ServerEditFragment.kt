@@ -53,13 +53,8 @@ class ServerEditFragment(val ip: String) : DialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = context as ServerEditListener
-        } catch (e: ClassCastException) {
-            // The activity doesn't implement the interface, throw exception
-            throw ClassCastException("$context must implement ServerEditListener")
-        }
+        check(context is ServerEditListener)
+        listener = context
     }
 
     override fun onCreateView(
@@ -70,7 +65,8 @@ class ServerEditFragment(val ip: String) : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
+        checkNotNull(activity)
+        return activity.let {
             textIn = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(ip)
@@ -78,6 +74,7 @@ class ServerEditFragment(val ip: String) : DialogFragment() {
                     setMargins(30, 0, 30, 0)
                 }
             }
+
             val container = FrameLayout(this.context!!)
             container.addView(textIn)
 
@@ -97,7 +94,7 @@ class ServerEditFragment(val ip: String) : DialogFragment() {
                     listener.onRemoveClick(this, textIn.text.toString())
                 }
                 .create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        }
     }
 
 }
