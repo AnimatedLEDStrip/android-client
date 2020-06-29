@@ -25,6 +25,7 @@ package animatedledstrip.androidcontrol.animation
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +33,11 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.animationOptionAdapter
+import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.animationutils.Animation
 import animatedledstrip.animationutils.AnimationData
-import animatedledstrip.animationutils.ReqLevel
-import animatedledstrip.utils.getAnimationOrNull
-import animatedledstrip.utils.info
-import animatedledstrip.utils.infoOrNull
+import animatedledstrip.animationutils.ParamUsage
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 /**
@@ -58,6 +58,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        animation_list.adapter = animationOptionAdapter
         animation_list.onItemSelectedListener = this
     }
 
@@ -73,25 +74,22 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        when {
-            parent === animation_list -> resetView()
-        }
+        if (parent === animation_list) resetView()
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     fun resetView() {
+        val item = animation_list.selectedItem.toString()
+        Log.d("RView", "Selected $item")
         animation_options.removeAllViews()
         animationData = AnimationData()
-        addAnimationOptions(
-            animation_list.selectedItem.toString().getAnimationOrNull()?.infoOrNull()
-                ?: Animation.COLOR.info()
-        )
+        addAnimationOptions(mainSender.supportedAnimations[item] ?: return)
     }
 
-    private fun addAnimationOptions(info: animatedledstrip.animationutils.AnimationInfo) {
-        animationData.animation = info.animation
+    private fun addAnimationOptions(info: Animation.AnimationInfo) {
+        Log.d("AnimOpts", "Adding opts for ${info.name}")
+        animationData.animation = info.name
 
         fun addOptionFrag(frag: Fragment) {
             childFragmentManager
@@ -102,10 +100,10 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
         if (info.repetitive) addOptionFrag(ContinuousSelect.newInstance())
         for (i in 0 until info.numColors) addOptionFrag(ColorSelect.newInstance())
-        if (info.center != ReqLevel.NOTUSED) addOptionFrag(CenterSelect.newInstance())
-        if (info.distance != ReqLevel.NOTUSED) addOptionFrag(DistanceSelect.newInstance())
-        if (info.direction != ReqLevel.NOTUSED) addOptionFrag(DirectionSelect.newInstance())
-        if (info.spacing != ReqLevel.NOTUSED) addOptionFrag(SpacingSelect.newInstance())
+        if (info.center != ParamUsage.NOTUSED) addOptionFrag(CenterSelect.newInstance())
+        if (info.distance != ParamUsage.NOTUSED) addOptionFrag(DistanceSelect.newInstance())
+        if (info.direction != ParamUsage.NOTUSED) addOptionFrag(DirectionSelect.newInstance())
+        if (info.spacing != ParamUsage.NOTUSED) addOptionFrag(SpacingSelect.newInstance())
     }
 
 

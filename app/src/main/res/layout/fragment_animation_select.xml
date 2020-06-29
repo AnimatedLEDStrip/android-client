@@ -24,7 +24,6 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
-                android:entries="@array/animations"
                 android:textSize="18sp"
                 android:spinnerMode="dropdown" />
     </androidx.cardview.widget.CardView>

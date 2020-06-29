@@ -35,13 +35,17 @@ const val PORT_KEY = "port_sel"
 
 val IPs = mutableListOf<String>()
 const val defaultPort = 6
-var mainSender: AnimationSenderFactory.AnimationSender =
-    AnimationSenderFactory.create(ipAddress = "", port = defaultPort)
+var mainSender: AnimationSender = AnimationSender(ipAddress = "", port = defaultPort)
 
 lateinit var mPreferences: SharedPreferences
 var connected = false
 
 var animationData = AnimationData()
+
+val animationOptions: MutableList<String>
+    get() = mainSender.supportedAnimations.keys.sorted().toMutableList()
+
+lateinit var animationOptionAdapter: ArrayAdapter<String>
 
 val presetColors = listOf(
     listOf<Long>(                   // RainbowColors from FastLED

@@ -31,10 +31,9 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.AnimationColor
 import animatedledstrip.animationutils.AnimationData
-import animatedledstrip.animationutils.ReqLevel
-import animatedledstrip.animationutils.isContinuous
+import animatedledstrip.animationutils.ParamUsage
+import animatedledstrip.animationutils.findAnimation
 import animatedledstrip.client.endAnimation
-import animatedledstrip.utils.infoOrNull
 import kotlinx.android.synthetic.main.fragment_animation.*
 
 /**
@@ -55,7 +54,10 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
         animation_id.text = data.id
         animation_name.text = getString(R.string.animation_label, data.animation.toString())
         animation_center.text = getString(R.string.center_label, data.center.toString())
-        animation_continuous.text = getString(R.string.continuous_label, data.isContinuous().toString())
+        animation_continuous.text = getString(
+            R.string.continuous_label,
+            (data.continuous ?: findAnimation(data.animation)?.info?.repetitive).toString()
+        )
         animation_delay.text = getString(R.string.delay_label, data.delay.toString())
         animation_delay_mod.text = getString(R.string.delaymod_label, data.delayMod.toString())
         animation_direction.text = getString(R.string.direction_label, data.direction.toString())
@@ -68,8 +70,8 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
             it.text = getString(R.string.end_anim_button_ending)
         }
 
-        fun removeExcessData(view: View, reqLevel: ReqLevel) {
-            if (reqLevel == ReqLevel.NOTUSED) animation_params.removeView(view)
+        fun removeExcessData(view: View, reqLevel: ParamUsage) {
+            if (reqLevel == ParamUsage.NOTUSED) animation_params.removeView(view)
         }
 
         data.colors.forEach {
@@ -81,7 +83,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
                 .commit()
         }
 
-        val info = data.animation.infoOrNull() ?: return
+        val info = findAnimation(data.animation)?.info ?: return
 
         removeExcessData(animation_center, info.center)
         removeExcessData(animation_delay, info.delay)

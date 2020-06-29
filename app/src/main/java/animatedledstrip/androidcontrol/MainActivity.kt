@@ -122,7 +122,9 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 }
                 mainSender.end()
             }.setOnReceiveCallback {
-                Log.d("Server", it.toString())
+                Log.d("Server", it)
+            }.setOnDefinedAnimationCallback {
+                resetOptionList()
             }.setOnUnableToConnectCallback { ip ->
                 val ipFrag = supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
@@ -130,6 +132,21 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     ipFrag?.connectButton?.text = getString(R.string.server_button_disconnected)
                 }
             }
+    }
+
+    private fun resetOptionList() {
+        runOnUiThread {
+            animationOptionAdapter =
+                ArrayAdapter(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    animationOptions
+                ).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+            if (animation_list != null) animation_list.adapter = animationOptionAdapter
+            animationOptionAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun setFABOnClick() {
@@ -157,6 +174,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
 
+        resetOptionList()
         setNightMode()
         retrieveIPs()
         retrievePort()
