@@ -1,5 +1,6 @@
 <resources>
     <!-- Titles -->
+
     <string name="app_name">AnimatedLEDStrip Control</string>
     <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
     <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
@@ -12,6 +13,12 @@
     <string name="action_clear_strip">Clear Strip</string>
     <string name="action_add_ip">Edit Servers</string>
     <string name="action_settings">Settings</string>
+
+
+    <!-- Notifications -->
+
+    <string name="led_control_notification_title">LED Control</string>
+    <string name="connected_to_notification_body">Connected to %1$s</string>
 
 
     <!-- Tabs -->
@@ -36,38 +43,10 @@
     <string name="param_distance">Distance</string>
     <string name="param_direction_forward">Forward</string>
     <string name="param_direction_backward">Backward</string>
+    <string name="param_spacing">Spacing</string>
 
     <string name="preset_button_text">PRESETS</string>
     <string name="clear_colors_button_text">Clear</string>
-
-
-    <!-- Animations -->
-
-    <string-array name="animations">
-        <item>Color</item>
-        <item>Bounce to Color</item>
-        <item>Cat Toy to Color</item>
-        <item>Fade to Color</item>
-        <item>Multi-pixel Run to Color</item>
-        <item>Sparkle to Color</item>
-        <item>Splat</item>
-        <item>Stack</item>
-        <item>Wipe</item>
-        <item>Alternate</item>
-        <item>Bounce</item>
-        <item>Cat Toy</item>
-        <item>Fireworks</item>
-        <item>Meteor</item>
-        <item>Multi-pixel Run</item>
-        <item>Pixel Marathon</item>
-        <item>Pixel Run</item>
-        <item>Ripple</item>
-        <item>Smooth Chase</item>
-        <item>Smooth Fade</item>
-        <item>Sparkle</item>
-        <item>Sparkle Fade</item>
-        <item>StackOverflow</item>
-    </string-array>
 
 
     <!-- Running Animations -->
@@ -104,4 +83,5 @@
     <string name="server_remove">X</string>
     <string name="server_ip">IP</string>
     <string name="default_ip">0.0.0.0</string>
+
 </resources>
