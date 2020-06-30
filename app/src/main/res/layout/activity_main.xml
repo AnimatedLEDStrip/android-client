@@ -26,7 +26,7 @@
                 android:background="?attr/colorPrimary"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <animatedledstrip.androidcontrol.tabs.CustomViewPager
+    <animatedledstrip.androidcontrol.tabs.ViewPagerWithoutSwipes
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
