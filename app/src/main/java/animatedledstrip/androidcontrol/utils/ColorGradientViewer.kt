@@ -33,15 +33,14 @@ import animatedledstrip.utils.toARGB
 import kotlinx.android.synthetic.main.fragment_animation_color.*
 
 /**
- * Represents a ColorContainer for a running animation listing.
+ * Represents a ColorContainer for a running animation listing
  */
-class AnimationColor(private val colors: List<Long>) : Fragment() {
+class ColorGradientViewer(private val colors: List<Long>) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_animation_color, container, false)
     }
 
@@ -64,7 +63,7 @@ class AnimationColor(private val colors: List<Long>) : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(colors: List<Long>) =
-            AnimationColor(colors)
+            ColorGradientViewer(colors)
     }
 
 }

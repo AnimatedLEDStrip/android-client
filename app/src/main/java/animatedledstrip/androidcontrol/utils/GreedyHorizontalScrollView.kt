@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.HorizontalScrollView
 
-
 /**
  * A HorizontalScrollView that asks its parent's parent to not intercept its touch events
  */

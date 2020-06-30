@@ -29,7 +29,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.AnimationColor
+import animatedledstrip.androidcontrol.utils.ColorGradientViewer
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.ParamUsage
 import animatedledstrip.animationutils.findAnimation
@@ -78,7 +78,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
             childFragmentManager.beginTransaction()
                 .add(
                     animation_colors.id,
-                    AnimationColor(it.toColorContainer().colors)
+                    ColorGradientViewer(it.toColorContainer().colors)
                 )
                 .commit()
         }
