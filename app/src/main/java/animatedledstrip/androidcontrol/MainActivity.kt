@@ -46,6 +46,8 @@ import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
+import animatedledstrip.androidcontrol.receivers.ClearStripBroadcastReceiver
+import animatedledstrip.androidcontrol.receivers.DisconnectSenderBroadcastReceiver
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData

@@ -1,8 +1,9 @@
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import animatedledstrip.androidcontrol.utils.mainSender
 
 class DisconnectSenderBroadcastReceiver : BroadcastReceiver() {
 
