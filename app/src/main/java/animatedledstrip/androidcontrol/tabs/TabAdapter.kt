@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.tabs
 
 import android.content.Context
 import androidx.fragment.app.FragmentPagerAdapter

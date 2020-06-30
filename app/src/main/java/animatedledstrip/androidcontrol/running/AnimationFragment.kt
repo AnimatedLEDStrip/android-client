@@ -29,7 +29,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.ColorGradientViewer
+import animatedledstrip.androidcontrol.views.ColorGradientViewer
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.animationutils.ParamUsage
 import animatedledstrip.animationutils.findAnimation

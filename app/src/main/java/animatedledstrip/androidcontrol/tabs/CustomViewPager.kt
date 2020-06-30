@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.tabs
 
 import android.annotation.SuppressLint
 import android.content.Context

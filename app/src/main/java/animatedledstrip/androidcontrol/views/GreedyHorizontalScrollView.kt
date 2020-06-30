@@ -1,4 +1,4 @@
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.views
 
 import android.content.Context
 import android.util.AttributeSet

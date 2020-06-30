@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.views
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle

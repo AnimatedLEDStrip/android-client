@@ -49,6 +49,7 @@ import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.receivers.ClearStripBroadcastReceiver
 import animatedledstrip.androidcontrol.receivers.DisconnectSenderBroadcastReceiver
 import animatedledstrip.androidcontrol.settings.SettingsActivity
+import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
@@ -226,7 +227,11 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter = TabAdapter(this, supportFragmentManager)
+        val sectionsPagerAdapter =
+            TabAdapter(
+                this,
+                supportFragmentManager
+            )
         val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(viewPager)
