@@ -6,7 +6,10 @@ import android.view.MotionEvent
 import android.widget.HorizontalScrollView
 
 
-class CustomHorizontalScrollView(context: Context, attributeSet: AttributeSet) :
+/**
+ * A HorizontalScrollView that asks its parent's parent to not intercept its touch events
+ */
+class GreedyHorizontalScrollView(context: Context, attributeSet: AttributeSet) :
     HorizontalScrollView(context, attributeSet) {
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
