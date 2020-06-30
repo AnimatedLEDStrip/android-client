@@ -29,13 +29,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.colors.ColorContainer
+import animatedledstrip.colors.isEmpty
 import animatedledstrip.utils.toARGB
 import kotlinx.android.synthetic.main.fragment_animation_color.*
 
 /**
  * Represents a ColorContainer for a running animation listing
  */
-class ColorGradientViewer(private val colors: List<Long>) : Fragment() {
+class ColorGradientViewer(private val cc: ColorContainer) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +51,12 @@ class ColorGradientViewer(private val colors: List<Long>) : Fragment() {
         color_gradient.background = GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             mutableListOf<Long>().apply {
-                if (colors.isEmpty()) {
+                if (cc.isEmpty()) {
                     add(0L)
                     add(0L)
                 } else {
-                    addAll(colors)
-                    add(colors[0])
+                    addAll(cc.colors)
+                    add(cc.colors[0])
                 }
             }.map { it.toARGB() }.toIntArray()
         )
@@ -62,8 +64,8 @@ class ColorGradientViewer(private val colors: List<Long>) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(colors: List<Long>) =
-            ColorGradientViewer(colors)
+        fun newInstance(cc: ColorContainer) =
+            ColorGradientViewer(cc)
     }
 
 }

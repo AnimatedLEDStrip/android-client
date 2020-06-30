@@ -38,7 +38,6 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.androidcontrol.utils.indexOfChildOrNull
-import animatedledstrip.androidcontrol.utils.presetColors
 import animatedledstrip.colors.ColorContainer
 import animatedledstrip.colors.ccpresets.*
 import animatedledstrip.utils.toARGB
@@ -59,7 +58,7 @@ class ColorSelect : Fragment() {
     /* Buttons */
 
     private var selectedColorButton: Button? = null
-    private val presetButtons = mutableMapOf<Button, List<Long>>()
+    private val presetButtons = mutableMapOf<Button, ColorContainer>()
 
     private val colorButtons: LinearLayout by lazy {
         color_buttons_container
@@ -166,13 +165,13 @@ class ColorSelect : Fragment() {
             .ripple()
             .build()
 
-    private fun presetDrawable(colors: List<Long>): Drawable =
+    private fun presetDrawable(cc: ColorContainer): Drawable =
         GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             mutableListOf<Long>()
                 .apply {
-                    addAll(colors)
-                    add(colors[0])
+                    addAll(cc.colors)
+                    add(cc.colors[0])
                 }
                 .map { it.toARGB() }
                 .toIntArray()
@@ -203,8 +202,8 @@ class ColorSelect : Fragment() {
         colorContainer += color
     }
 
-    private fun addColorButtons(colors: List<Long>) {
-        for (c in colors) {
+    private fun addColorButtons(cc: ColorContainer) {
+        for (c in cc.colors) {
             addColorButton(c)
         }
     }
@@ -283,7 +282,7 @@ class ColorSelect : Fragment() {
 
         preset_button_container.addView(presets)
 
-        presetColors.forEach { presetColor ->
+        CCGroupPresets.forEach { presetColor ->
             Button(this.context ?: throw IllegalStateException()).apply {
                 background = presetDrawable(presetColor)
                 layoutParams = presetLayout

@@ -78,7 +78,7 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
             childFragmentManager.beginTransaction()
                 .add(
                     animation_colors.id,
-                    ColorGradientViewer(it.toColorContainer().colors)
+                    ColorGradientViewer(it.toColorContainer())
                 )
                 .commit()
         }
