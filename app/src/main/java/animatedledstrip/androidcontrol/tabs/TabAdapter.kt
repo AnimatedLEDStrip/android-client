@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
 import animatedledstrip.androidcontrol.connections.ConnectFragment
-import animatedledstrip.androidcontrol.running.RunningAnimations
+import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -46,7 +46,7 @@ class TabAdapter(private val context: Context, fm: androidx.fragment.app.Fragmen
         return when (position) {
             0 -> ConnectFragment.newInstance()
             1 -> AnimationSelectContainer.newInstance()
-            2 -> RunningAnimations.newInstance()
+            2 -> RunningAnimationsContainer.newInstance()
             else -> throw Exception()
         }
     }

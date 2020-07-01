@@ -32,10 +32,14 @@ import animatedledstrip.androidcontrol.utils.mainSender
 import kotlinx.android.synthetic.main.fragment_running_animations.*
 
 /**
- * The list of running animations.
+ * The list of running animations
  */
-class RunningAnimations : Fragment() {
-    private fun addCurrentAnimations() {
+class RunningAnimationsContainer : Fragment() {
+
+    /**
+     * Add all animations that are running when this is created
+     */
+    private fun addCurrentRunningAnimations() {
         mainSender.runningAnimations.forEach { (id, data) ->
             fragmentManager?.beginTransaction()?.add(
                 running_animation_list.id,
@@ -45,7 +49,10 @@ class RunningAnimations : Fragment() {
         }
     }
 
-    private fun setConnectionCallbacks() {
+    /**
+     * Set the onNewAnimation and onEndAnimation callbacks for the mainSender
+     */
+    private fun setNewAndEndAnimationCallbacks() {
         mainSender
             .setOnNewAnimationCallback { data ->
                 activity?.runOnUiThread {
@@ -55,7 +62,8 @@ class RunningAnimations : Fragment() {
                         data.id
                     )?.commit()
                 }
-            }.setOnEndAnimationCallback { data ->
+            }
+            .setOnEndAnimationCallback { data ->
                 activity?.runOnUiThread {
                     fragmentManager?.beginTransaction()
                         ?.remove(
@@ -71,20 +79,19 @@ class RunningAnimations : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_running_animations, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addCurrentAnimations()
-        setConnectionCallbacks()
+        addCurrentRunningAnimations()
+        setNewAndEndAnimationCallbacks()
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = RunningAnimations()
+        fun newInstance() = RunningAnimationsContainer()
     }
 
 }
