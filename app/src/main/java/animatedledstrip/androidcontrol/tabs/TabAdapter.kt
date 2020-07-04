@@ -23,37 +23,65 @@
 package animatedledstrip.androidcontrol.tabs
 
 import android.content.Context
+import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
 import animatedledstrip.androidcontrol.connections.ConnectFragment
 import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
+import animatedledstrip.androidcontrol.utils.animationOptionAdapter
+import animatedledstrip.androidcontrol.utils.mainSender
+import kotlin.reflect.KClass
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class TabAdapter(private val context: Context, fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
+class TabAdapter(private val context: Context, fm: FragmentManager) :
+    FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    private val tabTitles = arrayOf(
-        R.string.tab_1_server,
-        R.string.tab_2_send,
-        R.string.tab_3_running
+    private val tabs = listOf<Pair<Int, KClass<out Fragment>>>(
+        R.string.tab_1_server to ConnectFragment::class,
+        R.string.tab_2_send to AnimationSelectContainer::class,
+        R.string.tab_3_running to RunningAnimationsContainer::class
     )
 
-    override fun getItem(position: Int): androidx.fragment.app.Fragment {
-        // getItem is called to instantiate the fragment for the given page.
-        return when (position) {
-            0 -> ConnectFragment.newInstance()
-            1 -> AnimationSelectContainer.newInstance()
-            2 -> RunningAnimationsContainer.newInstance()
+    override fun getItem(position: Int): Fragment {
+        var tabToUse = tabs[position].second
+        if (!mainSender.connected && tabToUse != ConnectFragment::class)
+            tabToUse = ConnectFirstPlaceholder::class
+        Log.d("Tab", tabToUse.toString())
+        return when (tabToUse) {
+            ConnectFragment::class -> ConnectFragment.newInstance()
+            AnimationSelectContainer::class -> {
+                Log.d("Click", animationOptionAdapter.toString())
+                AnimationSelectContainer.newInstance()
+            }
+            RunningAnimationsContainer::class -> RunningAnimationsContainer.newInstance()
+            ConnectFirstPlaceholder::class -> ConnectFirstPlaceholder.newInstance()
             else -> throw Exception()
         }
     }
 
+    override fun getItemPosition(obj: Any): Int =
+        when (obj) {
+            is ConnectFragment -> PagerAdapter.POSITION_UNCHANGED
+            is ConnectFirstPlaceholder ->
+                if (mainSender.connected) PagerAdapter.POSITION_NONE
+                else PagerAdapter.POSITION_UNCHANGED
+            is AnimationSelectContainer, is RunningAnimationsContainer ->
+                if (mainSender.connected) PagerAdapter.POSITION_UNCHANGED
+                else PagerAdapter.POSITION_NONE
+            else -> PagerAdapter.POSITION_NONE
+        }
+
     override fun getPageTitle(position: Int): CharSequence? {
-        return context.resources.getString(tabTitles[position])
+        return context.resources.getString(tabs[position].first)
     }
 
-    override fun getCount() = 3
+    override fun getCount() = tabs.size
 }
