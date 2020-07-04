@@ -54,7 +54,6 @@ import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 /**
  * Starting point for the app
@@ -65,6 +64,8 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
      * Name of the preferences file
      */
     private val sharedPrefFile = "led_prefs"
+
+    lateinit var tabAdapter: TabAdapter
 
     /**
      * Check for permissions and ask for them if necessary
@@ -102,27 +103,12 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         val disconnectIntent = Intent(this, DisconnectSenderBroadcastReceiver::class.java)
         val clearIntent = Intent(this, ClearStripBroadcastReceiver::class.java)
 
-        val notification = NotificationCompat.Builder(this, channelID)
-            .setSmallIcon(R.drawable.ic_led)
-            .setContentTitle(getString(R.string.notification_title))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setOngoing(true)
-            .setContentIntent(PendingIntent.getActivity(this, 0, intent, 0))
-            .addAction(
-                R.drawable.ic_led,
-                getString(R.string.action_disconnect),
-                PendingIntent.getBroadcast(this, 0, disconnectIntent, 0)
-            )
-            .addAction(
-                R.drawable.ic_led,
-                getString(R.string.action_clear_strip),
-                PendingIntent.getBroadcast(this, 0, clearIntent, 0)
-            )
-
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback { ip ->
-                connected = true
+                runOnUiThread {
+                    tabAdapter.notifyDataSetChanged()
+                }
 
                 fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
@@ -137,7 +123,38 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 if (showNotification) with(notificationManager) {
                     notify(
                         activeNotificationId,
-                        notification
+                        NotificationCompat.Builder(this@MainActivity, channelID)
+                            .setSmallIcon(R.drawable.ic_led)
+                            .setContentTitle(getString(R.string.notification_title))
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(
+                                PendingIntent.getActivity(
+                                    this@MainActivity,
+                                    0,
+                                    intent,
+                                    0
+                                )
+                            )
+                            .addAction(
+                                R.drawable.ic_led,
+                                getString(R.string.action_disconnect),
+                                PendingIntent.getBroadcast(
+                                    this@MainActivity,
+                                    0,
+                                    disconnectIntent,
+                                    0
+                                )
+                            )
+                            .addAction(
+                                R.drawable.ic_led,
+                                getString(R.string.action_clear_strip),
+                                PendingIntent.getBroadcast(
+                                    this@MainActivity,
+                                    0,
+                                    clearIntent,
+                                    0
+                                )
+                            )
                             .setContentText(
                                 getString(
                                     R.string.notification_body_connected_to,
@@ -149,7 +166,9 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 }
             }
             .setOnDisconnectCallback { ip ->
-                connected = false
+                runOnUiThread {
+                    tabAdapter.notifyDataSetChanged()
+                }
 
                 fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
@@ -163,20 +182,25 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                             .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
                             .commit()
                     }
-                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_disconnected)
+                    ipFrag?.connectButton?.text =
+                        getString(R.string.server_list_button_disconnected)
                 }
 
                 mainSender.end()
 
                 cancelActiveNotification()
 
-                resetOptionList()
+                runOnUiThread {
+                    animationOptionAdapter.clear()
+                }
             }
             .setOnReceiveCallback {
-                Log.d("Server", it)
+//                Log.d("Server", it)
             }
             .setOnDefinedAnimationCallback {
-                resetOptionList()
+                runOnUiThread {
+                    animationOptionAdapter.add(it.name)
+                }
             }
             .setOnUnableToConnectCallback { ip ->
                 val ipFrag =
@@ -187,29 +211,15 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                         getString(R.string.toast_body_could_not_connect, ip),
                         Toast.LENGTH_SHORT
                     ).show()
-                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_disconnected)
+                    ipFrag?.connectButton?.text =
+                        getString(R.string.server_list_button_disconnected)
                 }
             }
     }
 
-    private fun resetOptionList() {
-        runOnUiThread {
-            animationOptionAdapter =
-                ArrayAdapter(
-                    this,
-                    android.R.layout.simple_spinner_item,
-                    animationOptions
-                ).apply {
-                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                }
-            if (animation_list != null) animation_list.adapter = animationOptionAdapter
-            animationOptionAdapter.notifyDataSetChanged()
-        }
-    }
-
     private fun setFABOnClick() {
         fab.setOnClickListener {
-            if (connected) {
+            if (mainSender.connected) {
                 animationData.send()
                 val selectFrag =
                     supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
@@ -227,22 +237,30 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter =
+        tabAdapter =
             TabAdapter(
                 this,
                 supportFragmentManager
             )
         val viewPager: androidx.viewpager.widget.ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
+        viewPager.adapter = tabAdapter
         tabs.setupWithViewPager(viewPager)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
 
         checkPermissions()
         createActiveConnectionNotificationChannel()
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        animationOptionAdapter =
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                mutableListOf<String>()
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
 
-        resetOptionList()
         loadPreferences()
         setConnectionCallbacks()
         setFABOnClick()
