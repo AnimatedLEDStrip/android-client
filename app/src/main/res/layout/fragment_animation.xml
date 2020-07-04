@@ -11,7 +11,7 @@
         app:cardBackgroundColor="@color/colorViewBack"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
-        tools:context=".running.AnimationFragment">
+        tools:context=".running.RunningAnimationFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
