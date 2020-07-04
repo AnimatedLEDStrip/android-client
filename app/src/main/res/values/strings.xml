@@ -2,6 +2,7 @@
     <!-- Titles -->
 
     <string name="app_name">LED Control</string>
+    <string name="app_launcher_name">LED CTRL</string>
     <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
     <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
     <string name="title_activity_add_connection">Edit Servers</string>

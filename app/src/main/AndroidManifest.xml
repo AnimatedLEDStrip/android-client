@@ -24,7 +24,7 @@
         </activity>
         <activity
                 android:name=".MainActivity"
-                android:label="@string/title_activity_main_disconnected"
+                android:label="@string/app_launcher_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
