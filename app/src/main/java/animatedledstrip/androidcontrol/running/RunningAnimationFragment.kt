@@ -38,9 +38,9 @@ import kotlinx.android.synthetic.main.fragment_animation.*
 
 /**
  * Shows a single running animation along with its parameters and a button
- * for ending it.
+ * for ending it
  */
-class AnimationFragment(private val data: AnimationData) : Fragment() {
+class RunningAnimationFragment(private val data: AnimationData) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,35 +51,45 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        animation_id.text = data.id
-        animation_name.text = getString(R.string.run_anim_label_animation, data.animation.toString())
-        animation_center.text = getString(R.string.run_anim_label_center, data.center.toString())
-        animation_continuous.text = getString(
-            R.string.run_anim_label_continuous,
-            (data.continuous ?: findAnimation(data.animation)?.info?.repetitive).toString()
-        )
-        animation_delay.text = getString(R.string.run_anim_label_delay, data.delay.toString())
-        animation_delay_mod.text = getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
-        animation_direction.text = getString(R.string.run_anim_label_direction, data.direction.toString())
-        animation_distance.text = getString(R.string.run_anim_label_distance, data.distance.toString())
-        animation_spacing.text = getString(R.string.run_anim_label_spacing, data.spacing.toString())
 
+        // Set parameters
+        animation_id.text = data.id
+        animation_name.text =
+            getString(R.string.run_anim_label_animation, data.animation.toString())
+        animation_center.text =
+            getString(R.string.run_anim_label_center, data.center.toString())
+        animation_continuous.text =
+            getString(
+                R.string.run_anim_label_continuous,
+                (data.continuous ?: findAnimation(data.animation)?.info?.repetitive).toString()
+            )
+        animation_delay.text =
+            getString(R.string.run_anim_label_delay, data.delay.toString())
+        animation_delay_mod.text =
+            getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
+        animation_direction.text =
+            getString(R.string.run_anim_label_direction, data.direction.toString())
+        animation_distance.text =
+            getString(R.string.run_anim_label_distance, data.distance.toString())
+        animation_spacing.text =
+            getString(R.string.run_anim_label_spacing, data.spacing.toString())
+
+        // Set onClick listener for end button
         animation_end.setOnClickListener {
             check(it is Button)
             data.endAnimation()
             it.text = getString(R.string.run_anim_end_anim_button_ending)
         }
 
-        fun removeExcessData(view: View, reqLevel: ParamUsage) {
-            if (reqLevel == ParamUsage.NOTUSED) animation_params.removeView(view)
+        // Helper function for removing excess data points
+        // (checks if usage is NOTUSED, if so then removes it)
+        fun removeExcessData(view: View, usage: ParamUsage) {
+            if (usage == ParamUsage.NOTUSED) animation_params.removeView(view)
         }
 
         data.colors.forEach {
             childFragmentManager.beginTransaction()
-                .add(
-                    animation_colors.id,
-                    ColorGradientViewer(it.toColorContainer())
-                )
+                .add(animation_colors.id, ColorGradientViewer(it.toColorContainer()))
                 .commit()
         }
 
@@ -97,6 +107,6 @@ class AnimationFragment(private val data: AnimationData) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(data: AnimationData) = AnimationFragment(data)
+        fun newInstance(data: AnimationData) = RunningAnimationFragment(data)
     }
 }

@@ -43,7 +43,7 @@ class RunningAnimationsContainer : Fragment() {
         mainSender.runningAnimations.forEach { (id, data) ->
             fragmentManager?.beginTransaction()?.add(
                 running_animation_list.id,
-                AnimationFragment.newInstance(data),
+                RunningAnimationFragment.newInstance(data),
                 id
             )?.commit()
         }
@@ -58,7 +58,7 @@ class RunningAnimationsContainer : Fragment() {
                 activity?.runOnUiThread {
                     fragmentManager?.beginTransaction()?.add(
                         running_animation_list?.id ?: return@runOnUiThread,
-                        AnimationFragment.newInstance(data),
+                        RunningAnimationFragment.newInstance(data),
                         data.id
                     )?.commit()
                 }
