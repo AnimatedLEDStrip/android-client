@@ -38,6 +38,7 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.androidcontrol.utils.indexOfChildOrNull
+import animatedledstrip.animationutils.color
 import animatedledstrip.colors.ColorContainer
 import animatedledstrip.colors.ccpresets.*
 import animatedledstrip.utils.toARGB
@@ -261,7 +262,7 @@ class ColorSelect : Fragment() {
     ): View? {
         val thisView = inflater.inflate(R.layout.fragment_color_select, container, false)
 
-        animationData.colors += colorContainer
+        animationData.color(colorContainer)
 
         return thisView
     }

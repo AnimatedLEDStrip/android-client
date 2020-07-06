@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="@color/colorViewBack"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
+    tools:context=".animation.AddAnotherColorFragment">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/add_new_color_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:chipBackgroundColor="@color/colorViewBack"
+        android:text="@string/anim_add_color_button"
+        android:textColor="@color/colorText"
+        android:textAlignment="center"
+        android:textAppearance="@style/text18"
+        />
+
+</androidx.cardview.widget.CardView>

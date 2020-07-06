@@ -58,6 +58,7 @@
     <string name="anim_color_button_presets">PRESETS</string>
     <string name="anim_color_button_clear_colors">Clear</string>
     <string name="anim_color_button_add">Add</string>
+    <string name="anim_add_color_button">Add Another Color</string>
 
 
     <!-- Running Animations -->
@@ -99,5 +100,8 @@
     <string name="server_edit_dialog_button_save">Save</string>
     <string name="server_edit_dialog_button_cancel">Cancel</string>
     <string name="server_edit_dialog_button_remove">Remove</string>
+
+
+    <!-- Anything after this needs to be sorted-->
 
 </resources>

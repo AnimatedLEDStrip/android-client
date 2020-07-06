@@ -228,8 +228,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                 this,
                 getString(R.string.toast_body_not_connected),
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         }
     }
 
