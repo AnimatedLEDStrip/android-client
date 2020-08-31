@@ -101,6 +101,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         if (info.repetitive) addOptionFrag(ContinuousSelect.newInstance())
         addOptionFrag(ColorSelectContainerFragment.newInstance(info))
         if (info.center != ParamUsage.NOTUSED) addOptionFrag(CenterSelect.newInstance())
+        if (info.delay != ParamUsage.NOTUSED) addOptionFrag(DelaySelect.newInstance())
         if (info.distance != ParamUsage.NOTUSED) addOptionFrag(DistanceSelect.newInstance())
         if (info.direction != ParamUsage.NOTUSED) addOptionFrag(DirectionSelect.newInstance())
         if (info.spacing != ParamUsage.NOTUSED) addOptionFrag(SpacingSelect.newInstance())

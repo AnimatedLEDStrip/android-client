@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.connections
+package animatedledstrip.androidcontrol.animation
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -38,22 +38,21 @@ import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 
 /**
- * Pops up to create, edit or remove a server from the list.
+ * Pops up to modify delay
  */
-class ServerEditFragment(private val ip: String) : DialogFragment() {
+class DelayEditPopup(private val delay: Int, private val frag: DelaySelect) : DialogFragment() {
 
-    private lateinit var listener: ServerEditListener
+    private lateinit var listener: DelayEditListener
     private lateinit var textIn: EditText
 
-    interface ServerEditListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, oldIp: String, newIp: String)
+    interface DelayEditListener {
+        fun onDialogPositiveClick(dialog: DialogFragment, newDelay: String, frag: DelaySelect)
         fun onDialogNegativeClick(dialog: DialogFragment)
-        fun onRemoveClick(dialog: DialogFragment, ip: String)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is ServerEditListener)
+        check(context is DelayEditListener)
         listener = context
     }
 
@@ -61,7 +60,7 @@ class ServerEditFragment(private val ip: String) : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_server_edit, container, false)
+        return inflater.inflate(R.layout.popup_server_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -69,7 +68,7 @@ class ServerEditFragment(private val ip: String) : DialogFragment() {
         return activity.let {
             textIn = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(ip)
+                setText(delay.toString())
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(30, 0, 30, 0)
                 }
@@ -80,18 +79,12 @@ class ServerEditFragment(private val ip: String) : DialogFragment() {
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(
-                    if (ip == "") getString(R.string.server_edit_dialog_header_new_server)
-                    else getString(R.string.server_edit_dialog_header_edit_server)
-                )
-                .setPositiveButton(getString(R.string.server_edit_dialog_button_save)) { _, _ ->
-                    listener.onDialogPositiveClick(this, ip, textIn.text.toString())
+                .setTitle(getString(R.string.popup_dialog_header_edit_delay))
+                .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
+                    listener.onDialogPositiveClick(this, textIn.text.toString(), frag)
                 }
-                .setNegativeButton(getString(R.string.server_edit_dialog_button_cancel)) { _, _ ->
+                .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
                     listener.onDialogNegativeClick(this)
-                }
-                .setNeutralButton(getString(R.string.server_edit_dialog_button_remove)) { _, _ ->
-                    listener.onRemoveClick(this, textIn.text.toString())
                 }
                 .create()
         }

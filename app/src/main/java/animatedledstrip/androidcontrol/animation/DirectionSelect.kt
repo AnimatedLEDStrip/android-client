@@ -26,12 +26,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.animationutils.Direction
 import animatedledstrip.animationutils.direction
-import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_direction_select.*
 
 /**
@@ -48,16 +48,16 @@ class DirectionSelect : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        direction_toggle.setOnClickListener {
-            check(it is Chip)
-            when(it.text.toString()) {
+        direction_card.setOnClickListener {
+            check(it is CardView)
+            when(direction_text.text.toString()) {
                 getString(R.string.anim_param_direction_forward) -> {
                     animationData.direction(Direction.BACKWARD)
-                    it.text = getString(R.string.anim_param_direction_backward)
+                    direction_text.text = getString(R.string.anim_param_direction_backward)
                 }
                 getString(R.string.anim_param_direction_backward) -> {
                     animationData.direction(Direction.FORWARD)
-                    it.text = getString(R.string.anim_param_direction_forward)
+                    direction_text.text = getString(R.string.anim_param_direction_forward)
                 }
             }
         }

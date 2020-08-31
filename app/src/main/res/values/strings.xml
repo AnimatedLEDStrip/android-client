@@ -50,6 +50,7 @@
     <string name="anim_param_center">Center</string>
     <string name="anim_param_color">Color</string>
     <string name="anim_param_continuous_animation">Continuous Animation</string>
+    <string name="anim_param_delay">Delay</string>
     <string name="anim_param_distance">Distance</string>
     <string name="anim_param_direction_forward">Forward</string>
     <string name="anim_param_direction_backward">Backward</string>
@@ -60,7 +61,6 @@
     <string name="anim_color_button_add">Add</string>
     <string name="anim_add_color_button">Add Another Color</string>
 
-
     <!-- Running Animations -->
 
     <string name="run_anim_end_anim_button_end">End</string>
@@ -70,7 +70,7 @@
     <string name="run_anim_label_color">Color:</string>
     <string name="run_anim_label_center">Center: %1$s</string>
     <string name="run_anim_label_continuous">Continuous: %1$s</string>
-    <string name="run_anim_label_delay">Delay: %1$s</string>
+    <string name="run_anim_label_delay">Delay: %1$s ms</string>
     <string name="run_anim_label_delay_mod">DelayMod: %1$s</string>
     <string name="run_anim_label_direction">Direction: %1$s</string>
     <string name="run_anim_label_distance">Distance: %1$s</string>
@@ -86,7 +86,7 @@
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string name="setting_port">Port</string>1
+    <string name="setting_port">Port</string>
     <string name="setting_enable_notifications">Enable Notification</string>
 
 
@@ -95,14 +95,18 @@
     <string name="server_edit_button_edit">Edit</string>
     <string name="server_edit_label_ip">IP</string>
     <string name="server_edit_default_ip">0.0.0.0</string>
-    <string name="server_edit_dialog_header_new_server">New Server</string>
-    <string name="server_edit_dialog_header_edit_server">Edit Server</string>
-    <string name="server_edit_dialog_button_save">Save</string>
-    <string name="server_edit_dialog_button_cancel">Cancel</string>
-    <string name="server_edit_dialog_button_remove">Remove</string>
+
+
+    <!-- Popups -->
+
+    <string name="popup_dialog_header_new_server">New Server</string>
+    <string name="popup_dialog_header_edit_server">Edit Server</string>
+    <string name="popup_dialog_header_edit_delay">Edit Delay</string>
+    <string name="popup_dialog_button_save">Save</string>
+    <string name="popup_dialog_button_cancel">Cancel</string>
+    <string name="popup_dialog_button_remove">Remove</string>
+
+    <!-- Other-->
     <string name="connect_to_a_server_first">Connect to a server first</string>
-
-
-    <!-- Anything after this needs to be sorted-->
 
 </resources>

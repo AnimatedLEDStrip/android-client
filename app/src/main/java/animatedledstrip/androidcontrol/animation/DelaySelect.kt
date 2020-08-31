@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.connections
+package animatedledstrip.androidcontrol.animation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,38 +28,46 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.IPs
-import kotlinx.android.synthetic.main.fragment_connect.*
+import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.animationutils.findAnimation
+import kotlinx.android.synthetic.main.fragment_delay_select.*
 
 /**
- * List of all servers
+ * Set the delay property of the animation
  */
-class ConnectionListContainer : Fragment() {
+class DelaySelect : Fragment() {
+
+    private fun showEditDialog() {
+        val dialog = DelayEditPopup(
+            delay_text.text
+                .removePrefix("Delay: ")
+                .removeSuffix(" ms")
+                .toString()
+                .toInt(),
+            frag = this
+        )
+        dialog.show(parentFragmentManager, "DelayEditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_connect, container, false)
+        return inflater.inflate(R.layout.fragment_delay_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        IPs.forEachIndexed { index, ip ->
-            parentFragmentManager.beginTransaction()
-                .add(
-                    connections.id,
-                    ConnectionFragment.newInstance("Server $index", ip),
-                    ip
-                )
-                .commit()
+        val info = findAnimation(animationData.animation).info
+        delay_text.text = getString(R.string.run_anim_label_delay, info.delayDefault.toString())
+        delay_card.setOnClickListener {
+            showEditDialog()
         }
     }
 
-
     companion object {
         @JvmStatic
-        fun newInstance() = ConnectionListContainer()
+        fun newInstance() = DelaySelect()
     }
 
 }

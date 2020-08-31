@@ -37,7 +37,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.animation.AnimationSelect
+import animatedledstrip.androidcontrol.animation.DelayEditPopup
+import animatedledstrip.androidcontrol.animation.DelaySelect
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
@@ -46,11 +49,14 @@ import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animationutils.AnimationData
 import animatedledstrip.client.send
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_delay_select.*
 
 /**
  * Starting point for the app
  */
-class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(),
+    AnimationSelect.OnFragmentInteractionListener,
+    DelayEditPopup.DelayEditListener {
 
     /**
      * Name of the preferences file
@@ -234,4 +240,19 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
     }
 
     override fun onFragmentInteraction(uri: Uri) {}
+
+
+    override fun onDialogPositiveClick(
+        dialog: DialogFragment,
+        newDelay: String,
+        frag: DelaySelect
+    ) {
+        animationData.delay = newDelay.toLong()
+        frag.delay_text.text =
+            getString(R.string.run_anim_label_delay, animationData.delay.toString())
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+
+    }
 }

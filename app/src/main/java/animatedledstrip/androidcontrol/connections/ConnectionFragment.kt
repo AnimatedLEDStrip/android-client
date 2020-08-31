@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.fragment_connection.*
 /**
  * Shows a single server, with a button for connecting to it.
  */
-class ConnectionFragment(val name: String, private val ip: String) : Fragment() {
+class ConnectionFragment(val name: String = "", private val ip: String = "") : Fragment() {
 
     lateinit var connectButton: Button
 

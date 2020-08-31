@@ -44,11 +44,14 @@ class AnimationSelectContainer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentManager?.beginTransaction()?.add(
-            anim_select_container.id,
-            AnimationSelect.newInstance(),
-            "anim select"
-        )?.commit()
+        parentFragmentManager
+            .beginTransaction()
+            .add(
+                anim_select_container.id,
+                AnimationSelect.newInstance(),
+                "anim select"
+            )
+            .commit()
     }
 
     companion object {

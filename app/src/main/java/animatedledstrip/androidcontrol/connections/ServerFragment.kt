@@ -36,8 +36,8 @@ import kotlinx.android.synthetic.main.fragment_server.*
 class ServerFragment(private var ip: String) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = ServerEditFragment(ip)
-        dialog.show(fragmentManager ?: return, "ServerEditFragment")
+        val dialog = ServerEditPopup(ip)
+        dialog.show(parentFragmentManager, "ServerEditPopup")
     }
 
     override fun onCreateView(

@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.fragment_animation.*
  * Shows a single running animation along with its parameters and a button
  * for ending it
  */
-class RunningAnimationFragment(private val data: AnimationData) : Fragment() {
+class RunningAnimationFragment(private val data: AnimationData = AnimationData()) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

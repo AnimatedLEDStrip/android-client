@@ -2,6 +2,8 @@
 <resources>
     <color name="colorPrimary">#1976d2</color>
     <color name="colorPrimaryDark">#004ba0</color>
+    <color name="colorPrimaryLight">#63a4ff</color>
+    <color name="colorPrimaryVeryLight">#bad5ff</color>
     <color name="colorAccent">#00bcd4</color>
     <color name="colorViewBack">#eeeeee</color>
     <color name="colorText">#000000</color>

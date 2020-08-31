@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.content_add_connection.*
 /**
  * Add, edit and remove servers from the list shown in the connections list.
  */
-class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEditListener {
+class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditListener {
     override fun onDialogPositiveClick(dialog: DialogFragment, oldIp: String, newIp: String) {
         val index = IPs.indexOf(oldIp)
         IPs.remove(oldIp)
@@ -57,7 +57,7 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditFragment.ServerEdit
     }
 
     private fun showEditDialog() {
-        val dialog = ServerEditFragment("")
+        val dialog = ServerEditPopup("")
         dialog.show(supportFragmentManager, "ServerEditFragment")
     }
 

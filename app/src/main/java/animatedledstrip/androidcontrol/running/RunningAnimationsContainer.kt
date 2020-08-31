@@ -41,11 +41,11 @@ class RunningAnimationsContainer : Fragment() {
      */
     private fun addCurrentRunningAnimations() {
         mainSender.runningAnimations.forEach { (id, data) ->
-            fragmentManager?.beginTransaction()?.add(
+            parentFragmentManager.beginTransaction().add(
                 running_animation_list.id,
                 RunningAnimationFragment.newInstance(data),
                 id
-            )?.commit()
+            ).commit()
         }
     }
 
@@ -56,20 +56,20 @@ class RunningAnimationsContainer : Fragment() {
         mainSender
             .setOnNewAnimationDataCallback { data ->
                 activity?.runOnUiThread {
-                    fragmentManager?.beginTransaction()?.add(
+                    parentFragmentManager.beginTransaction().add(
                         running_animation_list?.id ?: return@runOnUiThread,
                         RunningAnimationFragment.newInstance(data),
                         data.id
-                    )?.commit()
+                    ).commit()
                 }
             }
             .setOnNewEndAnimationCallback { data ->
                 activity?.runOnUiThread {
-                    fragmentManager?.beginTransaction()
-                        ?.remove(
-                            fragmentManager?.findFragmentByTag(data.id) ?: return@runOnUiThread
+                    parentFragmentManager.beginTransaction()
+                        .remove(
+                            parentFragmentManager.findFragmentByTag(data.id) ?: return@runOnUiThread
                         )
-                        ?.commit()
+                        .commit()
                 }
             }
     }
