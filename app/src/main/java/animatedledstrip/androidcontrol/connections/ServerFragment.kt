@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.fragment_server.*
 /**
  * Shows a single connection in the edit servers list.
  */
-class ServerFragment(var ip: String) : Fragment() {
+class ServerFragment(private var ip: String) : Fragment() {
 
     private fun showEditDialog() {
         val dialog = ServerEditFragment(ip)

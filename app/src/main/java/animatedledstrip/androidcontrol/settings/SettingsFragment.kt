@@ -26,7 +26,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.SwitchPreference
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.*
 import com.takisoft.fix.support.v7.preference.EditTextPreference
@@ -41,7 +40,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         val darkPreference = findPreference("dark_setting") as ListPreference
         val portPreference = findPreference("port_setting") as EditTextPreference
-        val notificationPreference = findPreference("notification_setting") as SwitchPreference
 
         portPreference.text = mainSender.port.toString()
 
@@ -65,10 +63,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     mainSender.setPort(value.toInt())
                     preferencesEditor.putInt(PORT_KEY, value.toInt()).apply()
                 }
-                notificationPreference -> {
-                    showNotification = value as Boolean
-                    preferencesEditor.putBoolean(NOTIFICATION_KEY, value)
-                }
             }
             true
         }
@@ -78,6 +72,5 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         darkPreference.onPreferenceChangeListener = preferenceListener
         portPreference.onPreferenceChangeListener = preferenceListener
-        notificationPreference.onPreferenceChangeListener = preferenceListener
     }
 }

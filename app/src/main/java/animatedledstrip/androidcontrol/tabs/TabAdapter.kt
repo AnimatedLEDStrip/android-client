@@ -31,11 +31,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
-import animatedledstrip.androidcontrol.connections.ConnectFragment
+import animatedledstrip.androidcontrol.connections.ConnectionListContainer
 import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
 import animatedledstrip.androidcontrol.utils.animationOptionAdapter
 import animatedledstrip.androidcontrol.utils.mainSender
-import kotlin.reflect.KClass
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -44,19 +43,19 @@ import kotlin.reflect.KClass
 class TabAdapter(private val context: Context, fm: FragmentManager) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    private val tabs = listOf<Pair<Int, KClass<out Fragment>>>(
-        R.string.tab_1_server to ConnectFragment::class,
+    private val tabs = listOf(
+        R.string.tab_1_server to ConnectionListContainer::class,
         R.string.tab_2_send to AnimationSelectContainer::class,
         R.string.tab_3_running to RunningAnimationsContainer::class
     )
 
     override fun getItem(position: Int): Fragment {
         var tabToUse = tabs[position].second
-        if (!mainSender.connected && tabToUse != ConnectFragment::class)
+        if (!mainSender.connected && tabToUse != ConnectionListContainer::class)
             tabToUse = ConnectFirstPlaceholder::class
         Log.d("Tab", tabToUse.toString())
         return when (tabToUse) {
-            ConnectFragment::class -> ConnectFragment.newInstance()
+            ConnectionListContainer::class -> ConnectionListContainer.newInstance()
             AnimationSelectContainer::class -> {
                 Log.d("Click", animationOptionAdapter.toString())
                 AnimationSelectContainer.newInstance()
@@ -69,7 +68,7 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getItemPosition(obj: Any): Int =
         when (obj) {
-            is ConnectFragment -> PagerAdapter.POSITION_UNCHANGED
+            is ConnectionListContainer -> PagerAdapter.POSITION_UNCHANGED
             is ConnectFirstPlaceholder ->
                 if (mainSender.connected) PagerAdapter.POSITION_NONE
                 else PagerAdapter.POSITION_UNCHANGED

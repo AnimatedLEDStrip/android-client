@@ -40,10 +40,10 @@ import animatedledstrip.androidcontrol.R
 /**
  * Pops up to create, edit or remove a server from the list.
  */
-class ServerEditFragment(val ip: String) : DialogFragment() {
+class ServerEditFragment(private val ip: String) : DialogFragment() {
 
-    lateinit var listener: ServerEditListener
-    lateinit var textIn: EditText
+    private lateinit var listener: ServerEditListener
+    private lateinit var textIn: EditText
 
     interface ServerEditListener {
         fun onDialogPositiveClick(dialog: DialogFragment, oldIp: String, newIp: String)

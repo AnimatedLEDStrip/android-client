@@ -54,7 +54,7 @@ class RunningAnimationsContainer : Fragment() {
      */
     private fun setNewAndEndAnimationCallbacks() {
         mainSender
-            .setOnNewAnimationCallback { data ->
+            .setOnNewAnimationDataCallback { data ->
                 activity?.runOnUiThread {
                     fragmentManager?.beginTransaction()?.add(
                         running_animation_list?.id ?: return@runOnUiThread,
@@ -63,7 +63,7 @@ class RunningAnimationsContainer : Fragment() {
                     )?.commit()
                 }
             }
-            .setOnEndAnimationCallback { data ->
+            .setOnNewEndAnimationCallback { data ->
                 activity?.runOnUiThread {
                     fragmentManager?.beginTransaction()
                         ?.remove(

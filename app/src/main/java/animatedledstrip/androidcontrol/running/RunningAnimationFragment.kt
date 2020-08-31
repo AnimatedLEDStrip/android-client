@@ -55,13 +55,13 @@ class RunningAnimationFragment(private val data: AnimationData) : Fragment() {
         // Set parameters
         animation_id.text = data.id
         animation_name.text =
-            getString(R.string.run_anim_label_animation, data.animation.toString())
+            getString(R.string.run_anim_label_animation, data.animation)
         animation_center.text =
             getString(R.string.run_anim_label_center, data.center.toString())
         animation_continuous.text =
             getString(
                 R.string.run_anim_label_continuous,
-                (data.continuous ?: findAnimation(data.animation)?.info?.repetitive).toString()
+                (data.continuous ?: findAnimation(data.animation).info.repetitive).toString()
             )
         animation_delay.text =
             getString(R.string.run_anim_label_delay, data.delay.toString())
@@ -93,7 +93,7 @@ class RunningAnimationFragment(private val data: AnimationData) : Fragment() {
                 .commit()
         }
 
-        val info = findAnimation(data.animation)?.info ?: return
+        val info = findAnimation(data.animation).info
 
         removeExcessData(animation_center, info.center)
         removeExcessData(animation_delay, info.delay)

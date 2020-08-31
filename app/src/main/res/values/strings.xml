@@ -1,7 +1,7 @@
 <resources>
     <!-- Titles -->
 
-    <string name="app_name">LED Control</string>
+    <string name="app_name">AnimatedLEDStrip LED Control</string>
     <string name="app_launcher_name">LED CTRL</string>
     <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
     <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
@@ -100,6 +100,7 @@
     <string name="server_edit_dialog_button_save">Save</string>
     <string name="server_edit_dialog_button_cancel">Cancel</string>
     <string name="server_edit_dialog_button_remove">Remove</string>
+    <string name="connect_to_a_server_first">Connect to a server first</string>
 
 
     <!-- Anything after this needs to be sorted-->

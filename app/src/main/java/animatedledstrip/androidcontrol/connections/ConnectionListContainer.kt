@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_connect.*
 /**
  * List of all servers
  */
-class ConnectFragment : Fragment() {
+class ConnectionListContainer : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +59,7 @@ class ConnectFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = ConnectFragment()
+        fun newInstance() = ConnectionListContainer()
     }
 
 }

@@ -62,9 +62,9 @@ class SpacingSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         spacing_select.max = mainSender.stripInfo?.numLEDs ?: 240
-        val info = findAnimation(animationData.animation)?.info
+        val info = findAnimation(animationData.animation).info
         spacing_select.progress =
-            if (info?.spacing != ParamUsage.NOTUSED) info!!.spacingDefault
+            if (info.spacing != ParamUsage.NOTUSED) info.spacingDefault
             else spacing_select.max
         animationData.spacing = spacing_select.progress
         spacing_select.setOnSeekBarChangeListener(this)

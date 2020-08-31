@@ -14,15 +14,6 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".connections.AddConnectionActivity"
-                android:label="@string/title_activity_add_connection"
-                android:parentActivityName=".MainActivity"
-                android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="animatedledstrip.androidcontrol.MainActivity" />
-        </activity>
-        <activity
                 android:name=".MainActivity"
                 android:label="@string/app_launcher_name"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -33,6 +24,15 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".connections.AddConnectionActivity"
+                android:label="@string/title_activity_add_connection"
+                android:parentActivityName=".MainActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="animatedledstrip.androidcontrol.MainActivity" />
+        </activity>
+        <activity
                 android:name=".settings.SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:parentActivityName=".MainActivity">
@@ -40,8 +40,6 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="animatedledstrip.androidcontrol.MainActivity" />
         </activity>
-        <receiver android:name=".receivers.DisconnectSenderBroadcastReceiver" android:exported="true" />
-        <receiver android:name=".receivers.ClearStripBroadcastReceiver" android:exported="true" />
     </application>
 
 </manifest>

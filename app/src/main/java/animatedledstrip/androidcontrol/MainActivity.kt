@@ -23,16 +23,12 @@
 package animatedledstrip.androidcontrol
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -40,14 +36,10 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import animatedledstrip.androidcontrol.animation.AnimationSelect
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
-import animatedledstrip.androidcontrol.receivers.ClearStripBroadcastReceiver
-import animatedledstrip.androidcontrol.receivers.DisconnectSenderBroadcastReceiver
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
@@ -65,7 +57,7 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
      */
     private val sharedPrefFile = "led_prefs"
 
-    lateinit var tabAdapter: TabAdapter
+    private lateinit var tabAdapter: TabAdapter
 
     /**
      * Check for permissions and ask for them if necessary
@@ -77,35 +69,10 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         ) requestPermissions(arrayOf(Manifest.permission.INTERNET), 1)
     }
 
-    /**
-     * Create the active connection notification channel
-     */
-    private fun createActiveConnectionNotificationChannel() {
-        // Create the notification manager that will be used by the whole application
-        notificationManager = NotificationManagerCompat.from(this)
-
-        // Only add the channel if build version is Oreo or newer
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val activeConnectionChannel = NotificationChannel(
-                channelID,
-                getString(R.string.notification_channel_name),
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = getString(R.string.notification_channel_description)
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(activeConnectionChannel)
-        }
-    }
-
     private fun setConnectionCallbacks() {
-        val disconnectIntent = Intent(this, DisconnectSenderBroadcastReceiver::class.java)
-        val clearIntent = Intent(this, ClearStripBroadcastReceiver::class.java)
-
         mainSender
             .setAsDefaultSender()
-            .setOnConnectCallback { ip ->
+            .setOnConnectCallback { ip, _ ->
                 runOnUiThread {
                     tabAdapter.notifyDataSetChanged()
                 }
@@ -120,52 +87,9 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
                 }
 
-                if (showNotification) with(notificationManager) {
-                    notify(
-                        activeNotificationId,
-                        NotificationCompat.Builder(this@MainActivity, channelID)
-                            .setSmallIcon(R.drawable.ic_led)
-                            .setContentTitle(getString(R.string.notification_title))
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            .setContentIntent(
-                                PendingIntent.getActivity(
-                                    this@MainActivity,
-                                    0,
-                                    intent,
-                                    0
-                                )
-                            )
-                            .addAction(
-                                R.drawable.ic_led,
-                                getString(R.string.action_disconnect),
-                                PendingIntent.getBroadcast(
-                                    this@MainActivity,
-                                    0,
-                                    disconnectIntent,
-                                    0
-                                )
-                            )
-                            .addAction(
-                                R.drawable.ic_led,
-                                getString(R.string.action_clear_strip),
-                                PendingIntent.getBroadcast(
-                                    this@MainActivity,
-                                    0,
-                                    clearIntent,
-                                    0
-                                )
-                            )
-                            .setContentText(
-                                getString(
-                                    R.string.notification_body_connected_to,
-                                    mainSender.ipAddress
-                                )
-                            )
-                            .build()
-                    )
-                }
+                mPreferences.edit().putString(RECENT_IP_KEY, ip).apply()
             }
-            .setOnDisconnectCallback { ip ->
+            .setOnDisconnectCallback { ip, _ ->
                 runOnUiThread {
                     tabAdapter.notifyDataSetChanged()
                 }
@@ -188,21 +112,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
 
                 mainSender.end()
 
-                cancelActiveNotification()
-
                 runOnUiThread {
                     animationOptionAdapter.clear()
                 }
+
+                mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
             }
-            .setOnReceiveCallback {
-//                Log.d("Server", it)
-            }
-            .setOnDefinedAnimationCallback {
-                runOnUiThread {
-                    animationOptionAdapter.add(it.name)
-                }
-            }
-            .setOnUnableToConnectCallback { ip ->
+            .setOnUnableToConnectCallback { ip, _ ->
                 val ipFrag =
                     supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
                 runOnUiThread {
@@ -213,6 +129,13 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
                     ).show()
                     ipFrag?.connectButton?.text =
                         getString(R.string.server_list_button_disconnected)
+                }
+
+                mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
+            }
+            .setOnNewAnimationInfoCallback {
+                runOnUiThread {
+                    animationOptionAdapter.add(it.name)
                 }
             }
     }
@@ -248,7 +171,6 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
 
         checkPermissions()
-        createActiveConnectionNotificationChannel()
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         animationOptionAdapter =
@@ -263,6 +185,11 @@ class MainActivity : AppCompatActivity(), AnimationSelect.OnFragmentInteractionL
         loadPreferences()
         setConnectionCallbacks()
         setFABOnClick()
+
+        val recentIp = mPreferences.getString(RECENT_IP_KEY, "")!!
+
+        if (recentIp.isNotEmpty())
+            mainSender.setIPAddress(recentIp, start = true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

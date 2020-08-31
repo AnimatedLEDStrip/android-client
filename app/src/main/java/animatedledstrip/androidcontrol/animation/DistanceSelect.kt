@@ -62,9 +62,9 @@ class DistanceSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         distance_select.max = mainSender.stripInfo?.numLEDs ?: 240
-        val info = findAnimation(animationData.animation)?.info
+        val info = findAnimation(animationData.animation).info
         distance_select.progress =
-            if (info?.distance != ParamUsage.NOTUSED && info?.distanceDefault != -1) info!!.distanceDefault
+            if (info.distance != ParamUsage.NOTUSED && info.distanceDefault != -1) info.distanceDefault
             else distance_select.max
         animationData.distance = distance_select.progress
         distance_select.setOnSeekBarChangeListener(this)

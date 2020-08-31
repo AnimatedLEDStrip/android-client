@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_color_select_container.*
 /**
  * Holds all the fragments for creating an animation to send to the server.
  */
-class ColorSelectContainerFragment(val minimumColors: Int, val unlimitedColors: Boolean) :
+class ColorSelectContainerFragment(private val minimumColors: Int, private val unlimitedColors: Boolean) :
     Fragment() {
 
     private val newColorListener = View.OnClickListener {

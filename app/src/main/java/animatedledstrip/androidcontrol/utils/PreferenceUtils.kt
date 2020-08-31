@@ -10,12 +10,10 @@ const val DARK_KEY = "dark_mode"
 const val IP_KEY = "ip_addrs"
 const val PORT_KEY = "port_sel"
 const val NOTIFICATION_KEY = "do_notification"
+const val RECENT_IP_KEY = "recent_ip"
 
 // Loaded preferences
 lateinit var mPreferences: SharedPreferences
-
-// Track whether the notification should be shown
-var showNotification = true
 
 
 fun loadPreferences() {
@@ -24,7 +22,6 @@ fun loadPreferences() {
     setNightModeFromPreferences()
     setIPsFromPreferences()
     setPortFromPreferences()
-    setShowNotificationFromPreferences()
 }
 
 /**
@@ -46,10 +43,6 @@ fun setPortFromPreferences() {
     mainSender.port = mPreferences.getInt(PORT_KEY, defaultPort)
 }
 
-fun setShowNotificationFromPreferences() {
-    showNotification = mPreferences.getBoolean(NOTIFICATION_KEY, true)
-}
-
 fun setIPsFromPreferences() {
     IPs.clear()
     val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
@@ -67,8 +60,8 @@ fun setIPsFromPreferences() {
 fun saveDefaultPreferences() {
     mPreferences.edit()
         .putString(DARK_KEY, "Default")
+        .putString(RECENT_IP_KEY, "")
         .putInt(PORT_KEY, defaultPort)
         .putBoolean(NOTIFICATION_KEY, true)
         .apply()
-
 }
