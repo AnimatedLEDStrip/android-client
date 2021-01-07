@@ -29,9 +29,9 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
-import animatedledstrip.animationutils.Direction
-import animatedledstrip.animationutils.direction
+import animatedledstrip.androidcontrol.utils.animParams
+import animatedledstrip.animations.Direction
+import animatedledstrip.leds.animationmanagement.direction
 import kotlinx.android.synthetic.main.fragment_direction_select.*
 
 /**
@@ -52,11 +52,11 @@ class DirectionSelect : Fragment() {
             check(it is CardView)
             when(direction_text.text.toString()) {
                 getString(R.string.anim_param_direction_forward) -> {
-                    animationData.direction(Direction.BACKWARD)
+                    animParams.direction(Direction.BACKWARD)
                     direction_text.text = getString(R.string.anim_param_direction_backward)
                 }
                 getString(R.string.anim_param_direction_backward) -> {
-                    animationData.direction(Direction.FORWARD)
+                    animParams.direction(Direction.FORWARD)
                     direction_text.text = getString(R.string.anim_param_direction_forward)
                 }
             }

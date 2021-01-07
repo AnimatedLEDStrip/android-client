@@ -82,7 +82,7 @@
                     android:id="@+id/animation_delay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_delay"
+                    android:text="TEMP"
                     android:textColor="@color/colorText" />
 
             <TextView

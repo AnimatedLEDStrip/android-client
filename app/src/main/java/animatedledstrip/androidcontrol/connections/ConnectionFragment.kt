@@ -51,18 +51,18 @@ class ConnectionFragment(val name: String = "", private val ip: String = "") : F
         super.onViewCreated(view, savedInstanceState)
         server_name.text = ip
         connect_button.text =
-            if (mainSender.ipAddress == ip && mainSender.connected) getString(R.string.server_list_button_connected)
+            if (mainSender.address == ip && mainSender.connected) getString(R.string.server_list_button_connected)
             else getString(R.string.server_list_button_disconnected)
         connectButton = connect_button
         connect_button.setOnClickListener {
-            if (mainSender.ipAddress == ip && mainSender.connected)
+            if (mainSender.address == ip && mainSender.connected)
                 mainSender.end()
             else {
                 connectButton.text = getString(R.string.server_list_button_connecting)
-                if (mainSender.ipAddress != ip) {
+                if (mainSender.address != ip) {
                     mainSender.setIPAddress(ip, start = true)         // Also starts connection
                 } else if (!mainSender.connected)
-                    mainSender.start()
+                    mainSender.startHeadless()
             }
         }
     }

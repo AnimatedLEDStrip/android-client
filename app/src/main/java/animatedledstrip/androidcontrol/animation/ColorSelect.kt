@@ -36,12 +36,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.indexOfChildOrNull
-import animatedledstrip.animationutils.addColor
 import animatedledstrip.colors.ColorContainer
 import animatedledstrip.colors.ccpresets.*
-import animatedledstrip.utils.toARGB
+import animatedledstrip.colors.toARGB
+import animatedledstrip.leds.animationmanagement.addColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.color.colorChooser
@@ -94,10 +94,10 @@ class ColorSelect : Fragment() {
     private val colorContainer = ColorContainer()
 
     private val primaryColors =
-        listOf(CCBlack, CCRed, CCGreen, CCBlue, CCYellow, CCCyan, CCMagenta)
+        listOf(ColorContainer.Black, ColorContainer.Red, ColorContainer.Green, ColorContainer.Blue, ColorContainer.Yellow, ColorContainer.Cyan, ColorContainer.Magenta)
 
     private val colors =
-        (primaryColors + CCPresets.minus(primaryColors).minus(CCAqua))
+        (primaryColors + CCPresets.minus(primaryColors).minus(ColorContainer.Aqua))
             .map { it.color.toARGB() }
             .toIntArray()
 
@@ -106,8 +106,8 @@ class ColorSelect : Fragment() {
             .getOrNull(colorButtons.indexOfChildOrNull(selectedColorButton) ?: -1)
             ?: 0x0).toInt()
 
-    private val presetButtonColor: Long by lazy {
-        resources.getColor(R.color.colorPrimary, null).toLong()
+    private val presetButtonColor: Int by lazy {
+        resources.getColor(R.color.colorPrimary, null)
     }
 
 
@@ -158,7 +158,7 @@ class ColorSelect : Fragment() {
 
     /* Drawable creation functions */
 
-    private fun buttonDrawable(color: Long = CCBlack.color): Drawable =
+    private fun buttonDrawable(color: Int = ColorContainer.Black.color): Drawable =
         DrawableBuilder()
             .size(60)
             .oval()
@@ -169,7 +169,7 @@ class ColorSelect : Fragment() {
     private fun presetDrawable(cc: ColorContainer): Drawable =
         GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            mutableListOf<Long>()
+            mutableListOf<Int>()
                 .apply {
                     addAll(cc.colors)
                     add(cc.colors[0])
@@ -184,7 +184,7 @@ class ColorSelect : Fragment() {
     private fun colorButton(
         context: Context?,
         newButton: Boolean,
-        color: Long = CCBlack.color
+        color: Int = ColorContainer.Black.color
     ): Button =
         Button(context).apply {
             background = buttonDrawable(color)
@@ -197,7 +197,7 @@ class ColorSelect : Fragment() {
             setOnLongClickListener(if (newButton) null else removeColorListener)
         }
 
-    private fun addColorButton(color: Long = CCBlack.color) {
+    private fun addColorButton(color: Int = ColorContainer.Black.color) {
         clear_colors_button.visibility = Button.VISIBLE
         colorButtons.addView(colorButton(this.context, newButton = false, color = color))
         colorContainer += color
@@ -237,10 +237,10 @@ class ColorSelect : Fragment() {
                 initialSelection = currentColor,
                 waitForPositiveButton = false
             ) { _, color: Int ->
-                selectedColorButton?.background = buttonDrawable(color.toLong())
+                selectedColorButton?.background = buttonDrawable(color)
 
                 colorContainer.colors[colorButtons.indexOfChild(selectedColorButton)] =
-                    color.toLong()
+                    color
             }
             positiveButton(text = getString(R.string.anim_color_button_add))
         }
@@ -262,7 +262,7 @@ class ColorSelect : Fragment() {
     ): View? {
         val thisView = inflater.inflate(R.layout.fragment_color_select, container, false)
 
-        animationData.addColor(colorContainer)
+        animParams.addColor(colorContainer)
 
         return thisView
     }

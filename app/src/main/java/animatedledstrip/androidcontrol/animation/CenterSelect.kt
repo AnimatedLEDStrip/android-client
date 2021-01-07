@@ -29,9 +29,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
 import animatedledstrip.androidcontrol.utils.mainSender
-import animatedledstrip.animationutils.center
 import kotlinx.android.synthetic.main.fragment_center_select.*
 
 /**
@@ -41,7 +39,7 @@ class CenterSelect : Fragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onProgressChanged(bar: SeekBar?, progress: Int, p2: Boolean) {
         center_value.text = progress.toString()
-        animationData.center(progress)
+//        animParams.center(progress)
     }
 
     override fun onStartTrackingTouch(p0: SeekBar?) {

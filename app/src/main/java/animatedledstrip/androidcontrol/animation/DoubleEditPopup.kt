@@ -38,21 +38,29 @@ import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 
 /**
- * Pops up to modify delay
+ * Pops up to modify a double parameter
  */
-class DelayEditPopup(private val delay: Int, private val frag: DelaySelect) : DialogFragment() {
+class DoubleEditPopup(
+    private val initialValue: Double?,
+    private val paramName: String,
+    private val frag: DoubleSelect
+) : DialogFragment() {
 
-    private lateinit var listener: DelayEditListener
+    private lateinit var listener: DoubleEditListener
     private lateinit var textIn: EditText
 
-    interface DelayEditListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, newDelay: String, frag: DelaySelect)
-        fun onDialogNegativeClick(dialog: DialogFragment)
+    interface DoubleEditListener {
+        fun onDoubleDialogPositiveClick(
+            dialog: DialogFragment, parameter: String,
+            newValue: String, frag: DoubleSelect
+        )
+
+        fun onDoubleDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is DelayEditListener)
+        check(context is DoubleEditListener)
         listener = context
     }
 
@@ -60,7 +68,7 @@ class DelayEditPopup(private val delay: Int, private val frag: DelaySelect) : Di
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_server_edit, container, false)
+        return inflater.inflate(R.layout.popup_double_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -68,7 +76,7 @@ class DelayEditPopup(private val delay: Int, private val frag: DelaySelect) : Di
         return activity.let {
             textIn = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(delay.toString())
+                if (initialValue != null) setText(initialValue.toString())
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(30, 0, 30, 0)
                 }
@@ -79,12 +87,17 @@ class DelayEditPopup(private val delay: Int, private val frag: DelaySelect) : Di
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(getString(R.string.popup_dialog_header_edit_delay))
+                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onDialogPositiveClick(this, textIn.text.toString(), frag)
+                    listener.onDoubleDialogPositiveClick(
+                        this,
+                        paramName,
+                        textIn.text.toString(),
+                        frag
+                    )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onDialogNegativeClick(this)
+                    listener.onDoubleDialogNegativeClick(this)
                 }
                 .create()
         }

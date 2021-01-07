@@ -26,37 +26,53 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AnimationParameter
+import kotlinx.android.synthetic.main.fragment_double_select.*
 
 /**
- * Set the continuous property of the animation.
+ * Set a double property of the animation
  */
-class ContinuousSelect : Fragment() {
+class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
 
-    private lateinit var continuousAnimation: CheckBox
+    private fun showEditDialog() {
+        val dialog = DoubleEditPopup(
+            double_param_value_text.text
+                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("null")
+                .toString()
+                .toDoubleOrNull(),
+            parameter.name.camelToCapitalizedWords(),
+            frag = this
+        )
+        dialog.show(parentFragmentManager, "${parameter}EditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val thisView = inflater.inflate(R.layout.fragment_continuous_select, container, false)
+        return inflater.inflate(R.layout.fragment_double_select, container, false)
+    }
 
-        continuousAnimation = thisView.findViewById(R.id.continuous_animation)
-        continuousAnimation.isChecked = true
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        continuousAnimation.setOnCheckedChangeListener { _, isChecked ->
-            animationData.continuous = isChecked
+        double_param_value_text.text = getString(
+            R.string.run_anim_label_numerical_param,
+            parameter.name.camelToCapitalizedWords(),
+            parameter.default?.toString()
+        )
+        double_param_card.setOnClickListener {
+            showEditDialog()
         }
-
-        return thisView
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = ContinuousSelect()
+        fun newInstance(parameter: AnimationParameter<Double>) = DoubleSelect(parameter)
     }
 
 }

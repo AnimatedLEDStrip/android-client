@@ -20,36 +20,43 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.utils
+package animatedledstrip.androidcontrol.animation
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import animatedledstrip.client.AnimationSender
-import animatedledstrip.leds.animationmanagement.AnimationToRunParams
-import java.util.*
-
-// Configured IPs
-val IPs = mutableListOf<String>()
-
-// Default port
-const val defaultPort = 6
-
-// Main Animation Sender
-var mainSender: AnimationSender = AnimationSender(address = "", port = defaultPort)
-
-// AnimationData instance that will be sent and recreated as needed
-var animParams = AnimationToRunParams()
-
-lateinit var animationOptionAdapter: ArrayAdapter<String>
-
-fun LinearLayout?.indexOfChildOrNull(view: View?) = this?.indexOfChild(view)
+import android.view.ViewGroup
+import android.widget.CheckBox
+import androidx.fragment.app.Fragment
+import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.animParams
 
 /**
- * Adapted from https://stackoverflow.com/a/60010299/1944087
+ * Set the continuous property of the animation.
  */
-fun String.camelToCapitalizedWords(): String {
-    return "(?<=[a-zA-Z])[A-Z]".toRegex().replace(this) {
-        " ${it.value}"
-    }.capitalize(Locale.ROOT)
+class RunCountSelect : Fragment() {
+
+    private lateinit var continuousAnimation: CheckBox
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val thisView = inflater.inflate(R.layout.fragment_run_count_select, container, false)
+
+        continuousAnimation = thisView.findViewById(R.id.continuous_animation)
+//        continuousAnimation.isChecked = true
+
+        continuousAnimation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) animParams.runCount = -1
+        }
+
+        return thisView
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = RunCountSelect()
+    }
+
 }

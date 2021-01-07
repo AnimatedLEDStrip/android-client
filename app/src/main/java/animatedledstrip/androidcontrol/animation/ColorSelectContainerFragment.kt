@@ -29,7 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.animationutils.Animation
+import animatedledstrip.animations.Animation
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_color_select_container.*
 

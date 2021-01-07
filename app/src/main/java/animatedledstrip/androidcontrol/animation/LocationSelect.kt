@@ -28,46 +28,58 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
-import animatedledstrip.animationutils.findAnimation
-import kotlinx.android.synthetic.main.fragment_delay_select.*
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AnimationParameter
+import animatedledstrip.leds.locationmanagement.Location
+import kotlinx.android.synthetic.main.fragment_location_select.*
 
 /**
- * Set the delay property of the animation
+ * Set a location property of the animation.
  */
-class DelaySelect : Fragment() {
+class LocationSelect(val parameter: AnimationParameter<Location>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = DelayEditPopup(
-            delay_text.text
-                .removePrefix("Delay: ")
-                .removeSuffix(" ms")
-                .toString()
-                .toInt(),
+        val dialog = LocationEditPopup(
+            location_param_value_text.text
+                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("null")
+                .split(",")
+                .let {
+                    Location(
+                        it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
+                    )
+                },
+            parameter.name.camelToCapitalizedWords(),
             frag = this
         )
-        dialog.show(parentFragmentManager, "DelayEditPopup")
+        dialog.show(parentFragmentManager, "${parameter}EditPopup")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_delay_select, container, false)
+        return inflater.inflate(R.layout.fragment_location_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val info = findAnimation(animationData.animation).info
-        delay_text.text = getString(R.string.run_anim_label_delay, info.delayDefault.toString())
-        delay_card.setOnClickListener {
+
+        location_param_value_text.text = getString(
+            R.string.run_anim_label_numerical_param,
+            parameter.name.camelToCapitalizedWords(),
+            parameter.default?.coordinates
+        )
+        location_param_card.setOnClickListener {
             showEditDialog()
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = DelaySelect()
+        fun newInstance(parameter: AnimationParameter<Location>) = LocationSelect(parameter)
     }
 
 }

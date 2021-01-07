@@ -38,25 +38,33 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import animatedledstrip.androidcontrol.animation.AnimationSelect
-import animatedledstrip.androidcontrol.animation.DelayEditPopup
-import animatedledstrip.androidcontrol.animation.DelaySelect
+import animatedledstrip.androidcontrol.animation.*
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
-import animatedledstrip.animationutils.AnimationData
+import animatedledstrip.animations.Distance
 import animatedledstrip.client.send
+import animatedledstrip.communication.ClientParams
+import animatedledstrip.communication.MessageFrequency
+import animatedledstrip.leds.animationmanagement.*
+import animatedledstrip.leds.locationmanagement.Location
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_delay_select.*
+import kotlinx.android.synthetic.main.fragment_distance_select.*
+import kotlinx.android.synthetic.main.fragment_double_select.*
+import kotlinx.android.synthetic.main.fragment_int_select.*
+import kotlinx.android.synthetic.main.fragment_location_select.*
 
 /**
  * Starting point for the app
  */
 class MainActivity : AppCompatActivity(),
     AnimationSelect.OnFragmentInteractionListener,
-    DelayEditPopup.DelayEditListener {
+    IntEditPopup.IntEditListener,
+    DoubleEditPopup.DoubleEditListener,
+    DistanceEditPopup.DistanceEditListener,
+    LocationEditPopup.LocationEditListener {
 
     /**
      * Name of the preferences file
@@ -79,6 +87,13 @@ class MainActivity : AppCompatActivity(),
         mainSender
             .setAsDefaultSender()
             .setOnConnectCallback { ip, _ ->
+
+                ClientParams(
+                    sendRunningAnimationInfoOnConnection = false,
+                    sendAnimationEnd = MessageFrequency.REQUEST,
+                    sendAnimationStart = MessageFrequency.REQUEST,
+                ).send(mainSender)
+
                 runOnUiThread {
                     tabAdapter.notifyDataSetChanged()
                 }
@@ -144,12 +159,15 @@ class MainActivity : AppCompatActivity(),
                     animationOptionAdapter.add(it.name)
                 }
             }
+            .setOnReceiveCallback {
+                Log.w("A", it)
+            }
     }
 
     private fun setFABOnClick() {
         fab.setOnClickListener {
             if (mainSender.connected) {
-                animationData.send()
+                animParams.send()
                 val selectFrag =
                     supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
                 selectFrag?.resetView() ?: Log.d("FAB", "Error")
@@ -226,7 +244,7 @@ class MainActivity : AppCompatActivity(),
             }
             R.id.action_clear -> {
                 if (mainSender.connected)
-                    AnimationData().send()
+                    AnimationToRunParams("Color").send()
                 else Toast.makeText(
                     this,
                     getString(R.string.toast_body_not_connected),
@@ -242,17 +260,79 @@ class MainActivity : AppCompatActivity(),
     override fun onFragmentInteraction(uri: Uri) {}
 
 
-    override fun onDialogPositiveClick(
+    override fun onIntDialogPositiveClick(
         dialog: DialogFragment,
-        newDelay: String,
-        frag: DelaySelect
+        parameter: String,
+        newValue: String,
+        frag: IntSelect
     ) {
-        animationData.delay = newDelay.toLong()
-        frag.delay_text.text =
-            getString(R.string.run_anim_label_delay, animationData.delay.toString())
+        val newInt = newValue.toIntOrNull()
+        if (newInt != null) {
+            if (parameter == "Run Count") animParams.runCount = newInt
+            else animParams.intParam(parameter, newInt)
+        }
+        frag.int_param_value_text.text =
+            getString(
+                R.string.run_anim_label_numerical_param,
+                parameter,
+                if (parameter == "Run Count" && newValue == "-1" || newValue == "") "Endless"
+                else newInt.toString()
+            )
     }
 
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
+    override fun onIntDialogNegativeClick(dialog: DialogFragment) {}
 
+    override fun onDoubleDialogPositiveClick(
+        dialog: DialogFragment,
+        parameter: String,
+        newValue: String,
+        frag: DoubleSelect
+    ) {
+        val newDouble = newValue.toDoubleOrNull()
+        if (newDouble != null) animParams.doubleParam(parameter, newDouble)
+        frag.double_param_value_text.text =
+            getString(R.string.run_anim_label_numerical_param, parameter, newDouble.toString())
     }
+
+    override fun onDoubleDialogNegativeClick(dialog: DialogFragment) {}
+
+    override fun onDistanceDialogPositiveClick(
+        dialog: DialogFragment,
+        parameter: String,
+        newValueX: String,
+        newValueY: String,
+        newValueZ: String,
+        frag: DistanceSelect,
+    ) {
+        val newDistance = Distance(
+            newValueX.toDoubleOrNull() ?: 0.0,
+            newValueY.toDoubleOrNull() ?: 0.0,
+            newValueZ.toDoubleOrNull() ?: 0.0,
+        )
+        animParams.distanceParam(parameter, newDistance)
+        frag.distance_param_value_text.text =
+            getString(R.string.run_anim_label_numerical_param, parameter, newDistance.coordinates)
+    }
+
+    override fun onDistanceDialogNegativeClick(dialog: DialogFragment) {}
+
+    override fun onLocationDialogPositiveClick(
+        dialog: DialogFragment,
+        parameter: String,
+        newValueX: String,
+        newValueY: String,
+        newValueZ: String,
+        frag: LocationSelect,
+    ) {
+        val newLocation = Location(
+            newValueX.toDoubleOrNull() ?: 0.0,
+            newValueY.toDoubleOrNull() ?: 0.0,
+            newValueZ.toDoubleOrNull() ?: 0.0,
+        )
+        animParams.locationParam(parameter, newLocation)
+        frag.location_param_value_text.text =
+            getString(R.string.run_anim_label_numerical_param, parameter, newLocation.coordinates)
+    }
+
+    override fun onLocationDialogNegativeClick(dialog: DialogFragment) {}
 }

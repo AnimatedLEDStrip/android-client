@@ -31,7 +31,7 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.colors.ColorContainer
 import animatedledstrip.colors.isEmpty
-import animatedledstrip.utils.toARGB
+import animatedledstrip.colors.toARGB
 import kotlinx.android.synthetic.main.fragment_animation_color.*
 
 /**
@@ -50,10 +50,10 @@ class ColorGradientViewer(private val cc: ColorContainer) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         color_gradient.background = GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            mutableListOf<Long>().apply {
+            mutableListOf<Int>().apply {
                 if (cc.isEmpty()) {
-                    add(0L)
-                    add(0L)
+                    add(0)
+                    add(0)
                 } else {
                     addAll(cc.colors)
                     add(cc.colors[0])

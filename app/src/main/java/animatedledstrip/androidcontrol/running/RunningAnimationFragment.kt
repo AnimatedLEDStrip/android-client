@@ -29,18 +29,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.androidcontrol.views.ColorGradientViewer
-import animatedledstrip.animationutils.AnimationData
-import animatedledstrip.animationutils.ParamUsage
-import animatedledstrip.animationutils.findAnimation
-import animatedledstrip.client.endAnimation
+import animatedledstrip.animations.ParamUsage
+import animatedledstrip.animations.findAnimation
+import animatedledstrip.client.send
+import animatedledstrip.leds.animationmanagement.RunningAnimationParams
+import animatedledstrip.leds.animationmanagement.endAnimation
 import kotlinx.android.synthetic.main.fragment_animation.*
 
 /**
  * Shows a single running animation along with its parameters and a button
  * for ending it
  */
-class RunningAnimationFragment(private val data: AnimationData = AnimationData()) : Fragment() {
+class RunningAnimationFragment(private val params: RunningAnimationParams) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,32 +55,32 @@ class RunningAnimationFragment(private val data: AnimationData = AnimationData()
         super.onViewCreated(view, savedInstanceState)
 
         // Set parameters
-        animation_id.text = data.id
+        animation_id.text = params.id
         animation_name.text =
-            getString(R.string.run_anim_label_animation, data.animation)
-        animation_center.text =
-            getString(R.string.run_anim_label_center, data.center.toString())
-        animation_continuous.text =
-            getString(
-                R.string.run_anim_label_continuous,
-                (data.continuous ?: findAnimation(data.animation).info.repetitive).toString()
-            )
-        animation_delay.text =
-            getString(R.string.run_anim_label_delay, data.delay.toString())
-        animation_delay_mod.text =
-            getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
+            getString(R.string.run_anim_label_animation, params.animationName)
+//        animation_center.text =
+//            getString(R.string.run_anim_label_center, data.center.toString())
+//        animation_continuous.text =
+//            getString(
+//                R.string.run_anim_label_continuous,
+//                (data.continuous ?: findAnimation(data.animation).info.repetitive).toString()
+//            )
+//        animation_delay.text =
+//            getString(R.string.run_anim_label_delay, data.delay.toString())
+//        animation_delay_mod.text =
+//            getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
         animation_direction.text =
-            getString(R.string.run_anim_label_direction, data.direction.toString())
-        animation_distance.text =
-            getString(R.string.run_anim_label_distance, data.distance.toString())
-        animation_spacing.text =
-            getString(R.string.run_anim_label_spacing, data.spacing.toString())
+            getString(R.string.run_anim_label_direction, params.direction.toString())
+//        animation_distance.text =
+//            getString(R.string.run_anim_label_distance, data.distance.toString())
+//        animation_spacing.text =
+//            getString(R.string.run_anim_label_spacing, data.spacing.toString())
 
         // Set onClick listener for end button
         animation_end.setOnClickListener {
             check(it is Button)
-            data.endAnimation()
-            it.text = getString(R.string.run_anim_end_anim_button_ending)
+            params.endAnimation().send(mainSender)
+//            it.text = getString(R.string.run_anim_end_anim_button_ending)
         }
 
         // Helper function for removing excess data points
@@ -87,26 +89,26 @@ class RunningAnimationFragment(private val data: AnimationData = AnimationData()
             if (usage == ParamUsage.NOTUSED) animation_params.removeView(view)
         }
 
-        data.colors.forEach {
+        params.colors.forEach {
             childFragmentManager.beginTransaction()
                 .add(animation_colors.id, ColorGradientViewer(it.toColorContainer()))
                 .commit()
         }
 
-        val info = findAnimation(data.animation).info
+        val info = findAnimation(params.animationName).info
 
-        removeExcessData(animation_center, info.center)
-        removeExcessData(animation_delay, info.delay)
-        removeExcessData(animation_delay_mod, info.delay)
-        removeExcessData(animation_direction, info.direction)
-        removeExcessData(animation_distance, info.distance)
-        removeExcessData(animation_spacing, info.spacing)
-        if (!info.repetitive) animation_params.removeView(animation_continuous)
+//        removeExcessData(animation_center, info.center)
+//        removeExcessData(animation_delay, info.delay)
+//        removeExcessData(animation_delay_mod, info.delay)
+//        removeExcessData(animation_direction, info.direction)
+//        removeExcessData(animation_distance, info.distance)
+//        removeExcessData(animation_spacing, info.spacing)
+//        if (!info.repetitive) animation_params.removeView(animation_continuous)
     }
 
 
     companion object {
         @JvmStatic
-        fun newInstance(data: AnimationData) = RunningAnimationFragment(data)
+        fun newInstance(data: RunningAnimationParams) = RunningAnimationFragment(data)
     }
 }

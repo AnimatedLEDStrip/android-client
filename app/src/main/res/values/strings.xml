@@ -70,7 +70,7 @@
     <string name="run_anim_label_color">Color:</string>
     <string name="run_anim_label_center">Center: %1$s</string>
     <string name="run_anim_label_continuous">Continuous: %1$s</string>
-    <string name="run_anim_label_delay">Delay: %1$s ms</string>
+    <string name="run_anim_label_numerical_param">%1$s: %2$s</string>
     <string name="run_anim_label_delay_mod">DelayMod: %1$s</string>
     <string name="run_anim_label_direction">Direction: %1$s</string>
     <string name="run_anim_label_distance">Distance: %1$s</string>
@@ -101,7 +101,7 @@
 
     <string name="popup_dialog_header_new_server">New Server</string>
     <string name="popup_dialog_header_edit_server">Edit Server</string>
-    <string name="popup_dialog_header_edit_delay">Edit Delay</string>
+    <string name="popup_dialog_header_edit_number">Edit %1$s</string>
     <string name="popup_dialog_button_save">Save</string>
     <string name="popup_dialog_button_cancel">Cancel</string>
     <string name="popup_dialog_button_remove">Remove</string>

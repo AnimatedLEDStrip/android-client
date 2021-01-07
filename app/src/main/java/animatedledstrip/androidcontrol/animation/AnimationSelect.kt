@@ -32,12 +32,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animationData
+import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.animationOptionAdapter
 import animatedledstrip.androidcontrol.utils.mainSender
-import animatedledstrip.animationutils.Animation
-import animatedledstrip.animationutils.AnimationData
-import animatedledstrip.animationutils.ParamUsage
+import animatedledstrip.animations.Animation
+import animatedledstrip.animations.AnimationParameter
+import animatedledstrip.leds.animationmanagement.AnimationToRunParams
 import kotlinx.android.synthetic.main.fragment_animation_select.*
 
 /**
@@ -83,13 +83,13 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         val item = animation_list.selectedItem.toString()
         Log.d("RView", "Selected $item")
         animation_options.removeAllViews()
-        animationData = AnimationData()
+        animParams = AnimationToRunParams()
         addAnimationOptions(mainSender.supportedAnimations[item] ?: return)
     }
 
     private fun addAnimationOptions(info: Animation.AnimationInfo) {
         Log.d("AnimOpts", "Adding opts for ${info.name}")
-        animationData.animation = info.name
+        animParams.animation = info.name
 
         fun addOptionFrag(frag: Fragment) {
             childFragmentManager
@@ -98,13 +98,12 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
                 .commit()
         }
 
-        if (info.repetitive) addOptionFrag(ContinuousSelect.newInstance())
+        addOptionFrag(IntSelect(AnimationParameter("Run Count", "", info.runCountDefault)))
         addOptionFrag(ColorSelectContainerFragment.newInstance(info))
-        if (info.center != ParamUsage.NOTUSED) addOptionFrag(CenterSelect.newInstance())
-        if (info.delay != ParamUsage.NOTUSED) addOptionFrag(DelaySelect.newInstance())
-        if (info.distance != ParamUsage.NOTUSED) addOptionFrag(DistanceSelect.newInstance())
-        if (info.direction != ParamUsage.NOTUSED) addOptionFrag(DirectionSelect.newInstance())
-        if (info.spacing != ParamUsage.NOTUSED) addOptionFrag(SpacingSelect.newInstance())
+        for (param in info.intParams) addOptionFrag(IntSelect(param))
+        for (param in info.doubleParams) addOptionFrag(DoubleSelect(param))
+        for (param in info.distanceParams) addOptionFrag(DistanceSelect(param))
+        for (param in info.locationParams) addOptionFrag(LocationSelect(param))
     }
 
 

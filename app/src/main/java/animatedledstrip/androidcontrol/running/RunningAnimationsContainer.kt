@@ -23,13 +23,17 @@
 package animatedledstrip.androidcontrol.running
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.mainSender
+import animatedledstrip.client.send
+import animatedledstrip.communication.Command
 import kotlinx.android.synthetic.main.fragment_running_animations.*
+import kotlinx.coroutines.*
 
 /**
  * The list of running animations
@@ -49,32 +53,6 @@ class RunningAnimationsContainer : Fragment() {
         }
     }
 
-    /**
-     * Set the onNewAnimation and onEndAnimation callbacks for the mainSender
-     */
-    private fun setNewAndEndAnimationCallbacks() {
-        mainSender
-            .setOnNewAnimationDataCallback { data ->
-                activity?.runOnUiThread {
-                    parentFragmentManager.beginTransaction().add(
-                        running_animation_list?.id ?: return@runOnUiThread,
-                        RunningAnimationFragment.newInstance(data),
-                        data.id
-                    ).commit()
-                }
-            }
-            .setOnNewEndAnimationCallback { data ->
-                activity?.runOnUiThread {
-                    parentFragmentManager.beginTransaction()
-                        .remove(
-                            parentFragmentManager.findFragmentByTag(data.id) ?: return@runOnUiThread
-                        )
-                        .commit()
-                }
-            }
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,11 +60,43 @@ class RunningAnimationsContainer : Fragment() {
         return inflater.inflate(R.layout.fragment_running_animations, container, false)
     }
 
+    private var dataRequester: Job? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         addCurrentRunningAnimations()
-        setNewAndEndAnimationCallbacks()
+
+        dataRequester = GlobalScope.launch(Dispatchers.IO) {
+            var lastList = mainSender.runningAnimations.toMap()
+            while (true) {
+                delay(500)
+                val currentList = mainSender.runningAnimations.toMap()
+                mainSender.runningAnimations.clear()
+                Command("running list").send(mainSender)
+                parentFragmentManager.beginTransaction().apply {
+                    lastList.keys.onEach { id ->
+                        if (parentFragmentManager.findFragmentByTag(id) != null)
+                            remove(parentFragmentManager.findFragmentByTag(id)!!)
+                        else
+                            Log.e("RA", "$id Not found")
+                    }
+                    currentList.onEach { (id, params) ->
+                        add(
+                            running_animation_list?.id ?: return@onEach,
+                            RunningAnimationFragment.newInstance(params),
+                            id
+                        )
+                    }
+                }.commit()
+                lastList = currentList
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        dataRequester?.cancel()
+        super.onDestroyView()
     }
 
     companion object {
