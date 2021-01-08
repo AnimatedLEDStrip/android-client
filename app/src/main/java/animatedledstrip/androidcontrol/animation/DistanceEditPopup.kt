@@ -35,6 +35,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
@@ -53,12 +54,13 @@ class DistanceEditPopup(
     private lateinit var textInX: EditText
     private lateinit var textInY: EditText
     private lateinit var textInZ: EditText
+    private lateinit var distanceTypeToggle: ToggleButton
 
     interface DistanceEditListener {
         fun onDistanceDialogPositiveClick(
             dialog: DialogFragment, parameter: String,
             newValueX: String, newValueY: String, newValueZ: String,
-            frag: DistanceSelect
+            isPercentDistance: Boolean, frag: DistanceSelect
         )
 
         fun onDistanceDialogNegativeClick(dialog: DialogFragment)
@@ -102,6 +104,12 @@ class DistanceEditPopup(
                 }
             }
 
+            distanceTypeToggle = ToggleButton(this.context!!).apply {
+                text = "Absolute Distance"
+                textOn = "Percent Distance"
+                textOff = "Absolute Distance"
+            }
+
             val container = LinearLayout(this.context!!).apply {
                 orientation = LinearLayout.VERTICAL
 
@@ -135,6 +143,7 @@ class DistanceEditPopup(
                     })
                     addView(textInZ)
                 })
+                addView(distanceTypeToggle)
             }
 
             AlertDialog.Builder(it)
@@ -146,6 +155,7 @@ class DistanceEditPopup(
                         textInX.text.toString(),
                         textInY.text.toString(),
                         textInZ.text.toString(),
+                        distanceTypeToggle.isActivated,
                         frag
                     )
                 }

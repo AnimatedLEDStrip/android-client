@@ -58,6 +58,11 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
         animation_id.text = params.id
         animation_name.text =
             getString(R.string.run_anim_label_animation, params.animationName)
+        animation_run_count.text =
+            getString(
+                R.string.run_anim_label_run_count,
+                if (params.runCount == -1) "Endless" else params.runCount.toString()
+            )
 
         fun newParamTextView(paramName: String, paramValue: String): TextView =
             TextView(this.context!!).apply {
@@ -105,7 +110,7 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
 
         params.colors.forEach {
             childFragmentManager.beginTransaction()
-                .add(animation_colors.id, ColorGradientViewer(it.toColorContainer()))
+                .add(animation_colors.id, ColorGradientViewer(it.toColorContainer(), true))
                 .commit()
         }
 
@@ -118,11 +123,5 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
 //        removeExcessData(animation_distance, info.distance)
 //        removeExcessData(animation_spacing, info.spacing)
 //        if (!info.repetitive) animation_params.removeView(animation_continuous)
-    }
-
-
-    companion object {
-        @JvmStatic
-        fun newInstance(data: RunningAnimationParams) = RunningAnimationFragment(data)
     }
 }

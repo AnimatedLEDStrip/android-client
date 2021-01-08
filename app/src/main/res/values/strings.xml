@@ -35,7 +35,8 @@
 
     <string name="tab_1_server">Servers</string>
     <string name="tab_2_send">Send Animation</string>
-    <string name="tab_3_running">Running Animations</string>
+    <string name="tab_3_running">Running Anims</string>
+    <string name="tab_4_strip_info">Strip Info</string>
 
 
     <!-- Server List -->
@@ -47,19 +48,16 @@
 
     <!-- Animation Options -->
 
-    <string name="anim_param_center">Center</string>
     <string name="anim_param_color">Color</string>
-    <string name="anim_param_continuous_animation">Continuous Animation</string>
-    <string name="anim_param_delay">Delay</string>
     <string name="anim_param_distance">Distance</string>
     <string name="anim_param_direction_forward">Forward</string>
     <string name="anim_param_direction_backward">Backward</string>
-    <string name="anim_param_spacing">Spacing</string>
 
     <string name="anim_color_button_presets">PRESETS</string>
     <string name="anim_color_button_clear_colors">Clear</string>
     <string name="anim_color_button_add">Add</string>
     <string name="anim_add_color_button">Add Another Color</string>
+
 
     <!-- Running Animations -->
 
@@ -67,10 +65,25 @@
     <string name="run_anim_end_anim_button_ending">Ending</string>
 
     <string name="run_anim_label_animation">Animation: %1$s</string>
+    <string name="run_anim_label_run_count">Run Count: %1$s</string>
     <string name="run_anim_label_color">Color:</string>
     <string name="run_anim_label_param">%1$s: %2$s</string>
     <string name="run_anim_label_direction">Direction: %1$s</string>
     <string name="run_anim_label_id">ID</string>
+
+
+    <!-- Strip Info -->
+
+    <string name="strip_info_title">Strip Info</string>
+    <string name="strip_info_num_leds">Number of LEDs: %1$s</string>
+    <string name="strip_info_pin">Pin: %1$s</string>
+    <string name="strip_info_debug_enabled">Debugging Enabled: %1$s</string>
+    <string name="strip_info_debug_file_name">Debug File Name: %1$s</string>
+    <string name="strip_info_renders_between_outputs">Renders Between Debug Outputs: %1$s</string>
+    <string name="strip_info_is_1d_supported">1D Supported: %1$s</string>
+    <string name="strip_info_is_2d_supported">2D Supported: %1$s</string>
+    <string name="strip_info_is_3d_supported">3D Supported: %1$s</string>
+    <string name="strip_color_title">Current Strip Color</string>
 
 
     <!-- Settings -->

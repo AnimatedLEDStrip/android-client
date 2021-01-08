@@ -44,7 +44,8 @@ import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
-import animatedledstrip.animations.Distance
+import animatedledstrip.animations.AbsoluteDistance
+import animatedledstrip.animations.PercentDistance
 import animatedledstrip.client.send
 import animatedledstrip.communication.ClientParams
 import animatedledstrip.communication.MessageFrequency
@@ -291,7 +292,11 @@ class MainActivity : AppCompatActivity(),
         val newDouble = newValue.toDoubleOrNull()
         if (newDouble != null) animParams.doubleParam(parameter, newDouble)
         frag.double_param_value_text.text =
-            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newDouble.toString())
+            getString(
+                R.string.run_anim_label_param,
+                parameter.camelToCapitalizedWords(),
+                newDouble.toString()
+            )
     }
 
     override fun onDoubleDialogNegativeClick(dialog: DialogFragment) {}
@@ -302,16 +307,28 @@ class MainActivity : AppCompatActivity(),
         newValueX: String,
         newValueY: String,
         newValueZ: String,
+        isPercentDistance: Boolean,
         frag: DistanceSelect,
     ) {
-        val newDistance = Distance(
-            newValueX.toDoubleOrNull() ?: 0.0,
-            newValueY.toDoubleOrNull() ?: 0.0,
-            newValueZ.toDoubleOrNull() ?: 0.0,
-        )
+        val newDistance = if (isPercentDistance)
+            PercentDistance(
+                newValueX.toDoubleOrNull() ?: 0.0,
+                newValueY.toDoubleOrNull() ?: 0.0,
+                newValueZ.toDoubleOrNull() ?: 0.0,
+            )
+        else
+            AbsoluteDistance(
+                newValueX.toDoubleOrNull() ?: 0.0,
+                newValueY.toDoubleOrNull() ?: 0.0,
+                newValueZ.toDoubleOrNull() ?: 0.0,
+            )
         animParams.distanceParam(parameter, newDistance)
         frag.distance_param_value_text.text =
-            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newDistance.coordinates)
+            getString(
+                R.string.run_anim_label_param,
+                parameter.camelToCapitalizedWords(),
+                newDistance.coordinates
+            )
     }
 
     override fun onDistanceDialogNegativeClick(dialog: DialogFragment) {}
@@ -331,7 +348,11 @@ class MainActivity : AppCompatActivity(),
         )
         animParams.locationParam(parameter, newLocation)
         frag.location_param_value_text.text =
-            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newLocation.coordinates)
+            getString(
+                R.string.run_anim_label_param,
+                parameter.camelToCapitalizedWords(),
+                newLocation.coordinates
+            )
     }
 
     override fun onLocationDialogNegativeClick(dialog: DialogFragment) {}

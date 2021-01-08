@@ -29,6 +29,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AbsoluteDistance
 import animatedledstrip.animations.AnimationParameter
 import animatedledstrip.animations.Distance
 import kotlinx.android.synthetic.main.fragment_distance_select.*
@@ -45,7 +46,7 @@ class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
                 .removeSuffix("null")
                 .split(",")
                 .let {
-                    Distance(
+                    AbsoluteDistance(
                         it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,

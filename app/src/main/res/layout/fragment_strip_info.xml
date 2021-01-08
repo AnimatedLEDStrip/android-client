@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/strip_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="@color/colorViewBack"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
+    tools:context=".stripinfo.StripInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/strip_info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/strip_info_title"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/strip_info_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/strip_info_title">
+
+
+            <TextView
+                android:id="@+id/num_leds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_num_leds"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/pin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_pin"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/debug_enabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_debug_enabled"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/debug_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_debug_file_name"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/renders_between_debug_outputs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_renders_between_outputs"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/is_1d_supported"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_is_1d_supported"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/is_2d_supported"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_is_2d_supported"
+                android:textColor="@color/colorText" />
+
+            <TextView
+                android:id="@+id/is_3d_supported"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strip_info_is_3d_supported"
+                android:textColor="@color/colorText" />
+
+            <!--        <TextView-->
+            <!--            android:id="@+id/led_locations"-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:text="@string/run_anim_label_animation"-->
+            <!--            android:textColor="@color/colorText" />-->
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

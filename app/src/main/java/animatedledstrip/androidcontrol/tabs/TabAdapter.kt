@@ -33,6 +33,7 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
 import animatedledstrip.androidcontrol.connections.ConnectionListContainer
 import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
+import animatedledstrip.androidcontrol.stripinfo.StripInfoContainer
 import animatedledstrip.androidcontrol.utils.animationOptionAdapter
 import animatedledstrip.androidcontrol.utils.mainSender
 
@@ -46,7 +47,8 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
     private val tabs = listOf(
         R.string.tab_1_server to ConnectionListContainer::class,
         R.string.tab_2_send to AnimationSelectContainer::class,
-        R.string.tab_3_running to RunningAnimationsContainer::class
+        R.string.tab_3_running to RunningAnimationsContainer::class,
+        R.string.tab_4_strip_info to StripInfoContainer::class,
     )
 
     override fun getItem(position: Int): Fragment {
@@ -55,13 +57,14 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
             tabToUse = ConnectFirstPlaceholder::class
         Log.d("Tab", tabToUse.toString())
         return when (tabToUse) {
-            ConnectionListContainer::class -> ConnectionListContainer.newInstance()
+            ConnectionListContainer::class -> ConnectionListContainer()
             AnimationSelectContainer::class -> {
                 Log.d("Click", animationOptionAdapter.toString())
-                AnimationSelectContainer.newInstance()
+                AnimationSelectContainer()
             }
-            RunningAnimationsContainer::class -> RunningAnimationsContainer.newInstance()
-            ConnectFirstPlaceholder::class -> ConnectFirstPlaceholder.newInstance()
+            RunningAnimationsContainer::class -> RunningAnimationsContainer()
+            StripInfoContainer::class -> StripInfoContainer()
+            ConnectFirstPlaceholder::class -> ConnectFirstPlaceholder()
             else -> throw Exception()
         }
     }

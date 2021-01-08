@@ -47,7 +47,7 @@ class RunningAnimationsContainer : Fragment() {
         mainSender.runningAnimations.forEach { (id, data) ->
             parentFragmentManager.beginTransaction().add(
                 running_animation_list.id,
-                RunningAnimationFragment.newInstance(data),
+                RunningAnimationFragment(data),
                 id
             ).commit()
         }
@@ -84,7 +84,7 @@ class RunningAnimationsContainer : Fragment() {
                     currentList.onEach { (id, params) ->
                         add(
                             running_animation_list?.id ?: return@onEach,
-                            RunningAnimationFragment.newInstance(params),
+                            RunningAnimationFragment(params),
                             id
                         )
                     }
@@ -98,10 +98,4 @@ class RunningAnimationsContainer : Fragment() {
         dataRequester?.cancel()
         super.onDestroyView()
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = RunningAnimationsContainer()
-    }
-
 }

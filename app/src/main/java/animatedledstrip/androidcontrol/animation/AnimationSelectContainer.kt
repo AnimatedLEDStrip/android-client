@@ -53,9 +53,4 @@ class AnimationSelectContainer : Fragment() {
             )
             .commit()
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = AnimationSelectContainer()
-    }
 }

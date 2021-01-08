@@ -32,18 +32,24 @@ import animatedledstrip.androidcontrol.R
 import animatedledstrip.colors.ColorContainer
 import animatedledstrip.colors.isEmpty
 import animatedledstrip.colors.toARGB
-import kotlinx.android.synthetic.main.fragment_animation_color.*
+import kotlinx.android.synthetic.main.fragment_color_view.*
 
 /**
  * Represents a ColorContainer for a running animation listing
  */
-class ColorGradientViewer(private val cc: ColorContainer) : Fragment() {
+class ColorGradientViewer(private val cc: ColorContainer, private val includeTitle: Boolean) :
+    Fragment() {
+
+    constructor(
+        colorList: List<Int>,
+        includeTitle: Boolean
+    ) : this(ColorContainer(colorList.toMutableList()), includeTitle)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_animation_color, container, false)
+        return inflater.inflate(R.layout.fragment_color_view, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,12 +66,9 @@ class ColorGradientViewer(private val cc: ColorContainer) : Fragment() {
                 }
             }.map { it.toARGB() }.toIntArray()
         )
-    }
+        if (!includeTitle) {
+            color_view_title.text = ""
 
-    companion object {
-        @JvmStatic
-        fun newInstance(cc: ColorContainer) =
-            ColorGradientViewer(cc)
+        }
     }
-
 }
