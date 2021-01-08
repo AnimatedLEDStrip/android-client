@@ -44,7 +44,7 @@ class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
                 .removeSuffix("null")
                 .toString()
                 .toDoubleOrNull(),
-            parameter.name.camelToCapitalizedWords(),
+            parameter.name,
             frag = this
         )
         dialog.show(parentFragmentManager, "${parameter}EditPopup")
@@ -61,7 +61,7 @@ class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         double_param_value_text.text = getString(
-            R.string.run_anim_label_numerical_param,
+            R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
             parameter.default?.toString()
         )

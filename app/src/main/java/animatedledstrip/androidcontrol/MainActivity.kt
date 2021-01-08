@@ -273,8 +273,8 @@ class MainActivity : AppCompatActivity(),
         }
         frag.int_param_value_text.text =
             getString(
-                R.string.run_anim_label_numerical_param,
-                parameter,
+                R.string.run_anim_label_param,
+                parameter.camelToCapitalizedWords(),
                 if (parameter == "Run Count" && newValue == "-1" || newValue == "") "Endless"
                 else newInt.toString()
             )
@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity(),
         val newDouble = newValue.toDoubleOrNull()
         if (newDouble != null) animParams.doubleParam(parameter, newDouble)
         frag.double_param_value_text.text =
-            getString(R.string.run_anim_label_numerical_param, parameter, newDouble.toString())
+            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newDouble.toString())
     }
 
     override fun onDoubleDialogNegativeClick(dialog: DialogFragment) {}
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity(),
         )
         animParams.distanceParam(parameter, newDistance)
         frag.distance_param_value_text.text =
-            getString(R.string.run_anim_label_numerical_param, parameter, newDistance.coordinates)
+            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newDistance.coordinates)
     }
 
     override fun onDistanceDialogNegativeClick(dialog: DialogFragment) {}
@@ -331,7 +331,7 @@ class MainActivity : AppCompatActivity(),
         )
         animParams.locationParam(parameter, newLocation)
         frag.location_param_value_text.text =
-            getString(R.string.run_anim_label_numerical_param, parameter, newLocation.coordinates)
+            getString(R.string.run_anim_label_param, parameter.camelToCapitalizedWords(), newLocation.coordinates)
     }
 
     override fun onLocationDialogNegativeClick(dialog: DialogFragment) {}

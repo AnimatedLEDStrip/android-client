@@ -59,58 +59,46 @@
                     android:textColor="@color/colorText" />
 
             <LinearLayout
+                android:id="@+id/animation_run_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
                     android:id="@+id/animation_colors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
-            <TextView
-                    android:id="@+id/animation_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_center"
-                    android:textColor="@color/colorText" />
+            <LinearLayout
+                android:id="@+id/animation_intParams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-            <TextView
-                    android:id="@+id/animation_continuous"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_continuous"
-                    android:textColor="@color/colorText" />
+            <LinearLayout
+                android:id="@+id/animation_doubleParams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-            <TextView
-                    android:id="@+id/animation_delay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TEMP"
-                    android:textColor="@color/colorText" />
+            <LinearLayout
+                android:id="@+id/animation_distanceParams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
-            <TextView
-                    android:id="@+id/animation_delay_mod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_delay_mod"
-                    android:textColor="@color/colorText" />
+            <LinearLayout
+                android:id="@+id/animation_locationParams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <TextView
                     android:id="@+id/animation_direction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/run_anim_label_direction"
-                    android:textColor="@color/colorText" />
-
-            <TextView
-                    android:id="@+id/animation_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_distance"
-                    android:textColor="@color/colorText" />
-
-            <TextView
-                    android:id="@+id/animation_spacing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/run_anim_label_spacing"
                     android:textColor="@color/colorText" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

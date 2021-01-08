@@ -51,7 +51,7 @@ class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
                         it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
                     )
                 },
-            parameter.name.camelToCapitalizedWords(),
+            parameter.name,
             frag = this
         )
         dialog.show(parentFragmentManager, "${parameter}EditPopup")
@@ -68,7 +68,7 @@ class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         distance_param_value_text.text = getString(
-            R.string.run_anim_label_numerical_param,
+            R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
             parameter.default?.coordinates
         )

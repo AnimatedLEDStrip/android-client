@@ -27,12 +27,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.androidcontrol.views.ColorGradientViewer
-import animatedledstrip.animations.ParamUsage
-import animatedledstrip.animations.findAnimation
 import animatedledstrip.client.send
 import animatedledstrip.leds.animationmanagement.RunningAnimationParams
 import animatedledstrip.leds.animationmanagement.endAnimation
@@ -58,35 +58,49 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
         animation_id.text = params.id
         animation_name.text =
             getString(R.string.run_anim_label_animation, params.animationName)
-//        animation_center.text =
-//            getString(R.string.run_anim_label_center, data.center.toString())
-//        animation_continuous.text =
-//            getString(
-//                R.string.run_anim_label_continuous,
-//                (data.continuous ?: findAnimation(data.animation).info.repetitive).toString()
-//            )
-//        animation_delay.text =
-//            getString(R.string.run_anim_label_delay, data.delay.toString())
-//        animation_delay_mod.text =
-//            getString(R.string.run_anim_label_delay_mod, data.delayMod.toString())
+
+        fun newParamTextView(paramName: String, paramValue: String): TextView =
+            TextView(this.context!!).apply {
+                text = getString(R.string.run_anim_label_param, paramName, paramValue)
+                setTextColor(resources.getColor(R.color.colorText, null))
+            }
+
+        for (param in params.intParams)
+            animation_intParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    param.value.toString()
+                )
+            )
+        for (param in params.doubleParams)
+            animation_doubleParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    param.value.toString()
+                )
+            )
+        for (param in params.distanceParams)
+            animation_distanceParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    "%.2f, %.2f, %.2f".format(param.value.x, param.value.y, param.value.z)
+                )
+            )
+        for (param in params.locationParams)
+            animation_locationParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    "%.2f, %.2f, %.2f".format(param.value.x, param.value.y, param.value.z)
+                )
+            )
+
         animation_direction.text =
             getString(R.string.run_anim_label_direction, params.direction.toString())
-//        animation_distance.text =
-//            getString(R.string.run_anim_label_distance, data.distance.toString())
-//        animation_spacing.text =
-//            getString(R.string.run_anim_label_spacing, data.spacing.toString())
 
         // Set onClick listener for end button
         animation_end.setOnClickListener {
             check(it is Button)
             params.endAnimation().send(mainSender)
-//            it.text = getString(R.string.run_anim_end_anim_button_ending)
-        }
-
-        // Helper function for removing excess data points
-        // (checks if usage is NOTUSED, if so then removes it)
-        fun removeExcessData(view: View, usage: ParamUsage) {
-            if (usage == ParamUsage.NOTUSED) animation_params.removeView(view)
         }
 
         params.colors.forEach {
@@ -95,7 +109,7 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
                 .commit()
         }
 
-        val info = findAnimation(params.animationName).info
+//        val info = findAnimation(params.animationName).info
 
 //        removeExcessData(animation_center, info.center)
 //        removeExcessData(animation_delay, info.delay)

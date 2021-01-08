@@ -68,13 +68,8 @@
 
     <string name="run_anim_label_animation">Animation: %1$s</string>
     <string name="run_anim_label_color">Color:</string>
-    <string name="run_anim_label_center">Center: %1$s</string>
-    <string name="run_anim_label_continuous">Continuous: %1$s</string>
-    <string name="run_anim_label_numerical_param">%1$s: %2$s</string>
-    <string name="run_anim_label_delay_mod">DelayMod: %1$s</string>
+    <string name="run_anim_label_param">%1$s: %2$s</string>
     <string name="run_anim_label_direction">Direction: %1$s</string>
-    <string name="run_anim_label_distance">Distance: %1$s</string>
-    <string name="run_anim_label_spacing">Spacing: %1$s</string>
     <string name="run_anim_label_id">ID</string>
 
 

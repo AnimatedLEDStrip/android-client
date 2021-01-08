@@ -37,6 +37,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.Distance
 
 /**
@@ -138,7 +139,7 @@ class DistanceEditPopup(
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName))
+                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
                     listener.onDistanceDialogPositiveClick(
                         this, paramName,

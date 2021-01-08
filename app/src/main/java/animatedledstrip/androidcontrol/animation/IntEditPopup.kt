@@ -36,6 +36,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 
 /**
  * Pops up to modify an int parameter
@@ -87,7 +88,7 @@ class IntEditPopup(
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName))
+                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
                     listener.onIntDialogPositiveClick(this, paramName, textIn.text.toString(), frag)
                 }

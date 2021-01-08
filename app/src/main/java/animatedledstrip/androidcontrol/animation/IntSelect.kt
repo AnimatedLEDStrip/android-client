@@ -44,7 +44,7 @@ class IntSelect(val parameter: AnimationParameter<Int>) : Fragment() {
                 .let { if (it == "Endless") "-1" else it }
                 .toString()
                 .toIntOrNull(),
-            parameter.name.camelToCapitalizedWords(),
+            parameter.name,
             frag = this
         )
         dialog.show(parentFragmentManager, "${parameter}EditPopup")
@@ -61,7 +61,7 @@ class IntSelect(val parameter: AnimationParameter<Int>) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         int_param_value_text.text = getString(
-            R.string.run_anim_label_numerical_param,
+            R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
             if (parameter.name == "Run Count" && parameter.default == -1) "Endless"
             else parameter.default.toString()
