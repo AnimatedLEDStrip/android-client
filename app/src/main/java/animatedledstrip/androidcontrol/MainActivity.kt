@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(),
                 }
             }
             .setOnReceiveCallback {
-                Log.w("A", it)
+                Log.d("A", it)
             }
     }
 

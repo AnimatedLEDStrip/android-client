@@ -51,5 +51,5 @@ fun LinearLayout?.indexOfChildOrNull(view: View?) = this?.indexOfChild(view)
 fun String.camelToCapitalizedWords(): String {
     return "(?<=[a-zA-Z])[A-Z]".toRegex().replace(this) {
         " ${it.value}"
-    }.capitalize(Locale.ROOT)
+    }.capitalize(Locale.ROOT).replace("-", "\n")
 }
