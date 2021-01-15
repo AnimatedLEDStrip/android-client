@@ -107,9 +107,9 @@ class RotationEditPopup(
             }
 
             rotationTypeToggle = ToggleButton(this.context!!).apply {
-                text = "Radians Rotation" // TODO: String resource
-                textOn = "Degrees Rotation"
-                textOff = "Radians Rotation"
+                text = context.getString(R.string.rotation_radians)
+                textOn = context.getString(R.string.rotation_degrees)
+                textOff = context.getString(R.string.rotation_radians)
                 isChecked = when (animParams.rotationParams[paramName]) {
                     is DegreesRotation -> true
                     else -> false
@@ -122,7 +122,7 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "X Rotation: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "X Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -132,7 +132,7 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Y Rotation: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "Y Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -142,7 +142,7 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Z Rotation: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "Z Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -169,6 +169,12 @@ class RotationEditPopup(
                     listener.onRotationDialogNegativeClick(this)
                 }
                 .create()
+                .apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                    }
+                }
         }
     }
 

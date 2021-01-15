@@ -49,7 +49,6 @@
     <!-- Animation Options -->
 
     <string name="anim_param_color">Color</string>
-    <string name="anim_param_distance">Distance</string>
     <string name="anim_param_direction_forward">Forward</string>
     <string name="anim_param_direction_backward">Backward</string>
 
@@ -57,6 +56,12 @@
     <string name="anim_color_button_clear_colors">Clear</string>
     <string name="anim_color_button_add">Add</string>
     <string name="anim_add_color_button">Add Another Color</string>
+
+    <string name="popup_label">%1$s: </string>
+    <string name="distance_absolute">Absolute Distance</string>
+    <string name="distance_percent">Percent Distance</string>
+    <string name="rotation_radians">Radians Rotation</string>
+    <string name="rotation_degrees">Degrees Rotation</string>
 
 
     <!-- Running Animations -->

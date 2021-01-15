@@ -96,6 +96,12 @@ class IntEditPopup(
                     listener.onIntDialogNegativeClick(this)
                 }
                 .create()
+                .apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                    }
+                }
         }
     }
 

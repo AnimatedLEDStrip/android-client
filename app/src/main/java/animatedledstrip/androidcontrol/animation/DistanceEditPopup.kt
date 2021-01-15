@@ -107,9 +107,9 @@ class DistanceEditPopup(
             }
 
             distanceTypeToggle = ToggleButton(this.context!!).apply {
-                text = "Absolute Distance" // TODO: String resource
-                textOn = "Percent Distance"
-                textOff = "Absolute Distance"
+                text = context.getString(R.string.distance_absolute)
+                textOn = context.getString(R.string.distance_percent)
+                textOff = context.getString(R.string.distance_absolute)
                 isChecked = when (animParams.distanceParams[paramName]) {
                     is PercentDistance -> true
                     else -> false
@@ -122,7 +122,7 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "X: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "X")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -132,7 +132,7 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Y: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "Y")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -142,7 +142,7 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Z: "  // TODO: String resource
+                        text = context.getString(R.string.popup_label, "Z")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -154,7 +154,12 @@ class DistanceEditPopup(
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
+                .setTitle(
+                    getString(
+                        R.string.popup_dialog_header_edit_number,
+                        paramName.camelToCapitalizedWords()
+                    )
+                )
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
                     listener.onDistanceDialogPositiveClick(
                         this, paramName,
@@ -169,6 +174,12 @@ class DistanceEditPopup(
                     listener.onDistanceDialogNegativeClick(this)
                 }
                 .create()
+                .apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                    }
+                }
         }
     }
 
