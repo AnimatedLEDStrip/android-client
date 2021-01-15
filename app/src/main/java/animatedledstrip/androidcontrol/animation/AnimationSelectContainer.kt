@@ -48,7 +48,7 @@ class AnimationSelectContainer : Fragment() {
             .beginTransaction()
             .add(
                 anim_select_container.id,
-                AnimationSelect.newInstance(),
+                AnimationSelect(),
                 "anim select"
             )
             .commit()

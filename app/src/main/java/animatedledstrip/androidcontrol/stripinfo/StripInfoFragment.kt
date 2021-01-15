@@ -31,18 +31,18 @@ class StripInfoFragment : Fragment() {
                     getString(R.string.strip_info_num_leds, it.numLEDs.toString())
                 pin.text =
                     getString(R.string.strip_info_pin, it.pin.toString())
-                debug_enabled.text =
-                    getString(R.string.strip_info_debug_enabled, it.isDebugEnabled.toString())
-                if (!it.isDebugEnabled) {
-                    strip_info_data.removeView(debug_file_name)
-                    strip_info_data.removeView(renders_between_debug_outputs)
+                logging_enabled.text =
+                    getString(R.string.strip_info_logging_enabled, it.isRenderLoggingEnabled.toString())
+                if (!it.isRenderLoggingEnabled) {
+                    strip_info_data.removeView(render_log_file_name)
+                    strip_info_data.removeView(renders_between_log_saves)
                 } else {
-                    debug_file_name.text =
-                        getString(R.string.strip_info_debug_file_name, it.debugFile)
-                    renders_between_debug_outputs.text =
+                    render_log_file_name.text =
+                        getString(R.string.strip_info_log_file_name, it.renderLogFile)
+                    renders_between_log_saves.text =
                         getString(
-                            R.string.strip_info_renders_between_outputs,
-                            it.rendersBetweenDebugOutputs.toString()
+                            R.string.strip_info_renders_between_saves,
+                            it.rendersBetweenLogSaves.toString()
                         )
                 }
                 is_1d_supported.text =

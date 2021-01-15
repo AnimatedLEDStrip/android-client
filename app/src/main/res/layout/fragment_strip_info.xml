@@ -56,24 +56,24 @@
                 android:textColor="@color/colorText" />
 
             <TextView
-                android:id="@+id/debug_enabled"
+                android:id="@+id/logging_enabled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/strip_info_debug_enabled"
+                android:text="@string/strip_info_logging_enabled"
                 android:textColor="@color/colorText" />
 
             <TextView
-                android:id="@+id/debug_file_name"
+                android:id="@+id/render_log_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/strip_info_debug_file_name"
+                android:text="@string/strip_info_log_file_name"
                 android:textColor="@color/colorText" />
 
             <TextView
-                android:id="@+id/renders_between_debug_outputs"
+                android:id="@+id/renders_between_log_saves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/strip_info_renders_between_outputs"
+                android:text="@string/strip_info_renders_between_saves"
                 android:textColor="@color/colorText" />
 
             <TextView

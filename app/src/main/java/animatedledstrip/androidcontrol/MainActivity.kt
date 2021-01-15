@@ -44,10 +44,10 @@ import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
-import animatedledstrip.animations.AbsoluteDistance
-import animatedledstrip.animations.PercentDistance
+import animatedledstrip.animations.*
 import animatedledstrip.client.send
 import animatedledstrip.communication.ClientParams
+import animatedledstrip.communication.Command
 import animatedledstrip.communication.MessageFrequency
 import animatedledstrip.leds.animationmanagement.*
 import animatedledstrip.leds.locationmanagement.Location
@@ -56,6 +56,7 @@ import kotlinx.android.synthetic.main.fragment_distance_select.*
 import kotlinx.android.synthetic.main.fragment_double_select.*
 import kotlinx.android.synthetic.main.fragment_int_select.*
 import kotlinx.android.synthetic.main.fragment_location_select.*
+import kotlinx.android.synthetic.main.fragment_rotation_select.*
 
 /**
  * Starting point for the app
@@ -65,7 +66,8 @@ class MainActivity : AppCompatActivity(),
     IntEditPopup.IntEditListener,
     DoubleEditPopup.DoubleEditListener,
     DistanceEditPopup.DistanceEditListener,
-    LocationEditPopup.LocationEditListener {
+    LocationEditPopup.LocationEditListener,
+    RotationEditPopup.RotationEditListener {
 
     /**
      * Name of the preferences file
@@ -161,7 +163,7 @@ class MainActivity : AppCompatActivity(),
                 }
             }
             .setOnReceiveCallback {
-                Log.d("A", it)
+                Log.v("Data Receive", it)
             }
     }
 
@@ -244,14 +246,12 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_clear -> {
-                if (mainSender.connected)
-                    AnimationToRunParams("Color").send()
+                if (mainSender.connected) Command("strip clear")
                 else Toast.makeText(
                     this,
                     getString(R.string.toast_body_not_connected),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -301,6 +301,30 @@ class MainActivity : AppCompatActivity(),
 
     override fun onDoubleDialogNegativeClick(dialog: DialogFragment) {}
 
+    override fun onLocationDialogPositiveClick(
+        dialog: DialogFragment,
+        parameter: String,
+        newValueX: String,
+        newValueY: String,
+        newValueZ: String,
+        frag: LocationSelect,
+    ) {
+        val newLocation = Location(
+            newValueX.toDoubleOrNull() ?: 0.0,
+            newValueY.toDoubleOrNull() ?: 0.0,
+            newValueZ.toDoubleOrNull() ?: 0.0,
+        )
+        animParams.locationParam(parameter, newLocation)
+        frag.location_param_value_text.text =
+            getString(
+                R.string.run_anim_label_param,
+                parameter.camelToCapitalizedWords(),
+                newLocation.coordinates
+            )
+    }
+
+    override fun onLocationDialogNegativeClick(dialog: DialogFragment) {}
+
     override fun onDistanceDialogPositiveClick(
         dialog: DialogFragment,
         parameter: String,
@@ -333,27 +357,35 @@ class MainActivity : AppCompatActivity(),
 
     override fun onDistanceDialogNegativeClick(dialog: DialogFragment) {}
 
-    override fun onLocationDialogPositiveClick(
+    override fun onRotationDialogPositiveClick(
         dialog: DialogFragment,
         parameter: String,
         newValueX: String,
         newValueY: String,
         newValueZ: String,
-        frag: LocationSelect,
+        isDegreesRotation: Boolean,
+        frag: RotationSelect,
     ) {
-        val newLocation = Location(
-            newValueX.toDoubleOrNull() ?: 0.0,
-            newValueY.toDoubleOrNull() ?: 0.0,
-            newValueZ.toDoubleOrNull() ?: 0.0,
-        )
-        animParams.locationParam(parameter, newLocation)
-        frag.location_param_value_text.text =
+        val newRotation = if (isDegreesRotation)
+            DegreesRotation(
+                newValueX.toDoubleOrNull() ?: 0.0,
+                newValueY.toDoubleOrNull() ?: 0.0,
+                newValueZ.toDoubleOrNull() ?: 0.0,
+            )
+        else
+            RadiansRotation(
+                newValueX.toDoubleOrNull() ?: 0.0,
+                newValueY.toDoubleOrNull() ?: 0.0,
+                newValueZ.toDoubleOrNull() ?: 0.0,
+            )
+        animParams.rotationParam(parameter, newRotation)
+        frag.rotation_param_value_text.text =
             getString(
                 R.string.run_anim_label_param,
                 parameter.camelToCapitalizedWords(),
-                newLocation.coordinates
+                newRotation.let { "${it.xRotation}, ${it.yRotation}, ${it.zRotation} ${if (it is DegreesRotation) "deg" else "rad"}" }
             )
     }
 
-    override fun onLocationDialogNegativeClick(dialog: DialogFragment) {}
+    override fun onRotationDialogNegativeClick(dialog: DialogFragment) {}
 }

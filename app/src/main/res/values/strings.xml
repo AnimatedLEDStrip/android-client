@@ -77,9 +77,9 @@
     <string name="strip_info_title">Strip Info</string>
     <string name="strip_info_num_leds">Number of LEDs: %1$s</string>
     <string name="strip_info_pin">Pin: %1$s</string>
-    <string name="strip_info_debug_enabled">Debugging Enabled: %1$s</string>
-    <string name="strip_info_debug_file_name">Debug File Name: %1$s</string>
-    <string name="strip_info_renders_between_outputs">Renders Between Debug Outputs: %1$s</string>
+    <string name="strip_info_logging_enabled">Render Logging Enabled: %1$s</string>
+    <string name="strip_info_log_file_name">Render Log File Name: %1$s</string>
+    <string name="strip_info_renders_between_saves">Renders Between Log Saves: %1$s</string>
     <string name="strip_info_is_1d_supported">1D Supported: %1$s</string>
     <string name="strip_info_is_2d_supported">2D Supported: %1$s</string>
     <string name="strip_info_is_3d_supported">3D Supported: %1$s</string>

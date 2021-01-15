@@ -102,17 +102,15 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         addOptionFrag(ColorSelectContainerFragment.newInstance(info))
         for (param in info.intParams) addOptionFrag(IntSelect(param))
         for (param in info.doubleParams) addOptionFrag(DoubleSelect(param))
-        for (param in info.distanceParams) addOptionFrag(DistanceSelect(param))
+//        for (param in info.stringParams)
         for (param in info.locationParams) addOptionFrag(LocationSelect(param))
+        for (param in info.distanceParams) addOptionFrag(DistanceSelect(param))
+        for (param in info.rotationParams) addOptionFrag(RotationSelect(param))
+//        for (param in info.equationParams)
     }
 
 
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = AnimationSelect()
     }
 }

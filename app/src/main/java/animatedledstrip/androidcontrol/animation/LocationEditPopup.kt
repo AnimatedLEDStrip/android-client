@@ -74,7 +74,7 @@ class LocationEditPopup(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_int_edit, container, false)
+        return inflater.inflate(R.layout.popup_location_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

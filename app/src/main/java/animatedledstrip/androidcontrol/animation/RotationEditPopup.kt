@@ -40,37 +40,37 @@ import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.Distance
-import animatedledstrip.animations.PercentDistance
+import animatedledstrip.animations.DegreesRotation
+import animatedledstrip.animations.Rotation
 
 /**
- * Pops up to modify a distance parameter
+ * Pops up to modify a rotation parameter
  */
-class DistanceEditPopup(
-    private val initialValue: Distance,
+class RotationEditPopup(
+    private val initialValue: Rotation,
     private val paramName: String,
-    private val frag: DistanceSelect
+    private val frag: RotationSelect
 ) : DialogFragment() {
 
-    private lateinit var listener: DistanceEditListener
+    private lateinit var listener: RotationEditListener
     private lateinit var textInX: EditText
     private lateinit var textInY: EditText
     private lateinit var textInZ: EditText
-    private lateinit var distanceTypeToggle: ToggleButton
+    private lateinit var rotationTypeToggle: ToggleButton
 
-    interface DistanceEditListener {
-        fun onDistanceDialogPositiveClick(
+    interface RotationEditListener {
+        fun onRotationDialogPositiveClick(
             dialog: DialogFragment, parameter: String,
             newValueX: String, newValueY: String, newValueZ: String,
-            isPercentDistance: Boolean, frag: DistanceSelect
+            isDegreesRotation: Boolean, frag: RotationSelect
         )
 
-        fun onDistanceDialogNegativeClick(dialog: DialogFragment)
+        fun onRotationDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is DistanceEditListener)
+        check(context is RotationEditListener)
         listener = context
     }
 
@@ -78,7 +78,7 @@ class DistanceEditPopup(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_distance_edit, container, false)
+        return inflater.inflate(R.layout.popup_rotation_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -86,32 +86,32 @@ class DistanceEditPopup(
         return activity.let {
             textInX = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.x.toString())
+                setText(initialValue.xRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
             textInY = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.y.toString())
+                setText(initialValue.yRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
             textInZ = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.z.toString())
+                setText(initialValue.zRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
 
-            distanceTypeToggle = ToggleButton(this.context!!).apply {
-                text = "Absolute Distance" // TODO: String resource
-                textOn = "Percent Distance"
-                textOff = "Absolute Distance"
-                isChecked = when (animParams.distanceParams[paramName]) {
-                    is PercentDistance -> true
+            rotationTypeToggle = ToggleButton(this.context!!).apply {
+                text = "Radians Rotation" // TODO: String resource
+                textOn = "Degrees Rotation"
+                textOff = "Radians Rotation"
+                isChecked = when (animParams.rotationParams[paramName]) {
+                    is DegreesRotation -> true
                     else -> false
                 }
             }
@@ -122,7 +122,7 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "X: "  // TODO: String resource
+                        text = "X Rotation: "  // TODO: String resource
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -132,7 +132,7 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Y: "  // TODO: String resource
+                        text = "Y Rotation: "  // TODO: String resource
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -142,31 +142,31 @@ class DistanceEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = "Z: "  // TODO: String resource
+                        text = "Z Rotation: "  // TODO: String resource
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
                     })
                     addView(textInZ)
                 })
-                addView(distanceTypeToggle)
+                addView(rotationTypeToggle)
             }
 
             AlertDialog.Builder(it)
                 .setView(container)
                 .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onDistanceDialogPositiveClick(
+                    listener.onRotationDialogPositiveClick(
                         this, paramName,
                         textInX.text.toString(),
                         textInY.text.toString(),
                         textInZ.text.toString(),
-                        distanceTypeToggle.isChecked,
+                        rotationTypeToggle.isChecked,
                         frag
                     )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onDistanceDialogNegativeClick(this)
+                    listener.onRotationDialogNegativeClick(this)
                 }
                 .create()
         }

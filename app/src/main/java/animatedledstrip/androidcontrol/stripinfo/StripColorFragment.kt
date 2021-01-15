@@ -28,9 +28,16 @@ class StripColorFragment : Fragment() {
 
         mainSender.setOnNewCurrentStripColorCallback {
             this.activity?.runOnUiThread {
-                childFragmentManager.beginTransaction()
-                    .replace(strip_color.id, ColorGradientViewer(it.color, false), "strip color")
-                    .commit()
+                try {
+                    childFragmentManager.beginTransaction()
+                        .replace(
+                            strip_color.id,
+                            ColorGradientViewer(it.color, false),
+                            "strip color"
+                        )
+                        .commit()
+                } catch (e: IllegalStateException) {
+                }
             }
         }
         dataRequester = GlobalScope.launch(Dispatchers.IO) {

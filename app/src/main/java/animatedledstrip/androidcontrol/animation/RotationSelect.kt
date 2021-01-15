@@ -29,24 +29,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.AbsoluteDistance
 import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.animations.Distance
-import kotlinx.android.synthetic.main.fragment_distance_select.*
+import animatedledstrip.animations.DegreesRotation
+import animatedledstrip.animations.RadiansRotation
+import animatedledstrip.animations.Rotation
+import kotlinx.android.synthetic.main.fragment_rotation_select.*
 
 /**
- * Set a distance property of the animation.
+ * Set a rotation property of the animation.
  */
-class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
+class RotationSelect(val parameter: AnimationParameter<Rotation>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = DistanceEditPopup(
-            distance_param_value_text.text
+        val dialog = RotationEditPopup(
+            rotation_param_value_text.text
                 .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("rad")
+                .removeSuffix("deg")
                 .removeSuffix("null")
                 .split(",")
                 .let {
-                    AbsoluteDistance(
+                    RadiansRotation(
                         it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
@@ -62,18 +65,18 @@ class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_distance_select, container, false)
+        return inflater.inflate(R.layout.fragment_rotation_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        distance_param_value_text.text = getString(
+        rotation_param_value_text.text = getString(
             R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
-            parameter.default?.coordinates
+            parameter.default?.let { "${it.xRotation}, ${it.yRotation}, ${it.zRotation} ${if (it is DegreesRotation) "deg" else "rad"}" }
         )
-        distance_param_card.setOnClickListener {
+        rotation_param_card.setOnClickListener {
             showEditDialog()
         }
     }

@@ -69,27 +69,30 @@ class RunningAnimationsContainer : Fragment() {
 
         dataRequester = GlobalScope.launch(Dispatchers.IO) {
             var lastList = mainSender.runningAnimations.toMap()
-            while (true) {
+            while (mainSender.connected) {
                 delay(500)
                 val currentList = mainSender.runningAnimations.toMap()
                 mainSender.runningAnimations.clear()
                 Command("running list").send(mainSender)
-                parentFragmentManager.beginTransaction().apply {
-                    lastList.keys.onEach { id ->
-                        if (parentFragmentManager.findFragmentByTag(id) != null)
-                            remove(parentFragmentManager.findFragmentByTag(id)!!)
-                        else
-                            Log.e("RA", "$id Not found")
-                    }
-                    currentList.onEach { (id, params) ->
-                        add(
-                            running_animation_list?.id ?: return@onEach,
-                            RunningAnimationFragment(params),
-                            id
-                        )
-                    }
-                }.commit()
-                lastList = currentList
+                try {
+                    parentFragmentManager.beginTransaction().apply {
+                        lastList.keys.onEach { id ->
+                            if (parentFragmentManager.findFragmentByTag(id) != null)
+                                remove(parentFragmentManager.findFragmentByTag(id)!!)
+                            else
+                                Log.e("RA", "$id Not found")
+                        }
+                        currentList.onEach { (id, params) ->
+                            add(
+                                running_animation_list?.id ?: return@onEach,
+                                RunningAnimationFragment(params),
+                                id
+                            )
+                        }
+                    }.commit()
+                    lastList = currentList
+                } catch (e: IllegalStateException) {
+                }
             }
         }
     }
