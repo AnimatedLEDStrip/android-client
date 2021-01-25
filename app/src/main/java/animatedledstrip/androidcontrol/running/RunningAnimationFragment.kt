@@ -30,13 +30,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.alsClient
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.androidcontrol.views.ColorGradientViewer
-import animatedledstrip.client.send
 import animatedledstrip.leds.animationmanagement.RunningAnimationParams
-import animatedledstrip.leds.animationmanagement.endAnimation
-import kotlinx.android.synthetic.main.fragment_animation.*
+import kotlinx.android.synthetic.main.fragment_running_animation.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Shows a single running animation along with its parameters and a button
@@ -48,7 +49,7 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_animation, container, false)
+        return inflater.inflate(R.layout.fragment_running_animation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,13 +85,6 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
                     param.value.toString()
                 )
             )
-        for (param in params.distanceParams)
-            animation_distanceParams.addView(
-                newParamTextView(
-                    param.key.camelToCapitalizedWords(),
-                    "%.2f, %.2f, %.2f".format(param.value.x, param.value.y, param.value.z)
-                )
-            )
         for (param in params.locationParams)
             animation_locationParams.addView(
                 newParamTextView(
@@ -98,14 +92,27 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
                     "%.2f, %.2f, %.2f".format(param.value.x, param.value.y, param.value.z)
                 )
             )
-
-        animation_direction.text =
-            getString(R.string.run_anim_label_direction, params.direction.toString())
+        for (param in params.distanceParams)
+            animation_distanceParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    "%.2f, %.2f, %.2f".format(param.value.x, param.value.y, param.value.z)
+                )
+            )
+        for (param in params.rotationParams)
+            animation_locationParams.addView(
+                newParamTextView(
+                    param.key.camelToCapitalizedWords(),
+                    "%.2f, %.2f, %.2f (%s)".format(param.value.xRotation, param.value.yRotation, param.value.zRotation, param.value.rotationOrder.joinToString { "${it.name[0]}," })
+                )
+            )
 
         // Set onClick listener for end button
         animation_end.setOnClickListener {
             check(it is Button)
-            params.endAnimation().send(mainSender)
+            GlobalScope.launch(Dispatchers.IO) {
+                alsClient?.endAnimation(params)
+            }
         }
 
         params.colors.forEach {
@@ -113,15 +120,5 @@ class RunningAnimationFragment(private val params: RunningAnimationParams) : Fra
                 .add(animation_colors.id, ColorGradientViewer(it.toColorContainer(), true))
                 .commit()
         }
-
-//        val info = findAnimation(params.animationName).info
-
-//        removeExcessData(animation_center, info.center)
-//        removeExcessData(animation_delay, info.delay)
-//        removeExcessData(animation_delay_mod, info.delay)
-//        removeExcessData(animation_direction, info.direction)
-//        removeExcessData(animation_distance, info.distance)
-//        removeExcessData(animation_spacing, info.spacing)
-//        if (!info.repetitive) animation_params.removeView(animation_continuous)
     }
 }

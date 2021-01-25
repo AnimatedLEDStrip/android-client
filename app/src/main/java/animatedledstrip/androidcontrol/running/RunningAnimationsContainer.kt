@@ -29,9 +29,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.mainSender
-import animatedledstrip.client.send
-import animatedledstrip.communication.Command
+import animatedledstrip.androidcontrol.utils.alsClient
+import animatedledstrip.leds.animationmanagement.RunningAnimationParams
 import kotlinx.android.synthetic.main.fragment_running_animations.*
 import kotlinx.coroutines.*
 
@@ -40,18 +39,18 @@ import kotlinx.coroutines.*
  */
 class RunningAnimationsContainer : Fragment() {
 
-    /**
-     * Add all animations that are running when this is created
-     */
-    private fun addCurrentRunningAnimations() {
-        mainSender.runningAnimations.forEach { (id, data) ->
-            parentFragmentManager.beginTransaction().add(
-                running_animation_list.id,
-                RunningAnimationFragment(data),
-                id
-            ).commit()
-        }
-    }
+//    /**
+//     * Add all animations that are running when this is created
+//     */
+//    private fun addCurrentRunningAnimations() {
+//        mainSender.runningAnimations.forEach { (id, data) ->
+//            parentFragmentManager.beginTransaction().add(
+//                running_animation_list.id,
+//                RunningAnimationFragment(data),
+//                id
+//            ).commit()
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,15 +64,11 @@ class RunningAnimationsContainer : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addCurrentRunningAnimations()
-
         dataRequester = GlobalScope.launch(Dispatchers.IO) {
-            var lastList = mainSender.runningAnimations.toMap()
-            while (mainSender.connected) {
+            var lastList = mapOf<String, RunningAnimationParams>()
+            while (true) {
                 delay(500)
-                val currentList = mainSender.runningAnimations.toMap()
-                mainSender.runningAnimations.clear()
-                Command("running list").send(mainSender)
+                val currentList: Map<String, RunningAnimationParams> = alsClient?.getRunningAnimations() ?: mapOf()
                 try {
                     parentFragmentManager.beginTransaction().apply {
                         lastList.keys.onEach { id ->

@@ -3,12 +3,13 @@ package animatedledstrip.androidcontrol.utils
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import animatedledstrip.client.ALSHttpClient
+import io.ktor.client.engine.android.*
 
 
 // Keys for saving settings
 const val DARK_KEY = "dark_mode"
 const val IP_KEY = "ip_addrs"
-const val PORT_KEY = "port_sel"
 const val NOTIFICATION_KEY = "do_notification"
 const val RECENT_IP_KEY = "recent_ip"
 
@@ -21,7 +22,6 @@ fun loadPreferences() {
 
     setNightModeFromPreferences()
     setIPsFromPreferences()
-    setPortFromPreferences()
 }
 
 /**
@@ -39,12 +39,8 @@ fun setNightModeFromPreferences() {
     )
 }
 
-fun setPortFromPreferences() {
-    mainSender.port = mPreferences.getInt(PORT_KEY, defaultPort)
-}
-
 fun setIPsFromPreferences() {
-    IPs.clear()
+    alsClientMap.clear()
     val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
 
     for (ip in ipList.split(",")) {
@@ -53,7 +49,7 @@ fun setIPsFromPreferences() {
                 .removeSuffix("]")
                 .removePrefix(" ")
 
-        if (ip != "") IPs.add(ipFormatted)
+        if (ip != "") alsClientMap[ipFormatted] = (ALSHttpClient(Android, ipFormatted))
     }
 }
 
@@ -61,7 +57,6 @@ fun saveDefaultPreferences() {
     mPreferences.edit()
         .putString(DARK_KEY, "Default")
         .putString(RECENT_IP_KEY, "")
-        .putInt(PORT_KEY, defaultPort)
         .putBoolean(NOTIFICATION_KEY, true)
         .apply()
 }

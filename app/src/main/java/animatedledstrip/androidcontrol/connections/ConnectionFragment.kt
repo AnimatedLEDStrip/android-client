@@ -29,13 +29,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.mainSender
+import animatedledstrip.androidcontrol.utils.alsClient
+import animatedledstrip.androidcontrol.utils.resetIpAndClearData
+import animatedledstrip.androidcontrol.utils.selectServerAndPopulateData
 import kotlinx.android.synthetic.main.fragment_connection.*
 
 /**
- * Shows a single server, with a button for connecting to it.
+ * Shows a single server, with a button for selecting it
  */
-class ConnectionFragment(val name: String = "", private val ip: String = "") : Fragment() {
+class ConnectionFragment(private val ip: String = "") : Fragment() {
 
     lateinit var connectButton: Button
 
@@ -51,25 +53,16 @@ class ConnectionFragment(val name: String = "", private val ip: String = "") : F
         super.onViewCreated(view, savedInstanceState)
         server_name.text = ip
         connect_button.text =
-            if (mainSender.address == ip && mainSender.connected) getString(R.string.server_list_button_connected)
+            if (alsClient?.ip == ip) getString(R.string.server_list_button_connected)
             else getString(R.string.server_list_button_disconnected)
         connectButton = connect_button
         connect_button.setOnClickListener {
-            if (mainSender.address == ip && mainSender.connected)
-                mainSender.end()
-            else {
+            if (alsClient?.ip == ip) {
+                resetIpAndClearData()
+            } else {
                 connectButton.text = getString(R.string.server_list_button_connecting)
-                if (mainSender.address != ip) {
-                    mainSender.setIPAddress(ip, start = true)         // Also starts connection
-                } else if (!mainSender.connected)
-                    mainSender.startHeadless()
+                selectServerAndPopulateData(ip)
             }
         }
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(name: String, ip: String) = ConnectionFragment(name, ip)
-    }
-
 }

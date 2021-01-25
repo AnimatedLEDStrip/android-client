@@ -41,7 +41,7 @@
 
     <!-- Server List -->
 
-    <string name="server_list_button_disconnected">Disconnected</string>
+    <string name="server_list_button_disconnected">Connect</string>
     <string name="server_list_button_connected">Connected</string>
     <string name="server_list_button_connecting">Connecting…</string>
 
@@ -120,6 +120,7 @@
     <string name="popup_dialog_button_remove">Remove</string>
 
     <!-- Other-->
-    <string name="connect_to_a_server_first">Connect to a server first</string>
+    <string name="select_a_server_first">Select a server first</string>
+    <string name="contacting_server">Contacting server for data</string>
 
 </resources>

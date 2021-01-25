@@ -27,8 +27,9 @@ import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.*
-import com.takisoft.fix.support.v7.preference.EditTextPreference
+import animatedledstrip.androidcontrol.utils.DARK_KEY
+import animatedledstrip.androidcontrol.utils.mPreferences
+import animatedledstrip.androidcontrol.utils.setNightModeFromPreferences
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
 /**
@@ -39,9 +40,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootkey)
 
         val darkPreference = findPreference("dark_setting") as ListPreference
-        val portPreference = findPreference("port_setting") as EditTextPreference
-
-        portPreference.text = mainSender.port.toString()
 
         val preferenceListener = Preference.OnPreferenceChangeListener { preference, value ->
             val preferencesEditor: SharedPreferences.Editor = mPreferences.edit()
@@ -58,19 +56,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     ).apply()
                     setNightModeFromPreferences()
                 }
-                portPreference -> {
-                    preference.summary = value as String
-                    mainSender.setPort(value.toInt())
-                    preferencesEditor.putInt(PORT_KEY, value.toInt()).apply()
-                }
             }
             true
         }
 
         darkPreference.summary = darkPreference.value.toString()
-        portPreference.summary = portPreference.text
 
         darkPreference.onPreferenceChangeListener = preferenceListener
-        portPreference.onPreferenceChangeListener = preferenceListener
     }
 }

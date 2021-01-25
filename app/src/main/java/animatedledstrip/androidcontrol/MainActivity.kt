@@ -45,10 +45,6 @@ import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animations.*
-import animatedledstrip.client.send
-import animatedledstrip.communication.ClientParams
-import animatedledstrip.communication.Command
-import animatedledstrip.communication.MessageFrequency
 import animatedledstrip.leds.animationmanagement.*
 import animatedledstrip.leds.locationmanagement.Location
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,6 +53,10 @@ import kotlinx.android.synthetic.main.fragment_double_select.*
 import kotlinx.android.synthetic.main.fragment_int_select.*
 import kotlinx.android.synthetic.main.fragment_location_select.*
 import kotlinx.android.synthetic.main.fragment_rotation_select.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * Starting point for the app
@@ -87,98 +87,67 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setConnectionCallbacks() {
-        mainSender
-            .setAsDefaultSender()
-            .setOnConnectCallback { ip, _ ->
-
-                ClientParams(
-                    sendRunningAnimationInfoOnConnection = false,
-                    sendAnimationEnd = MessageFrequency.REQUEST,
-                    sendAnimationStart = MessageFrequency.REQUEST,
-                ).send(mainSender)
-
-                runOnUiThread {
-                    tabAdapter.notifyDataSetChanged()
-                }
-
-                fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
-                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-
-                val ipFrag =
-                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
-                runOnUiThread {
-                    supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
-                    ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
-                }
-
-                mPreferences.edit().putString(RECENT_IP_KEY, ip).apply()
+        ConnectionEventActions.populateData = { ip ->
+            runOnUiThread {
+                tabAdapter.notifyDataSetChanged()
             }
-            .setOnDisconnectCallback { ip, _ ->
-                runOnUiThread {
-                    tabAdapter.notifyDataSetChanged()
-                }
 
-                fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
+            fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
 
-                val ipFrag =
-                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
-                runOnUiThread {
-                    supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
-                    mainSender.runningAnimations.forEach { (id, _) ->
-                        supportFragmentManager.beginTransaction()
-                            .remove(supportFragmentManager.findFragmentByTag(id) ?: return@forEach)
-                            .commit()
-                    }
-                    ipFrag?.connectButton?.text =
-                        getString(R.string.server_list_button_disconnected)
-                }
-
-                mainSender.end()
-
-                runOnUiThread {
-                    animationOptionAdapter.clear()
-                }
-
-                mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
+            val ipFrag =
+                supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+            runOnUiThread {
+                supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
+                ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
             }
-            .setOnUnableToConnectCallback { ip, _ ->
-                val ipFrag =
-                    supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
-                runOnUiThread {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.toast_body_could_not_connect, ip),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    ipFrag?.connectButton?.text =
-                        getString(R.string.server_list_button_disconnected)
-                }
 
-                mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
+            GlobalScope.launch(Dispatchers.IO) {
+                animationOptionAdapter.addAll(alsClient?.getSupportedAnimationNames() ?: return@launch)
             }
-            .setOnNewAnimationInfoCallback {
-                runOnUiThread {
-                    animationOptionAdapter.add(it.name)
-                }
+
+            mPreferences.edit().putString(RECENT_IP_KEY, ip).apply()
+        }
+
+        ConnectionEventActions.clearData = { ip ->
+            runOnUiThread {
+                tabAdapter.notifyDataSetChanged()
             }
-            .setOnReceiveCallback {
-                Log.v("Data Receive", it)
+
+            fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
+
+            val ipFrag =
+                supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+            runOnUiThread {
+                supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
+                ipFrag?.connectButton?.text =
+                    getString(R.string.server_list_button_disconnected)
             }
+
+            runOnUiThread {
+                animationOptionAdapter.clear()
+            }
+
+            mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
+        }
     }
 
     private fun setFABOnClick() {
         fab.setOnClickListener {
-            if (mainSender.connected) {
-                animParams.send()
-                val selectFrag =
-                    supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
-                selectFrag?.resetView() ?: Log.d("FAB", "Error")
-            } else Toast.makeText(
-                this,
-                getString(R.string.toast_body_not_connected),
-                Toast.LENGTH_SHORT
-            ).show()
+            runBlocking(Dispatchers.IO) {
+                alsClient?.startAnimation(animParams)
+            } ?: run {
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.toast_body_not_connected),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+            val selectFrag =
+                supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
+            selectFrag?.resetView() ?: Log.d("FAB", "Error")
         }
     }
 
@@ -215,8 +184,9 @@ class MainActivity : AppCompatActivity(),
 
         val recentIp = mPreferences.getString(RECENT_IP_KEY, "")!!
 
-        if (recentIp.isNotEmpty())
-            mainSender.setIPAddress(recentIp, start = true)
+        if (recentIp.isNotEmpty()) {
+            selectServerAndPopulateData(recentIp)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -235,23 +205,23 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_disconnect -> {
-                if (mainSender.connected)
-                    mainSender.end()
-                else Toast.makeText(
-                    this,
-                    getString(R.string.toast_body_not_connected),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                true
-            }
-            R.id.action_clear -> {
-                if (mainSender.connected) Command("strip clear")
+                if (alsClient != null)
+                    resetIpAndClearData()
                 else Toast.makeText(
                     this,
                     getString(R.string.toast_body_not_connected),
                     Toast.LENGTH_SHORT
                 ).show()
+                true
+            }
+            R.id.action_clear -> {
+                GlobalScope.launch(Dispatchers.IO) {
+                    alsClient?.clearStrip() ?: Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.toast_body_not_connected),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

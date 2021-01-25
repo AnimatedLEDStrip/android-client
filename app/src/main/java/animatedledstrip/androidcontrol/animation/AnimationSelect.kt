@@ -32,13 +32,15 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.alsClient
 import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.animationOptionAdapter
-import animatedledstrip.androidcontrol.utils.mainSender
 import animatedledstrip.animations.Animation
 import animatedledstrip.animations.AnimationParameter
 import animatedledstrip.leds.animationmanagement.AnimationToRunParams
 import kotlinx.android.synthetic.main.fragment_animation_select.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 /**
  * Select the animation type.
@@ -81,10 +83,13 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
 
     fun resetView() {
         val item = animation_list.selectedItem.toString()
-        Log.d("RView", "Selected $item")
         animation_options.removeAllViews()
         animParams = AnimationToRunParams()
-        addAnimationOptions(mainSender.supportedAnimations[item] ?: return)
+        var info: Animation.AnimationInfo?
+        runBlocking(Dispatchers.IO) {
+            info = alsClient?.getAnimationInfo(item)
+        }
+        addAnimationOptions(info ?: return)
     }
 
     private fun addAnimationOptions(info: Animation.AnimationInfo) {

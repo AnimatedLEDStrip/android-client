@@ -30,19 +30,13 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 
 /**
- * Holds all the fragments for creating an animation to send to the server.
+ * Tells the user to select a server first
  */
-class ConnectFirstPlaceholder : Fragment() {
-
+class SelectFirstPlaceholder : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_connect_first, container, false)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = ConnectFirstPlaceholder()
+        return inflater.inflate(R.layout.fragment_select_first, container, false)
     }
 }

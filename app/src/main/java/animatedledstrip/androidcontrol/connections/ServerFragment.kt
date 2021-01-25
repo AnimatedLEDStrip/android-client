@@ -55,10 +55,4 @@ class ServerFragment(private var ip: String) : Fragment() {
             showEditDialog()
         }
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(ip: String) = ServerFragment(ip)
-    }
-
 }

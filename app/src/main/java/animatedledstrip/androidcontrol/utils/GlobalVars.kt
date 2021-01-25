@@ -22,21 +22,18 @@
 
 package animatedledstrip.androidcontrol.utils
 
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import animatedledstrip.client.AnimationSender
+import animatedledstrip.client.ALSHttpClient
 import animatedledstrip.leds.animationmanagement.AnimationToRunParams
 import java.util.*
 
-// Configured IPs
-val IPs = mutableListOf<String>()
+val alsClientMap: MutableMap<String, ALSHttpClient> = mutableMapOf()
 
-// Default port
-const val defaultPort = 6
-
-// Main Animation Sender
-var mainSender: AnimationSender = AnimationSender(address = "", port = defaultPort)
+var alsClient: ALSHttpClient? = null
+    private set
 
 // AnimationData instance that will be sent and recreated as needed
 var animParams = AnimationToRunParams()
@@ -52,4 +49,23 @@ fun String.camelToCapitalizedWords(): String {
     return "(?<=[a-zA-Z])[A-Z]".toRegex().replace(this) {
         " ${it.value}"
     }.capitalize(Locale.ROOT).replace("-", "\n")
+}
+
+fun selectServerAndPopulateData(ip: String) {
+    alsClient = alsClientMap[ip] ?: run {
+        Log.e("Select Server", "Server corresponding to ip $ip not found")
+        return
+    }
+    ConnectionEventActions.populateData?.invoke(ip)
+}
+
+fun resetIpAndClearData() {
+    val oldIp = alsClient?.ip ?: return
+    alsClient = null
+    ConnectionEventActions.clearData?.invoke(oldIp)
+}
+
+object ConnectionEventActions {
+    var populateData: ((String) -> Any?)? = null
+    var clearData: ((String) -> Any?)? = null
 }

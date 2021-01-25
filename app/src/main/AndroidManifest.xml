@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        package="animatedledstrip.androidcontrol">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="animatedledstrip.androidcontrol">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            tools:ignore="GoogleAppIndexingWarning">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".MainActivity"
-                android:label="@string/app_launcher_name"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name=".MainActivity"
+            android:label="@string/app_launcher_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,21 +25,21 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".connections.AddConnectionActivity"
-                android:label="@string/title_activity_add_connection"
-                android:parentActivityName=".MainActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+            android:name=".connections.AddConnectionActivity"
+            android:label="@string/title_activity_add_connection"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="animatedledstrip.androidcontrol.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="animatedledstrip.androidcontrol.MainActivity" />
         </activity>
         <activity
-                android:name=".settings.SettingsActivity"
-                android:label="@string/title_activity_settings"
-                android:parentActivityName=".MainActivity">
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="animatedledstrip.androidcontrol.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="animatedledstrip.androidcontrol.MainActivity" />
         </activity>
     </application>
 

@@ -20,51 +20,23 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.tabs
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animParams
-import animatedledstrip.animations.Direction
-import animatedledstrip.leds.animationmanagement.direction
-import kotlinx.android.synthetic.main.fragment_direction_select.*
 
 /**
- * Set the direction property of the animation.
+ * Tells the user that the app is contacting the server
  */
-class DirectionSelect : Fragment() {
-
+class ContactingServerPlaceholder : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_direction_select, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        direction_card.setOnClickListener {
-            check(it is CardView)
-            when(direction_text.text.toString()) {
-                getString(R.string.anim_param_direction_forward) -> {
-                    animParams.direction(Direction.BACKWARD)
-                    direction_text.text = getString(R.string.anim_param_direction_backward)
-                }
-                getString(R.string.anim_param_direction_backward) -> {
-                    animParams.direction(Direction.FORWARD)
-                    direction_text.text = getString(R.string.anim_param_direction_forward)
-                }
-            }
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = DirectionSelect()
+        return inflater.inflate(R.layout.fragment_contacting_server, container, false)
     }
 }

@@ -23,7 +23,6 @@
 package animatedledstrip.androidcontrol.tabs
 
 import android.content.Context
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -34,8 +33,8 @@ import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
 import animatedledstrip.androidcontrol.connections.ConnectionListContainer
 import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
 import animatedledstrip.androidcontrol.stripinfo.StripInfoContainer
+import animatedledstrip.androidcontrol.utils.alsClient
 import animatedledstrip.androidcontrol.utils.animationOptionAdapter
-import animatedledstrip.androidcontrol.utils.mainSender
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -53,18 +52,18 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getItem(position: Int): Fragment {
         var tabToUse = tabs[position].second
-        if (!mainSender.connected && tabToUse != ConnectionListContainer::class)
-            tabToUse = ConnectFirstPlaceholder::class
-        Log.d("Tab", tabToUse.toString())
+        if (alsClient == null && tabToUse != ConnectionListContainer::class)
+            tabToUse = SelectFirstPlaceholder::class
         return when (tabToUse) {
             ConnectionListContainer::class -> ConnectionListContainer()
             AnimationSelectContainer::class -> {
-                Log.d("Click", animationOptionAdapter.toString())
-                AnimationSelectContainer()
+                if (animationOptionAdapter.isEmpty)
+                    ContactingServerPlaceholder()
+                else AnimationSelectContainer()
             }
             RunningAnimationsContainer::class -> RunningAnimationsContainer()
             StripInfoContainer::class -> StripInfoContainer()
-            ConnectFirstPlaceholder::class -> ConnectFirstPlaceholder()
+            SelectFirstPlaceholder::class -> SelectFirstPlaceholder()
             else -> throw Exception()
         }
     }
@@ -72,11 +71,11 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
     override fun getItemPosition(obj: Any): Int =
         when (obj) {
             is ConnectionListContainer -> PagerAdapter.POSITION_UNCHANGED
-            is ConnectFirstPlaceholder ->
-                if (mainSender.connected) PagerAdapter.POSITION_NONE
+            is SelectFirstPlaceholder ->
+                if (alsClient != null) PagerAdapter.POSITION_NONE
                 else PagerAdapter.POSITION_UNCHANGED
             is AnimationSelectContainer, is RunningAnimationsContainer ->
-                if (mainSender.connected) PagerAdapter.POSITION_UNCHANGED
+                if (alsClient != null) PagerAdapter.POSITION_UNCHANGED
                 else PagerAdapter.POSITION_NONE
             else -> PagerAdapter.POSITION_NONE
         }

@@ -28,7 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.IPs
+import animatedledstrip.androidcontrol.utils.alsClientMap
 import kotlinx.android.synthetic.main.fragment_connect.*
 
 /**
@@ -45,21 +45,14 @@ class ConnectionListContainer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        IPs.forEachIndexed { index, ip ->
+        alsClientMap.forEach { (ip, _) ->
             parentFragmentManager.beginTransaction()
                 .add(
                     connections.id,
-                    ConnectionFragment.newInstance("Server $index", ip),
+                    ConnectionFragment(ip),
                     ip
                 )
                 .commit()
         }
     }
-
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = ConnectionListContainer()
-    }
-
 }

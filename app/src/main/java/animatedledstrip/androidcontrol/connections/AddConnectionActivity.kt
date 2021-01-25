@@ -23,27 +23,26 @@
 package animatedledstrip.androidcontrol.connections
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.IP_KEY
-import animatedledstrip.androidcontrol.utils.IPs
+import animatedledstrip.androidcontrol.utils.alsClientMap
 import animatedledstrip.androidcontrol.utils.mPreferences
+import animatedledstrip.client.ALSHttpClient
+import io.ktor.client.engine.android.*
 import kotlinx.android.synthetic.main.activity_add_connection.*
 import kotlinx.android.synthetic.main.content_add_connection.*
 
 /**
- * Add, edit and remove servers from the list shown in the connections list.
+ * Add, edit and remove servers from the list shown in the connections list
  */
 class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditListener {
     override fun onDialogPositiveClick(dialog: DialogFragment, oldIp: String, newIp: String) {
-        val index = IPs.indexOf(oldIp)
-        IPs.remove(oldIp)
-        if (index == -1) IPs.add(newIp) else IPs.add(index, newIp)
+        alsClientMap.remove(oldIp)
+        alsClientMap[newIp] = ALSHttpClient(Android, newIp)
         saveServerIPs()
         loadServers()
-        Log.d("IPs", IPs.toString())
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
@@ -51,7 +50,7 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditLis
     }
 
     override fun onRemoveClick(dialog: DialogFragment, ip: String) {
-        IPs.remove(ip)
+        alsClientMap.remove(ip)
         saveServerIPs()
         loadServers()
     }
@@ -63,12 +62,11 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditLis
 
     private fun loadServers() {
         ip_list.removeAllViews()
-        Log.d("IPs", "Load called")
-        IPs.forEach { ip ->
+        alsClientMap.forEach { (ip, _) ->
             supportFragmentManager.beginTransaction()
                 .add(
                     ip_list.id,
-                    ServerFragment.newInstance(ip),
+                    ServerFragment(ip),
                     ip
                 )
                 .commit()
@@ -76,7 +74,7 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditLis
     }
 
     private fun saveServerIPs() {
-        mPreferences.edit().putStringSet(IP_KEY, IPs.toSet()).apply()
+        mPreferences.edit().putStringSet(IP_KEY, alsClientMap.keys.toSet()).apply()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,5 +88,4 @@ class AddConnectionActivity : AppCompatActivity(), ServerEditPopup.ServerEditLis
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-
 }
