@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.fragment_connection.*
  */
 class ConnectionFragment(private val ip: String = "") : Fragment() {
 
-    lateinit var connectButton: Button
+    var connectButton: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +60,7 @@ class ConnectionFragment(private val ip: String = "") : Fragment() {
             if (alsClient?.ip == ip) {
                 resetIpAndClearData()
             } else {
-                connectButton.text = getString(R.string.server_list_button_connecting)
+                connectButton?.text = getString(R.string.server_list_button_connecting)
                 selectServerAndPopulateData(ip)
             }
         }

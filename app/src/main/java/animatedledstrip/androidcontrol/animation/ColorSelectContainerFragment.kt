@@ -29,7 +29,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.animations.Animation
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_color_select_container.*
 
@@ -89,11 +88,5 @@ class ColorSelectContainerFragment(private val minimumColors: Int, private val u
             .beginTransaction()
             .add(color_select_container.id, addColorFragment)
             .commit()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(info: Animation.AnimationInfo) =
-            ColorSelectContainerFragment(info.minimumColors, info.unlimitedColors)
     }
 }

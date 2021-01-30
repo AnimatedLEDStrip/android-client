@@ -104,7 +104,7 @@ class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         addOptionFrag(IntSelect(AnimationParameter("Run Count", "", info.runCountDefault)))
-        addOptionFrag(ColorSelectContainerFragment.newInstance(info))
+        addOptionFrag(ColorSelectContainerFragment(info.minimumColors, info.unlimitedColors))
         for (param in info.intParams) addOptionFrag(IntSelect(param))
         for (param in info.doubleParams) addOptionFrag(DoubleSelect(param))
 //        for (param in info.stringParams)
