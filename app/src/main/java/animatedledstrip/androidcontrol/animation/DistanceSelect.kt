@@ -29,9 +29,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.AbsoluteDistance
 import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.animations.Distance
+import animatedledstrip.animations.parameters.AbsoluteDistance
+import animatedledstrip.animations.parameters.Distance
 import kotlinx.android.synthetic.main.fragment_distance_select.*
 
 /**

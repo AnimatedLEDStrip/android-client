@@ -40,8 +40,8 @@ import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.Distance
-import animatedledstrip.animations.PercentDistance
+import animatedledstrip.animations.parameters.Distance
+import animatedledstrip.animations.parameters.PercentDistance
 
 /**
  * Pops up to modify a distance parameter
@@ -176,8 +176,18 @@ class DistanceEditPopup(
                 .create()
                 .apply {
                     setOnShowListener {
-                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
-                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                            resources.getColor(
+                                R.color.colorText,
+                                null
+                            )
+                        )
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                            resources.getColor(
+                                R.color.colorText,
+                                null
+                            )
+                        )
                     }
                 }
         }

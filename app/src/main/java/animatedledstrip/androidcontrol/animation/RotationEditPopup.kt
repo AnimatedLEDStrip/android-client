@@ -40,8 +40,8 @@ import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.DegreesRotation
-import animatedledstrip.animations.Rotation
+import animatedledstrip.animations.parameters.DegreesRotation
+import animatedledstrip.animations.parameters.Rotation
 
 /**
  * Pops up to modify a rotation parameter

@@ -45,6 +45,10 @@ import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animations.*
+import animatedledstrip.animations.parameters.AbsoluteDistance
+import animatedledstrip.animations.parameters.DegreesRotation
+import animatedledstrip.animations.parameters.PercentDistance
+import animatedledstrip.animations.parameters.RadiansRotation
 import animatedledstrip.leds.animationmanagement.*
 import animatedledstrip.leds.locationmanagement.Location
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,11 +67,7 @@ import kotlinx.coroutines.runBlocking
  */
 class MainActivity : AppCompatActivity(),
     AnimationSelect.OnFragmentInteractionListener,
-    IntEditPopup.IntEditListener,
-    DoubleEditPopup.DoubleEditListener,
-    DistanceEditPopup.DistanceEditListener,
-    LocationEditPopup.LocationEditListener,
-    RotationEditPopup.RotationEditListener {
+    ParamPopupListener {
 
     /**
      * Name of the preferences file

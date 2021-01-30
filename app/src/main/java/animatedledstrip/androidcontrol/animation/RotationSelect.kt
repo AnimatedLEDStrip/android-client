@@ -30,9 +30,9 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.animations.DegreesRotation
-import animatedledstrip.animations.RadiansRotation
-import animatedledstrip.animations.Rotation
+import animatedledstrip.animations.parameters.DegreesRotation
+import animatedledstrip.animations.parameters.RadiansRotation
+import animatedledstrip.animations.parameters.Rotation
 import kotlinx.android.synthetic.main.fragment_rotation_select.*
 
 /**

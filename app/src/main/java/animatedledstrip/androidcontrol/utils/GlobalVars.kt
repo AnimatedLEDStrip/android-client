@@ -28,11 +28,12 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import animatedledstrip.client.ALSHttpClient
 import animatedledstrip.leds.animationmanagement.AnimationToRunParams
+import io.ktor.client.engine.android.*
 import java.util.*
 
-val alsClientMap: MutableMap<String, ALSHttpClient> = mutableMapOf()
+val alsClientMap: MutableMap<String, ALSHttpClient<AndroidEngineConfig>> = mutableMapOf()
 
-var alsClient: ALSHttpClient? = null
+var alsClient: ALSHttpClient<AndroidEngineConfig>? = null
     private set
 
 // AnimationData instance that will be sent and recreated as needed
