@@ -241,14 +241,20 @@ class MainActivity : AppCompatActivity(),
         if (newInt != null) {
             if (parameter == "Run Count") animParams.runCount = newInt
             else animParams.intParam(parameter, newInt)
+            frag.int_param_value_text.text =
+                getString(
+                    R.string.run_anim_label_param,
+                    parameter.camelToCapitalizedWords(),
+                    if (parameter == "Run Count" && newValue == "-1" || newValue == "") "Endless"
+                    else newInt.toString()
+                )
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                getString(R.string.toast_body_invalid_parameter, newValue, parameter),
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        frag.int_param_value_text.text =
-            getString(
-                R.string.run_anim_label_param,
-                parameter.camelToCapitalizedWords(),
-                if (parameter == "Run Count" && newValue == "-1" || newValue == "") "Endless"
-                else newInt.toString()
-            )
     }
 
     override fun onIntDialogNegativeClick(dialog: DialogFragment) {}

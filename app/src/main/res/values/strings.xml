@@ -29,6 +29,7 @@
 
     <string name="toast_body_not_connected">Not Connected</string>
     <string name="toast_body_could_not_connect">Could not connect to %1$s</string>
+    <string name="toast_body_invalid_parameter">Invalid value %1$s for parameter %2$s</string>
 
 
     <!-- Tabs -->
