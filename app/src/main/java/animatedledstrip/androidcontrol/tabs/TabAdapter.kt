@@ -64,7 +64,7 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
             RunningAnimationsContainer::class -> RunningAnimationsContainer()
             StripInfoContainer::class -> StripInfoContainer()
             SelectFirstPlaceholder::class -> SelectFirstPlaceholder()
-            else -> throw Exception()
+            else -> error("Trying to load an invalid tab")
         }
     }
 

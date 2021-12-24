@@ -34,7 +34,7 @@ class StripColorFragment : Fragment() {
                         childFragmentManager.beginTransaction()
                             .replace(
                                 strip_color.id,
-                                ColorGradientViewer(color.color, false),
+                                ColorGradientViewer(color, false),
                                 "strip color"
                             )
                             .commit()

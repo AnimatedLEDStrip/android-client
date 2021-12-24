@@ -23,7 +23,6 @@
 package animatedledstrip.androidcontrol.animation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +39,6 @@ class ColorSelectContainerFragment(private val minimumColors: Int, private val u
 
     private val newColorListener = View.OnClickListener {
         check(it is Chip)
-        Log.d("Chip", "Pressed")
         newColor()
     }
 

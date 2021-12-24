@@ -88,10 +88,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun setConnectionCallbacks() {
         ConnectionEventActions.populateData = { ip ->
-            runOnUiThread {
-                tabAdapter.notifyDataSetChanged()
-            }
-
             fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
             fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
 
@@ -103,17 +99,18 @@ class MainActivity : AppCompatActivity(),
             }
 
             GlobalScope.launch(Dispatchers.IO) {
-                animationOptionAdapter.addAll(alsClient?.getSupportedAnimationNames() ?: return@launch)
+                animationOptionAdapter.addAll(
+                    alsClient?.getSupportedAnimationsNames() ?: return@launch
+                )
+                runOnUiThread {
+                    tabAdapter.notifyDataSetChanged()
+                }
             }
 
             mPreferences.edit().putString(RECENT_IP_KEY, ip).apply()
         }
 
         ConnectionEventActions.clearData = { ip ->
-            runOnUiThread {
-                tabAdapter.notifyDataSetChanged()
-            }
-
             fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
             fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
 
@@ -127,6 +124,7 @@ class MainActivity : AppCompatActivity(),
 
             runOnUiThread {
                 animationOptionAdapter.clear()
+                tabAdapter.notifyDataSetChanged()
             }
 
             mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
