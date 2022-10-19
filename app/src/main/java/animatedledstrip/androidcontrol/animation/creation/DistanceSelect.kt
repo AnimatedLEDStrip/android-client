@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,20 +30,28 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.AnimationParameter
-import kotlinx.android.synthetic.main.fragment_int_select.*
+import animatedledstrip.animations.parameters.AbsoluteDistance
+import animatedledstrip.animations.parameters.Distance
+import kotlinx.android.synthetic.main.fragment_distance_select.*
 
 /**
- * Set an integer property of the animation
+ * Set a distance property of the animation.
  */
-class IntSelect(val parameter: AnimationParameter<Int>) : Fragment() {
+class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = IntEditPopup(
-            int_param_value_text.text
+        val dialog = DistanceEditPopup(
+            distance_param_value_text.text
                 .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
-                .let { if (it == "Endless") "-1" else it }
-                .toString()
-                .toIntOrNull(),
+                .removeSuffix("null")
+                .split(",")
+                .let {
+                    AbsoluteDistance(
+                        it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
+                    )
+                },
             parameter.name,
             frag = this
         )
@@ -54,19 +62,18 @@ class IntSelect(val parameter: AnimationParameter<Int>) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_int_select, container, false)
+        return inflater.inflate(R.layout.fragment_distance_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        int_param_value_text.text = getString(
+        distance_param_value_text.text = getString(
             R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
-            if (parameter.name == "Run Count" && parameter.default == -1) "Endless"
-            else parameter.default.toString()
+            parameter.default?.coordinates
         )
-        int_param_card.setOnClickListener {
+        distance_param_card.setOnClickListener {
             showEditDialog()
         }
     }

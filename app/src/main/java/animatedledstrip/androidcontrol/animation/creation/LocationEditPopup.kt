@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -35,42 +35,38 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.parameters.DegreesRotation
-import animatedledstrip.animations.parameters.Rotation
+import animatedledstrip.leds.locationmanagement.Location
 
 /**
- * Pops up to modify a rotation parameter
+ * Pops up to modify a location parameter
  */
-class RotationEditPopup(
-    private val initialValue: Rotation,
+class LocationEditPopup(
+    private val initialValue: Location,
     private val paramName: String,
-    private val frag: RotationSelect
+    private val frag: LocationSelect
 ) : DialogFragment() {
 
-    private lateinit var listener: RotationEditListener
+    private lateinit var listener: LocationEditListener
     private lateinit var textInX: EditText
     private lateinit var textInY: EditText
     private lateinit var textInZ: EditText
-    private lateinit var rotationTypeToggle: ToggleButton
 
-    interface RotationEditListener {
-        fun onRotationDialogPositiveClick(
+    interface LocationEditListener {
+        fun onLocationDialogPositiveClick(
             dialog: DialogFragment, parameter: String,
             newValueX: String, newValueY: String, newValueZ: String,
-            isDegreesRotation: Boolean, frag: RotationSelect
+            frag: LocationSelect
         )
 
-        fun onRotationDialogNegativeClick(dialog: DialogFragment)
+        fun onLocationDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is RotationEditListener)
+        check(context is LocationEditListener)
         listener = context
     }
 
@@ -78,7 +74,7 @@ class RotationEditPopup(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_rotation_edit, container, false)
+        return inflater.inflate(R.layout.popup_location_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -86,33 +82,23 @@ class RotationEditPopup(
         return activity.let {
             textInX = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.xRotation.toString())
+                setText(initialValue.x.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
             textInY = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.yRotation.toString())
+                setText(initialValue.y.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
             textInZ = EditText(this.context!!).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(initialValue.zRotation.toString())
+                setText(initialValue.z.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
-                }
-            }
-
-            rotationTypeToggle = ToggleButton(this.context!!).apply {
-                text = context.getString(R.string.rotation_radians)
-                textOn = context.getString(R.string.rotation_degrees)
-                textOff = context.getString(R.string.rotation_radians)
-                isChecked = when (animParams.rotationParams[paramName]) {
-                    is DegreesRotation -> true
-                    else -> false
                 }
             }
 
@@ -122,7 +108,7 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "X Rotation")
+                        text = "X: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -132,7 +118,7 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "Y Rotation")
+                        text = "Y: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
@@ -142,31 +128,30 @@ class RotationEditPopup(
                 addView(LinearLayout(this.context!!).apply {
                     orientation = LinearLayout.HORIZONTAL
                     addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "Z Rotation")
+                        text = "Z: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
                     })
                     addView(textInZ)
                 })
-                addView(rotationTypeToggle)
             }
 
             AlertDialog.Builder(it)
                 .setView(container)
                 .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onRotationDialogPositiveClick(
-                        this, paramName,
+                    listener.onLocationDialogPositiveClick(
+                        this,
+                        paramName,
                         textInX.text.toString(),
                         textInY.text.toString(),
                         textInZ.text.toString(),
-                        rotationTypeToggle.isChecked,
                         frag
                     )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onRotationDialogNegativeClick(this)
+                    listener.onLocationDialogNegativeClick(this)
                 }
                 .create()
                 .apply {

@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.app.AlertDialog
 import android.app.Dialog

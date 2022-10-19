@@ -1,4 +1,4 @@
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 interface ParamPopupListener : IntEditPopup.IntEditListener,
     DoubleEditPopup.DoubleEditListener,

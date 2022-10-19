@@ -11,7 +11,7 @@
     app:cardBackgroundColor="@color/colorViewBack"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    tools:context="animatedledstrip.androidcontrol.animation.ColorSelect">
+    tools:context="animatedledstrip.androidcontrol.animation.creation.ColorSelect">
 
     <LinearLayout
         android:layout_width="match_parent"

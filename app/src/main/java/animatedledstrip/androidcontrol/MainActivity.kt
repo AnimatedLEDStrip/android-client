@@ -38,13 +38,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import animatedledstrip.androidcontrol.animation.*
+import animatedledstrip.androidcontrol.animation.creation.*
 import animatedledstrip.androidcontrol.connections.AddConnectionActivity
 import animatedledstrip.androidcontrol.connections.ConnectionFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
-import animatedledstrip.animations.*
 import animatedledstrip.animations.parameters.AbsoluteDistance
 import animatedledstrip.animations.parameters.DegreesRotation
 import animatedledstrip.animations.parameters.PercentDistance
@@ -58,7 +57,7 @@ import kotlinx.android.synthetic.main.fragment_int_select.*
 import kotlinx.android.synthetic.main.fragment_location_select.*
 import kotlinx.android.synthetic.main.fragment_rotation_select.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -66,7 +65,7 @@ import kotlinx.coroutines.runBlocking
  * Starting point for the app
  */
 class MainActivity : AppCompatActivity(),
-    AnimationSelect.OnFragmentInteractionListener,
+    AnimationCreation.OnFragmentInteractionListener,
     ParamPopupListener {
 
     /**
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity(),
                 ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
             }
 
-            GlobalScope.launch(Dispatchers.IO) {
+            MainScope().launch(Dispatchers.IO) {
                 animationOptionAdapter.addAll(
                     alsClient?.getSupportedAnimationsNames() ?: return@launch
                 )
@@ -144,7 +143,7 @@ class MainActivity : AppCompatActivity(),
                 return@setOnClickListener
             }
             val selectFrag =
-                supportFragmentManager.findFragmentByTag("anim select") as AnimationSelect?
+                supportFragmentManager.findFragmentByTag("anim select") as AnimationCreation?
             selectFrag?.resetView() ?: Log.d("FAB", "Error")
         }
     }
@@ -213,7 +212,7 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_clear -> {
-                GlobalScope.launch(Dispatchers.IO) {
+                MainScope().launch(Dispatchers.IO) {
                     alsClient?.clearStrip() ?: Toast.makeText(
                         this@MainActivity,
                         getString(R.string.toast_body_not_connected),

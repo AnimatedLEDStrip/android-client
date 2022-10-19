@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.content.Context
 import android.net.Uri
@@ -47,7 +47,7 @@ import kotlinx.coroutines.runBlocking
  *
  * Adds the corresponding fragments for configuring that animation.
  */
-class AnimationSelect : Fragment(), AdapterView.OnItemSelectedListener {
+class AnimationCreation : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var listener: OnFragmentInteractionListener? = null
 

@@ -12,7 +12,7 @@
     app:cardBackgroundColor="@color/colorViewBack"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    tools:context=".animation.IntSelect">
+    tools:context=".animation.creation.IntSelect">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

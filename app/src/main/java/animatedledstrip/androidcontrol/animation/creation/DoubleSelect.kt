@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,29 +28,51 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import kotlinx.android.synthetic.main.fragment_animation_select_container.*
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AnimationParameter
+import kotlinx.android.synthetic.main.fragment_double_select.*
 
 /**
- * Holds all the fragments for creating an animation to send to the server.
+ * Set a double property of the animation
  */
-class AnimationSelectContainer : Fragment() {
+class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
+
+    private fun showEditDialog() {
+        val dialog = DoubleEditPopup(
+            double_param_value_text.text
+                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("null")
+                .toString()
+                .toDoubleOrNull(),
+            parameter.name,
+            frag = this
+        )
+        dialog.show(parentFragmentManager, "${parameter}EditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_animation_select_container, container, false)
+        return inflater.inflate(R.layout.fragment_double_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentFragmentManager
-            .beginTransaction()
-            .add(
-                anim_select_container.id,
-                AnimationSelect(),
-                "anim select"
-            )
-            .commit()
+
+        double_param_value_text.text = getString(
+            R.string.run_anim_label_param,
+            parameter.name.camelToCapitalizedWords(),
+            parameter.default?.toString()
+        )
+        double_param_card.setOnClickListener {
+            showEditDialog()
+        }
     }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(parameter: AnimationParameter<Double>) = DoubleSelect(parameter)
+    }
+
 }

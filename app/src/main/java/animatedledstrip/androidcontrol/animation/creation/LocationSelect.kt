@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation
+package animatedledstrip.androidcontrol.animation.creation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,20 +30,27 @@ import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.AnimationParameter
-import kotlinx.android.synthetic.main.fragment_double_select.*
+import animatedledstrip.leds.locationmanagement.Location
+import kotlinx.android.synthetic.main.fragment_location_select.*
 
 /**
- * Set a double property of the animation
+ * Set a location property of the animation.
  */
-class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
+class LocationSelect(val parameter: AnimationParameter<Location>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = DoubleEditPopup(
-            double_param_value_text.text
+        val dialog = LocationEditPopup(
+            location_param_value_text.text
                 .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
                 .removeSuffix("null")
-                .toString()
-                .toDoubleOrNull(),
+                .split(",")
+                .let {
+                    Location(
+                        it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
+                        it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
+                    )
+                },
             parameter.name,
             frag = this
         )
@@ -54,25 +61,25 @@ class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_double_select, container, false)
+        return inflater.inflate(R.layout.fragment_location_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        double_param_value_text.text = getString(
+        location_param_value_text.text = getString(
             R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
-            parameter.default?.toString()
+            parameter.default?.coordinates
         )
-        double_param_card.setOnClickListener {
+        location_param_card.setOnClickListener {
             showEditDialog()
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(parameter: AnimationParameter<Double>) = DoubleSelect(parameter)
+        fun newInstance(parameter: AnimationParameter<Location>) = LocationSelect(parameter)
     }
 
 }

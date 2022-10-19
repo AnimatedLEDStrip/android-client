@@ -29,7 +29,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.animation.AnimationSelectContainer
+import animatedledstrip.androidcontrol.animation.creation.AnimationCreationContainer
 import animatedledstrip.androidcontrol.connections.ConnectionListContainer
 import animatedledstrip.androidcontrol.running.RunningAnimationsContainer
 import animatedledstrip.androidcontrol.stripinfo.StripInfoContainer
@@ -45,7 +45,7 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
 
     private val tabs = listOf(
         R.string.tab_1_server to ConnectionListContainer::class,
-        R.string.tab_2_send to AnimationSelectContainer::class,
+        R.string.tab_2_send to AnimationCreationContainer::class,
         R.string.tab_3_running to RunningAnimationsContainer::class,
         R.string.tab_4_strip_info to StripInfoContainer::class,
     )
@@ -56,10 +56,10 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
             tabToUse = SelectFirstPlaceholder::class
         return when (tabToUse) {
             ConnectionListContainer::class -> ConnectionListContainer()
-            AnimationSelectContainer::class -> {
+            AnimationCreationContainer::class -> {
                 if (animationOptionAdapter.isEmpty)
                     ContactingServerPlaceholder()
-                else AnimationSelectContainer()
+                else AnimationCreationContainer()
             }
             RunningAnimationsContainer::class -> RunningAnimationsContainer()
             StripInfoContainer::class -> StripInfoContainer()
@@ -74,7 +74,7 @@ class TabAdapter(private val context: Context, fm: FragmentManager) :
             is SelectFirstPlaceholder ->
                 if (alsClient != null) PagerAdapter.POSITION_NONE
                 else PagerAdapter.POSITION_UNCHANGED
-            is AnimationSelectContainer, is RunningAnimationsContainer ->
+            is AnimationCreationContainer, is RunningAnimationsContainer ->
                 if (alsClient != null) PagerAdapter.POSITION_UNCHANGED
                 else PagerAdapter.POSITION_NONE
             else -> PagerAdapter.POSITION_NONE
