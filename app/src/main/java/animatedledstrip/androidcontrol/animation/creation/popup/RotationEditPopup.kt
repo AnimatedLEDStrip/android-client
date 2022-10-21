@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.popup
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -38,6 +38,7 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.animation.creation.param.RotationSelect
 import animatedledstrip.androidcontrol.utils.animParams
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.parameters.DegreesRotation
@@ -82,23 +83,23 @@ class RotationEditPopup(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        checkNotNull(activity)
+        requireActivity()
         return activity.let {
-            textInX = EditText(this.context!!).apply {
+            textInX = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.xRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
-            textInY = EditText(this.context!!).apply {
+            textInY = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.yRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
-            textInZ = EditText(this.context!!).apply {
+            textInZ = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.zRotation.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -106,7 +107,7 @@ class RotationEditPopup(
                 }
             }
 
-            rotationTypeToggle = ToggleButton(this.context!!).apply {
+            rotationTypeToggle = ToggleButton(this.requireContext()).apply {
                 text = context.getString(R.string.rotation_radians)
                 textOn = context.getString(R.string.rotation_degrees)
                 textOff = context.getString(R.string.rotation_radians)
@@ -116,12 +117,12 @@ class RotationEditPopup(
                 }
             }
 
-            val container = LinearLayout(this.context!!).apply {
+            val container = LinearLayout(this.requireContext()).apply {
                 orientation = LinearLayout.VERTICAL
 
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@RotationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
+                    addView(TextView(this@RotationEditPopup.requireContext()).apply {
                         text = context.getString(R.string.popup_label, "X Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
@@ -129,9 +130,9 @@ class RotationEditPopup(
                     })
                     addView(textInX)
                 })
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@RotationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
+                    addView(TextView(this@RotationEditPopup.requireContext()).apply {
                         text = context.getString(R.string.popup_label, "Y Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
@@ -139,9 +140,9 @@ class RotationEditPopup(
                     })
                     addView(textInY)
                 })
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@RotationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
+                    addView(TextView(this@RotationEditPopup.requireContext()).apply {
                         text = context.getString(R.string.popup_label, "Z Rotation")
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)

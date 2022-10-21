@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.popup
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -36,32 +36,32 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.androidcontrol.animation.creation.param.IDSelect
 
 /**
  * Pops up to modify a double parameter
  */
-class DoubleEditPopup(
-    private val initialValue: Double?,
-    private val paramName: String,
-    private val frag: DoubleSelect
+class IDEditPopup(
+    private val initialValue: String?,
+    private val frag: IDSelect,
 ) : DialogFragment() {
 
-    private lateinit var listener: DoubleEditListener
+    private lateinit var listener: IDEditListener
     private lateinit var textIn: EditText
 
-    interface DoubleEditListener {
-        fun onDoubleDialogPositiveClick(
-            dialog: DialogFragment, parameter: String,
-            newValue: String, frag: DoubleSelect
+    interface IDEditListener {
+        fun onIDDialogPositiveClick(
+            dialog: DialogFragment,
+            newValue: String,
+            frag: IDSelect,
         )
 
-        fun onDoubleDialogNegativeClick(dialog: DialogFragment)
+        fun onIDDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is DoubleEditListener)
+        check(context is IDEditListener)
         listener = context
     }
 
@@ -69,42 +69,51 @@ class DoubleEditPopup(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_double_edit, container, false)
+        return inflater.inflate(R.layout.popup_id_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        checkNotNull(activity)
+        requireActivity()
         return activity.let {
-            textIn = EditText(this.context!!).apply {
-                inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
+            textIn = EditText(this.requireContext()).apply {
+                inputType = InputType.TYPE_CLASS_TEXT
                 if (initialValue != null) setText(initialValue.toString())
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(30, 0, 30, 0)
                 }
             }
 
-            val container = FrameLayout(this.context!!)
+            val container = FrameLayout(this.requireContext())
             container.addView(textIn)
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
+                .setTitle(getString(R.string.popup_dialog_header_edit_id))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onDoubleDialogPositiveClick(
+                    listener.onIDDialogPositiveClick(
                         this,
-                        paramName,
                         textIn.text.toString(),
-                        frag
+                        frag,
                     )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onDoubleDialogNegativeClick(this)
+                    listener.onIDDialogNegativeClick(this)
                 }
                 .create()
                 .apply {
                     setOnShowListener {
-                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
-                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                            resources.getColor(
+                                R.color.colorText,
+                                null
+                            )
+                        )
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                            resources.getColor(
+                                R.color.colorText,
+                                null
+                            )
+                        )
                     }
                 }
         }

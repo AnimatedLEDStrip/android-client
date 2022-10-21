@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.alsClient
+import animatedledstrip.androidcontrol.utils.ioScope
+import animatedledstrip.androidcontrol.utils.resetIpAndClearData
+import animatedledstrip.leds.stripmanagement.StripInfo
 import kotlinx.android.synthetic.main.fragment_strip_info.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 /**
  * Shows information about the LED strip controlled by the connected server
@@ -26,8 +29,14 @@ class StripInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val info = alsClient?.getStripInfo() ?: return@launch
+        ioScope.launch(Dispatchers.IO) {
+            val info: StripInfo
+            try {
+                info = alsClient?.getStripInfo() ?: return@launch
+            } catch (e: ConnectException) {
+                resetIpAndClearData()
+                return@launch
+            }
 
             this@StripInfoFragment.activity?.runOnUiThread {
                 num_leds.text =
@@ -35,7 +44,10 @@ class StripInfoFragment : Fragment() {
                 pin.text =
                     getString(R.string.strip_info_pin, info.pin.toString())
                 logging_enabled.text =
-                    getString(R.string.strip_info_logging_enabled, info.isRenderLoggingEnabled.toString())
+                    getString(
+                        R.string.strip_info_logging_enabled,
+                        info.isRenderLoggingEnabled.toString()
+                    )
                 if (!info.isRenderLoggingEnabled) {
                     strip_info_data.removeView(render_log_file_name)
                     strip_info_data.removeView(renders_between_log_saves)

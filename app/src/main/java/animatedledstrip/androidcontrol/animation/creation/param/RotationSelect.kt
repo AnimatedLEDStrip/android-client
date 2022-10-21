@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.param
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,24 +28,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.animation.creation.popup.RotationEditPopup
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.leds.locationmanagement.Location
-import kotlinx.android.synthetic.main.fragment_location_select.*
+import animatedledstrip.animations.parameters.DegreesRotation
+import animatedledstrip.animations.parameters.RadiansRotation
+import animatedledstrip.animations.parameters.Rotation
+import kotlinx.android.synthetic.main.fragment_rotation_select.*
 
 /**
- * Set a location property of the animation.
+ * Set a rotation property of the animation.
  */
-class LocationSelect(val parameter: AnimationParameter<Location>) : Fragment() {
+class RotationSelect(val parameter: AnimationParameter<Rotation>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = LocationEditPopup(
-            location_param_value_text.text
+        val dialog = RotationEditPopup(
+            rotation_param_value_text.text
                 .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("rad")
+                .removeSuffix("deg")
                 .removeSuffix("null")
                 .split(",")
                 .let {
-                    Location(
+                    RadiansRotation(
                         it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
@@ -61,25 +66,19 @@ class LocationSelect(val parameter: AnimationParameter<Location>) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_location_select, container, false)
+        return inflater.inflate(R.layout.fragment_rotation_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        location_param_value_text.text = getString(
+        rotation_param_value_text.text = getString(
             R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
-            parameter.default?.coordinates
+            parameter.default?.let { "${it.xRotation}, ${it.yRotation}, ${it.zRotation} ${if (it is DegreesRotation) "deg" else "rad"}" }
         )
-        location_param_card.setOnClickListener {
+        rotation_param_card.setOnClickListener {
             showEditDialog()
         }
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(parameter: AnimationParameter<Location>) = LocationSelect(parameter)
-    }
-
 }

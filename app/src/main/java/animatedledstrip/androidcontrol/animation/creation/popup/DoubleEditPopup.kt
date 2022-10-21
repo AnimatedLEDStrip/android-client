@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.connections
+package animatedledstrip.androidcontrol.animation.creation.popup
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -34,34 +34,35 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.animation.creation.param.DoubleSelect
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 
 /**
- * Pops up to create, edit or remove a server from the list.
+ * Pops up to modify a double parameter
  */
-class ServerEditPopup(private val ip: String, private val name: String) : DialogFragment() {
+class DoubleEditPopup(
+    private val initialValue: Double?,
+    private val paramName: String,
+    private val frag: DoubleSelect
+) : DialogFragment() {
 
-    private lateinit var listener: ServerEditListener
-    private lateinit var ipTextIn: EditText
-    private lateinit var nameTextIn: EditText
+    private lateinit var listener: DoubleEditListener
+    private lateinit var textIn: EditText
 
-    interface ServerEditListener {
-        fun onDialogPositiveClick(
-            dialog: DialogFragment,
-            oldIp: String,
-            newIp: String,
-            newName: String,
+    interface DoubleEditListener {
+        fun onDoubleDialogPositiveClick(
+            dialog: DialogFragment, parameter: String,
+            newValue: String, frag: DoubleSelect
         )
 
-        fun onDialogNegativeClick(dialog: DialogFragment)
-        fun onRemoveClick(dialog: DialogFragment, ip: String)
+        fun onDoubleDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is ServerEditListener)
+        check(context is DoubleEditListener)
         listener = context
     }
 
@@ -69,59 +70,44 @@ class ServerEditPopup(private val ip: String, private val name: String) : Dialog
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_server_edit, container, false)
+        return inflater.inflate(R.layout.popup_double_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         requireActivity()
         return activity.let {
-            nameTextIn = EditText(this.requireContext()).apply {
-                hint = "Name"
-                inputType = InputType.TYPE_CLASS_TEXT
-                setText(name)
-                layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-                    setMargins(30, 0, 30, 0)
-                }
-            }
-            ipTextIn = EditText(this.requireContext()).apply {
-                hint = "IP Address"
+            textIn = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
-                setText(ip)
+                if (initialValue != null) setText(initialValue.toString())
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(30, 0, 30, 0)
                 }
-            }
-            val inputLayout = LinearLayout(this.requireContext()).apply {
-                orientation = LinearLayout.VERTICAL
-                addView(nameTextIn)
-                addView(ipTextIn)
-                layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             }
 
             val container = FrameLayout(this.requireContext())
-            container.addView(inputLayout)
+            container.addView(textIn)
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(
-                    if (ip == "") getString(R.string.popup_dialog_header_new_server)
-                    else getString(R.string.popup_dialog_header_edit_server)
-                )
+                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onDialogPositiveClick(
+                    listener.onDoubleDialogPositiveClick(
                         this,
-                        ip,
-                        ipTextIn.text.toString(),
-                        nameTextIn.text.toString(),
+                        paramName,
+                        textIn.text.toString(),
+                        frag
                     )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onDialogNegativeClick(this)
-                }
-                .setNeutralButton(getString(R.string.popup_dialog_button_remove)) { _, _ ->
-                    listener.onRemoveClick(this, ipTextIn.text.toString())
+                    listener.onDoubleDialogNegativeClick(this)
                 }
                 .create()
+                .apply {
+                    setOnShowListener {
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                    }
+                }
         }
     }
 

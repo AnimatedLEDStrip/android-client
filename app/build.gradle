@@ -20,6 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'animatedledstrip.androidcontrol'
 }
 
 dependencies {
@@ -34,7 +35,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.takisoft.fix:preference-v7:28.0.0.0'
-    implementation('io.github.animatedledstrip:animatedledstrip-client-jvm:1.0.1')
+    implementation('io.github.animatedledstrip:animatedledstrip-client-jvm:1.1.0-SNAPSHOT')
     implementation('io.ktor:ktor-client-android:1.5.0')
     implementation 'com.github.madrapps:pikolo:2.0.0'
     implementation 'com.github.duanhong169:drawabletoolbox:1.0.7'

@@ -30,9 +30,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
 import animatedledstrip.androidcontrol.utils.alsClient
+import animatedledstrip.androidcontrol.utils.resetIpAndClearData
 import animatedledstrip.leds.animationmanagement.RunningAnimationParams
 import kotlinx.android.synthetic.main.fragment_running_animations.*
 import kotlinx.coroutines.*
+import java.net.ConnectException
 
 /**
  * The list of running animations
@@ -64,30 +66,35 @@ class RunningAnimationsContainer : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dataRequester = GlobalScope.launch(Dispatchers.IO) {
+        dataRequester = MainScope().launch(Dispatchers.IO) {
             var lastList = mapOf<String, RunningAnimationParams>()
             while (true) {
-                delay(500)
-                val currentList: Map<String, RunningAnimationParams> = alsClient?.getRunningAnimations() ?: mapOf()
                 try {
-                    parentFragmentManager.beginTransaction().apply {
-                        lastList.keys.onEach { id ->
-                            if (parentFragmentManager.findFragmentByTag(id) != null)
-                                remove(parentFragmentManager.findFragmentByTag(id)!!)
-                            else
-                                Log.e("RA", "$id Not found")
-                        }
-                        currentList.onEach { (id, params) ->
-                            add(
-                                running_animation_list?.id ?: return@onEach,
-                                RunningAnimationFragment(params),
-                                id
-                            )
-                        }
-                    }.commit()
-                    lastList = currentList
-                } catch (e: IllegalStateException) {
+                    val currentList: Map<String, RunningAnimationParams> =
+                        alsClient?.getRunningAnimations() ?: mapOf()
+                    try {
+                        parentFragmentManager.beginTransaction().apply {
+                            lastList.keys.onEach { id ->
+                                if (parentFragmentManager.findFragmentByTag(id) != null)
+                                    remove(parentFragmentManager.findFragmentByTag(id)!!)
+                                else
+                                    Log.e("RA", "$id Not found")
+                            }
+                            currentList.onEach { (id, params) ->
+                                add(
+                                    running_animation_list?.id ?: return@onEach,
+                                    RunningAnimationFragment(params),
+                                    id
+                                )
+                            }
+                        }.commit()
+                        lastList = currentList
+                    } catch (_: IllegalStateException) {
+                    }
+                } catch (e: ConnectException) {
+                    resetIpAndClearData()
                 }
+                delay(500)
             }
         }
     }

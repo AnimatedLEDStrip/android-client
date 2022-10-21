@@ -41,15 +41,22 @@ fun setNightModeFromPreferences() {
 
 fun setIPsFromPreferences() {
     alsClientMap.clear()
-    val ipList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
+    val serverList = mPreferences.getStringSet(IP_KEY, null)?.toString() ?: ""
 
-    for (ip in ipList.split(",")) {
-        val ipFormatted =
-            ip.removePrefix("[")
+    for (server in serverList.split(",")) {
+        val parsedServer =
+            server.removePrefix("[")
                 .removeSuffix("]")
                 .removePrefix(" ")
+                .split(";")
+        val parsedIP = parsedServer[0]
+        val parsedName = parsedServer.getOrElse(1) { "" }
 
-        if (ip != "") alsClientMap[ipFormatted] = (ALSHttpClient(Android, ipFormatted))
+        if (parsedIP != "") alsClientMap[parsedIP] = ALSClientInfo(
+            client = ALSHttpClient(Android, parsedIP),
+            ip = parsedIP,
+            name = parsedName,
+        )
     }
 }
 

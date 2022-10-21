@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.param
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,28 +28,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.animation.creation.popup.DistanceEditPopup
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.animations.parameters.DegreesRotation
-import animatedledstrip.animations.parameters.RadiansRotation
-import animatedledstrip.animations.parameters.Rotation
-import kotlinx.android.synthetic.main.fragment_rotation_select.*
+import animatedledstrip.animations.parameters.AbsoluteDistance
+import animatedledstrip.animations.parameters.Distance
+import kotlinx.android.synthetic.main.fragment_distance_select.*
 
 /**
- * Set a rotation property of the animation.
+ * Set a distance property of the animation.
  */
-class RotationSelect(val parameter: AnimationParameter<Rotation>) : Fragment() {
+class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
 
     private fun showEditDialog() {
-        val dialog = RotationEditPopup(
-            rotation_param_value_text.text
+        val dialog = DistanceEditPopup(
+            distance_param_value_text.text
                 .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
-                .removeSuffix("rad")
-                .removeSuffix("deg")
                 .removeSuffix("null")
                 .split(",")
                 .let {
-                    RadiansRotation(
+                    AbsoluteDistance(
                         it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
                         it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
@@ -65,18 +63,18 @@ class RotationSelect(val parameter: AnimationParameter<Rotation>) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_rotation_select, container, false)
+        return inflater.inflate(R.layout.fragment_distance_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rotation_param_value_text.text = getString(
+        distance_param_value_text.text = getString(
             R.string.run_anim_label_param,
             parameter.name.camelToCapitalizedWords(),
-            parameter.default?.let { "${it.xRotation}, ${it.yRotation}, ${it.zRotation} ${if (it is DegreesRotation) "deg" else "rad"}" }
+            parameter.default?.coordinates
         )
-        rotation_param_card.setOnClickListener {
+        distance_param_card.setOnClickListener {
             showEditDialog()
         }
     }

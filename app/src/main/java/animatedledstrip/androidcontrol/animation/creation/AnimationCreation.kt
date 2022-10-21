@@ -32,15 +32,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.alsClient
-import animatedledstrip.androidcontrol.utils.animParams
-import animatedledstrip.androidcontrol.utils.animationOptionAdapter
+import animatedledstrip.androidcontrol.animation.creation.param.*
+import animatedledstrip.androidcontrol.animation.creation.param.color.ColorSelectContainerFragment
+import animatedledstrip.androidcontrol.utils.*
 import animatedledstrip.animations.Animation
 import animatedledstrip.animations.AnimationParameter
 import animatedledstrip.leds.animationmanagement.AnimationToRunParams
-import kotlinx.android.synthetic.main.fragment_animation_select.*
+import com.google.android.material.chip.Chip
+import kotlinx.android.synthetic.main.fragment_animation_creation.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.net.ConnectException
 
 /**
  * Select the animation type.
@@ -51,17 +54,41 @@ class AnimationCreation : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var listener: OnFragmentInteractionListener? = null
 
+    private val saveAnimationListener = View.OnClickListener {
+        check(it is Chip)
+        ioScope.launch(Dispatchers.IO) {
+            try {
+                alsClient?.saveAnimation(animParams)
+            } catch (e: ConnectException) {
+                resetIpAndClearData()
+            }
+        }
+    }
+
+    //            runBlocking(Dispatchers.IO) {
+//                alsClient?.startAnimation(animParams)
+//            } ?: run {
+//                Toast.makeText(
+//                    this@MainActivity,
+//                    getString(R.string.toast_body_no_server_selected),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                return@setOnClickListener
+//            }
+
+    private lateinit var saveAnimationFragment: SaveAnimationFragment
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_animation_select, container, false)
+        return inflater.inflate(R.layout.fragment_animation_creation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        animation_list.adapter = animationOptionAdapter
-        animation_list.onItemSelectedListener = this
+        animation_property_list.adapter = animationPropertyOptionAdapter
+        animation_property_list.onItemSelectedListener = this
     }
 
     override fun onAttach(context: Context) {
@@ -76,18 +103,23 @@ class AnimationCreation : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (parent === animation_list) resetView()
+        if (parent === animation_property_list) resetView()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-    fun resetView() {
-        val item = animation_list.selectedItem.toString()
+    private fun resetView() {
+        val item = animation_property_list.selectedItem.toString()
         animation_options.removeAllViews()
         animParams = AnimationToRunParams()
         var info: Animation.AnimationInfo?
         runBlocking(Dispatchers.IO) {
-            info = alsClient?.getAnimationInfo(item)
+            try {
+                info = alsClient?.getAnimationInfo(item)
+            } catch (e: ConnectException) {
+                info = null
+                resetIpAndClearData()
+            }
         }
         addAnimationOptions(info ?: return)
     }
@@ -103,6 +135,7 @@ class AnimationCreation : Fragment(), AdapterView.OnItemSelectedListener {
                 .commit()
         }
 
+        addOptionFrag(IDSelect(animParams.id))
         addOptionFrag(IntSelect(AnimationParameter("Run Count", "", info.runCountDefault)))
         addOptionFrag(ColorSelectContainerFragment(info.minimumColors, info.unlimitedColors))
         for (param in info.intParams) addOptionFrag(IntSelect(param))
@@ -112,6 +145,9 @@ class AnimationCreation : Fragment(), AdapterView.OnItemSelectedListener {
         for (param in info.distanceParams) addOptionFrag(DistanceSelect(param))
         for (param in info.rotationParams) addOptionFrag(RotationSelect(param))
 //        for (param in info.equationParams)
+
+        saveAnimationFragment = SaveAnimationFragment(saveAnimationListener)
+        addOptionFrag(saveAnimationFragment)
     }
 
 

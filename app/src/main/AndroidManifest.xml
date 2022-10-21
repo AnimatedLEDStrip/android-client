@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="animatedledstrip.androidcontrol">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -24,8 +23,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".connections.AddConnectionActivity"
-            android:label="@string/title_activity_add_connection"
+            android:name=".connections.AddServerActivity"
+            android:label="@string/title_activity_add_server"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

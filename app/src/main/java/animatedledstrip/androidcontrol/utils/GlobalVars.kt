@@ -29,17 +29,23 @@ import android.widget.LinearLayout
 import animatedledstrip.client.ALSHttpClient
 import animatedledstrip.leds.animationmanagement.AnimationToRunParams
 import io.ktor.client.engine.android.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.util.*
 
-val alsClientMap: MutableMap<String, ALSHttpClient<AndroidEngineConfig>> = mutableMapOf()
+val alsClientMap: MutableMap<String, ALSClientInfo> = mutableMapOf()
+
+fun MutableMap<String, ALSClientInfo>.toStringSet(): Set<String> =
+    this.values.map { i -> "${i.ip};${i.name}" }.toSet()
 
 var alsClient: ALSHttpClient<AndroidEngineConfig>? = null
     private set
 
+
 // AnimationData instance that will be sent and recreated as needed
 var animParams = AnimationToRunParams()
 
-lateinit var animationOptionAdapter: ArrayAdapter<String>
+lateinit var animationPropertyOptionAdapter: ArrayAdapter<String>
 
 fun LinearLayout?.indexOfChildOrNull(view: View?) = this?.indexOfChild(view)
 
@@ -49,11 +55,12 @@ fun LinearLayout?.indexOfChildOrNull(view: View?) = this?.indexOfChild(view)
 fun String.camelToCapitalizedWords(): String {
     return "(?<=[a-zA-Z])[A-Z]".toRegex().replace(this) {
         " ${it.value}"
-    }.capitalize(Locale.ROOT).replace("-", "\n")
+    }.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        .replace("-", "\n")
 }
 
 fun selectServerAndPopulateData(ip: String) {
-    alsClient = alsClientMap[ip] ?: run {
+    alsClient = alsClientMap[ip]?.client ?: run {
         Log.e("Select Server", "Server corresponding to ip $ip not found")
         return
     }
@@ -70,3 +77,5 @@ object ConnectionEventActions {
     var populateData: ((String) -> Any?)? = null
     var clearData: ((String) -> Any?)? = null
 }
+
+val ioScope = CoroutineScope(Dispatchers.IO)

@@ -3,48 +3,39 @@
 
     <string name="app_name">AnimatedLEDStrip LED Control</string>
     <string name="app_launcher_name">LED CTRL</string>
-    <string name="title_activity_main_disconnected">AnimatedLEDStrip (Disconnected)</string>
-    <string name="title_activity_main_connected">AnimatedLEDStrip (%1$s)</string>
-    <string name="title_activity_add_connection">Edit Servers</string>
+    <string name="title_activity_main_no_server_selected">AnimatedLEDStrip (Select Server)</string>
+    <string name="title_activity_main_server_selected" translatable="false">AnimatedLEDStrip (%1$s)</string>
+    <string name="title_activity_add_server">Edit Servers</string>
     <string name="title_activity_settings">Settings</string>
 
 
     <!-- Menu -->
 
-    <string name="action_disconnect">Disconnect</string>
     <string name="action_clear_strip">Clear Strip</string>
     <string name="action_add_ip">Edit Servers</string>
     <string name="action_settings">Settings</string>
 
 
-    <!-- Notifications -->
-
-    <string name="notification_title">LED Control</string>
-    <string name="notification_body_connected_to">Connected to %1$s</string>
-    <string name="notification_channel_name">Active Connection</string>
-    <string name="notification_channel_description">Report an active connection</string>
-
-
     <!-- Toasts -->
 
-    <string name="toast_body_not_connected">Not Connected</string>
-    <string name="toast_body_could_not_connect">Could not connect to %1$s</string>
+    <string name="toast_body_no_server_selected">No Server Selected</string>
     <string name="toast_body_invalid_parameter">Invalid value %1$s for parameter %2$s</string>
 
 
     <!-- Tabs -->
 
-    <string name="tab_1_server">Servers</string>
-    <string name="tab_2_send">Send Animation</string>
-    <string name="tab_3_running">Running Anims</string>
-    <string name="tab_4_strip_info">Strip Info</string>
+    <string name="tab_1_server">Server</string>
+    <string name="tab_2_running">Run ning</string>
+    <string name="tab_3_run">Run</string>
+    <string name="tab_4_create">Create</string>
+    <string name="tab_5_strip_info">Strip Info</string>
 
 
     <!-- Server List -->
 
-    <string name="server_list_button_disconnected">Connect</string>
-    <string name="server_list_button_connected">Connected</string>
-    <string name="server_list_button_connecting">Connecting…</string>
+    <string name="server_list_button_not_selected">Select</string>
+    <string name="server_list_button_selected">Selected</string>
+    <string name="server_list_unnamed_server">No Name Assigned</string>
 
 
     <!-- Animation Options -->
@@ -64,6 +55,14 @@
     <string name="rotation_radians">Radians Rotation</string>
     <string name="rotation_degrees">Degrees Rotation</string>
 
+    <string name="anim_create_button_save">Save</string>
+
+
+    <!-- Animation Selection -->
+
+    <string name="anim_select_button_run">Run</string>
+    <string name="animation_list_delete">Delete</string>
+
 
     <!-- Running Animations -->
 
@@ -73,8 +72,9 @@
     <string name="run_anim_label_animation">Animation: %1$s</string>
     <string name="run_anim_label_run_count">Run Count: %1$s</string>
     <string name="run_anim_label_color">Color:</string>
-    <string name="run_anim_label_param">%1$s: %2$s</string>
     <string name="run_anim_label_direction">Direction: %1$s</string>
+    <string name="run_anim_label_id_param">ID: %1$s</string>
+    <string name="run_anim_label_param">%1$s: %2$s</string>
     <string name="run_anim_label_id">ID</string>
 
 
@@ -114,6 +114,7 @@
     <!-- Popups -->
 
     <string name="popup_dialog_header_new_server">New Server</string>
+    <string name="popup_dialog_header_edit_id">Edit ID</string>
     <string name="popup_dialog_header_edit_server">Edit Server</string>
     <string name="popup_dialog_header_edit_number">Edit %1$s</string>
     <string name="popup_dialog_button_save">Save</string>

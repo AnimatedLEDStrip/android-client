@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.connections
+package animatedledstrip.androidcontrol.animation.creation.param
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,31 +28,47 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.alsClientMap
-import kotlinx.android.synthetic.main.fragment_connect.*
+import animatedledstrip.androidcontrol.animation.creation.popup.IntEditPopup
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AnimationParameter
+import kotlinx.android.synthetic.main.fragment_int_select.*
 
 /**
- * List of all servers
+ * Set an integer property of the animation
  */
-class ConnectionListContainer : Fragment() {
+class IntSelect(val parameter: AnimationParameter<Int>) : Fragment() {
+
+    private fun showEditDialog() {
+        val dialog = IntEditPopup(
+            int_param_value_text.text
+                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .let { if (it == "Endless") "-1" else it }
+                .toString()
+                .toIntOrNull(),
+            parameter.name,
+            frag = this
+        )
+        dialog.show(parentFragmentManager, "${parameter}EditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_connect, container, false)
+        return inflater.inflate(R.layout.fragment_int_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        alsClientMap.forEach { (ip, _) ->
-            parentFragmentManager.beginTransaction()
-                .add(
-                    connections.id,
-                    ConnectionFragment(ip),
-                    ip
-                )
-                .commit()
+
+        int_param_value_text.text = getString(
+            R.string.run_anim_label_param,
+            parameter.name.camelToCapitalizedWords(),
+            if (parameter.name == "Run Count" && parameter.default == -1) "Endless"
+            else parameter.default.toString()
+        )
+        int_param_card.setOnClickListener {
+            showEditDialog()
         }
     }
 }

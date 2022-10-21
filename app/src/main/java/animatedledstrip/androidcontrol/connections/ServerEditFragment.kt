@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.connections
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,29 +28,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import kotlinx.android.synthetic.main.fragment_animation_creation_container.*
+import kotlinx.android.synthetic.main.fragment_server_edit.*
 
 /**
- * Holds all the fragments for creating an animation to send to the server.
+ * Shows a single connection in the edit servers list.
  */
-class AnimationCreationContainer : Fragment() {
+class ServerEditFragment(private var ip: String, private var name: String) : Fragment() {
+
+    private fun showEditDialog() {
+        val dialog = ServerEditPopup(ip, name)
+        dialog.show(parentFragmentManager, "ServerEditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_animation_creation_container, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_server_edit, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentFragmentManager
-            .beginTransaction()
-            .add(
-                anim_create_container.id,
-                AnimationCreation(),
-                "anim select"
-            )
-            .commit()
+        server_edit_name.text = name
+        server_edit_ip.text = ip
+        server_edit_button.setOnClickListener {
+            showEditDialog()
+        }
     }
 }

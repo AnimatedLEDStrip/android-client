@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.param.color
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,53 +28,63 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.AnimationParameter
-import animatedledstrip.animations.parameters.AbsoluteDistance
-import animatedledstrip.animations.parameters.Distance
-import kotlinx.android.synthetic.main.fragment_distance_select.*
+import com.google.android.material.chip.Chip
+import kotlinx.android.synthetic.main.fragment_color_select_container.*
 
 /**
- * Set a distance property of the animation.
+ * Holds all the fragments for creating an animation to send to the server.
  */
-class DistanceSelect(val parameter: AnimationParameter<Distance>) : Fragment() {
+class ColorSelectContainerFragment(private val minimumColors: Int, private val unlimitedColors: Boolean) :
+    Fragment() {
 
-    private fun showEditDialog() {
-        val dialog = DistanceEditPopup(
-            distance_param_value_text.text
-                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
-                .removeSuffix("null")
-                .split(",")
-                .let {
-                    AbsoluteDistance(
-                        it.getOrNull(0)?.toDoubleOrNull() ?: 0.0,
-                        it.getOrNull(1)?.toDoubleOrNull() ?: 0.0,
-                        it.getOrNull(2)?.toDoubleOrNull() ?: 0.0,
-                    )
-                },
-            parameter.name,
-            frag = this
-        )
-        dialog.show(parentFragmentManager, "${parameter}EditPopup")
+    private val newColorListener = View.OnClickListener {
+        check(it is Chip)
+        newColor()
     }
+
+    private lateinit var addColorFragment: AddAnotherColorFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_distance_select, container, false)
+        return inflater.inflate(R.layout.fragment_color_select_container, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        distance_param_value_text.text = getString(
-            R.string.run_anim_label_param,
-            parameter.name.camelToCapitalizedWords(),
-            parameter.default?.coordinates
-        )
-        distance_param_card.setOnClickListener {
-            showEditDialog()
+        val transaction = childFragmentManager.beginTransaction()
+
+        for (i in 0 until minimumColors)
+            transaction.add(
+                color_select_container.id,
+                ColorSelect.newInstance()
+            )
+
+        if (unlimitedColors) {
+            addColorFragment = AddAnotherColorFragment(newColorListener)
+            transaction.add(
+                color_select_container.id,
+                addColorFragment
+            )
         }
+
+        transaction.commit()
+    }
+
+    private fun newColor() {
+        childFragmentManager
+            .beginTransaction()
+            .remove(addColorFragment)
+            .add(color_select_container.id, ColorSelect.newInstance())
+            .commit()
+
+        addColorFragment = AddAnotherColorFragment(newColorListener)
+
+        childFragmentManager
+            .beginTransaction()
+            .add(color_select_container.id, addColorFragment)
+            .commit()
     }
 }

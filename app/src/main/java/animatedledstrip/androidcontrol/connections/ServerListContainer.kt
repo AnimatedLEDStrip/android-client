@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.connections
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,63 +28,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.fragment_color_select_container.*
+import animatedledstrip.androidcontrol.utils.alsClientMap
+import kotlinx.android.synthetic.main.fragment_server_list.*
 
 /**
- * Holds all the fragments for creating an animation to send to the server.
+ * List of all servers
  */
-class ColorSelectContainerFragment(private val minimumColors: Int, private val unlimitedColors: Boolean) :
-    Fragment() {
-
-    private val newColorListener = View.OnClickListener {
-        check(it is Chip)
-        newColor()
-    }
-
-    private lateinit var addColorFragment: AddAnotherColorFragment
+class ServerListContainer : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_color_select_container, container, false)
+        return inflater.inflate(R.layout.fragment_server_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val transaction = childFragmentManager.beginTransaction()
-
-        for (i in 0 until minimumColors)
-            transaction.add(
-                color_select_container.id,
-                ColorSelect.newInstance()
-            )
-
-        if (unlimitedColors) {
-            addColorFragment = AddAnotherColorFragment(newColorListener)
-            transaction.add(
-                color_select_container.id,
-                addColorFragment
-            )
+        alsClientMap.forEach { (_, info) ->
+            parentFragmentManager.beginTransaction()
+                .add(
+                    servers.id,
+                    ServerFragment(info.ip, info.name),
+                    info.ip,
+                )
+                .commit()
         }
-
-        transaction.commit()
-    }
-
-    private fun newColor() {
-        childFragmentManager
-            .beginTransaction()
-            .remove(addColorFragment)
-            .add(color_select_container.id, ColorSelect.newInstance())
-            .commit()
-
-        addColorFragment = AddAnotherColorFragment(newColorListener)
-
-        childFragmentManager
-            .beginTransaction()
-            .add(color_select_container.id, addColorFragment)
-            .commit()
     }
 }

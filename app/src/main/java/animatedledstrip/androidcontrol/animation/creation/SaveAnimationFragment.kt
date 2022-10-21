@@ -6,16 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import kotlinx.android.synthetic.main.fragment_add_another_color.*
+import kotlinx.android.synthetic.main.fragment_save_animation.*
 
-/**
- *
- */
-class AddAnotherColorFragment(private val listener: View.OnClickListener) : Fragment() {
-
+class SaveAnimationFragment(private val listener: View.OnClickListener) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        add_new_color_button.setOnClickListener(listener)
+        save_anim_button.setOnClickListener(listener)
     }
 
     override fun onCreateView(
@@ -23,11 +19,11 @@ class AddAnotherColorFragment(private val listener: View.OnClickListener) : Frag
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_another_color, container, false)
+        return inflater.inflate(R.layout.fragment_save_animation, container, false)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(listener: View.OnClickListener) = AddAnotherColorFragment(listener)
+        fun newInstance(listener: View.OnClickListener) = SaveAnimationFragment(listener)
     }
 }

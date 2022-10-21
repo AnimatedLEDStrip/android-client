@@ -20,49 +20,60 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.connections
+package animatedledstrip.androidcontrol.animation.creation.param
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.alsClient
-import animatedledstrip.androidcontrol.utils.resetIpAndClearData
-import animatedledstrip.androidcontrol.utils.selectServerAndPopulateData
-import kotlinx.android.synthetic.main.fragment_connection.*
+import animatedledstrip.androidcontrol.animation.creation.popup.DoubleEditPopup
+import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
+import animatedledstrip.animations.AnimationParameter
+import kotlinx.android.synthetic.main.fragment_double_select.*
 
 /**
- * Shows a single server, with a button for selecting it
+ * Set a double property of the animation
  */
-class ConnectionFragment(private val ip: String = "") : Fragment() {
+class DoubleSelect(val parameter: AnimationParameter<Double>) : Fragment() {
 
-    var connectButton: Button? = null
+    private fun showEditDialog() {
+        val dialog = DoubleEditPopup(
+            double_param_value_text.text
+                .removePrefix("${parameter.name.camelToCapitalizedWords()}: ")
+                .removeSuffix("null")
+                .toString()
+                .toDoubleOrNull(),
+            parameter.name,
+            frag = this
+        )
+        dialog.show(parentFragmentManager, "${parameter}EditPopup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_connection, container, false)
+        return inflater.inflate(R.layout.fragment_double_select, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        server_name.text = ip
-        connect_button.text =
-            if (alsClient?.ip == ip) getString(R.string.server_list_button_connected)
-            else getString(R.string.server_list_button_disconnected)
-        connectButton = connect_button
-        connect_button.setOnClickListener {
-            if (alsClient?.ip == ip) {
-                resetIpAndClearData()
-            } else {
-                connectButton?.text = getString(R.string.server_list_button_connecting)
-                selectServerAndPopulateData(ip)
-            }
+
+        double_param_value_text.text = getString(
+            R.string.run_anim_label_param,
+            parameter.name.camelToCapitalizedWords(),
+            parameter.default?.toString()
+        )
+        double_param_card.setOnClickListener {
+            showEditDialog()
         }
     }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(parameter: AnimationParameter<Double>) = DoubleSelect(parameter)
+    }
+
 }

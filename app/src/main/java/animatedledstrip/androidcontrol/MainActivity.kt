@@ -26,11 +26,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -38,9 +35,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import animatedledstrip.androidcontrol.animation.creation.*
-import animatedledstrip.androidcontrol.connections.AddConnectionActivity
-import animatedledstrip.androidcontrol.connections.ConnectionFragment
+import animatedledstrip.androidcontrol.animation.creation.AnimationCreation
+import animatedledstrip.androidcontrol.animation.creation.ParamPopupListener
+import animatedledstrip.androidcontrol.animation.creation.param.*
+import animatedledstrip.androidcontrol.connections.AddServerActivity
+import animatedledstrip.androidcontrol.connections.ServerFragment
 import animatedledstrip.androidcontrol.settings.SettingsActivity
 import animatedledstrip.androidcontrol.tabs.TabAdapter
 import animatedledstrip.androidcontrol.utils.*
@@ -53,13 +52,13 @@ import animatedledstrip.leds.locationmanagement.Location
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_distance_select.*
 import kotlinx.android.synthetic.main.fragment_double_select.*
+import kotlinx.android.synthetic.main.fragment_id_select.*
 import kotlinx.android.synthetic.main.fragment_int_select.*
 import kotlinx.android.synthetic.main.fragment_location_select.*
 import kotlinx.android.synthetic.main.fragment_rotation_select.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.net.ConnectException
 
 /**
  * Starting point for the app
@@ -67,7 +66,6 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity(),
     AnimationCreation.OnFragmentInteractionListener,
     ParamPopupListener {
-
     /**
      * Name of the preferences file
      */
@@ -87,22 +85,26 @@ class MainActivity : AppCompatActivity(),
 
     private fun setConnectionCallbacks() {
         ConnectionEventActions.populateData = { ip ->
-            fab.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
-            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_send))
-
             val ipFrag =
-                supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+                supportFragmentManager.findFragmentByTag(ip) as ServerFragment?
             runOnUiThread {
-                supportActionBar?.title = getString(R.string.title_activity_main_connected, ip)
-                ipFrag?.connectButton?.text = getString(R.string.server_list_button_connected)
+                supportActionBar?.title = getString(
+                    R.string.title_activity_main_server_selected,
+                    alsClientMap[ip]?.name ?: ip,
+                )
+                ipFrag?.selectButton?.text = getString(R.string.server_list_button_selected)
             }
 
-            MainScope().launch(Dispatchers.IO) {
-                animationOptionAdapter.addAll(
-                    alsClient?.getSupportedAnimationsNames() ?: return@launch
-                )
-                runOnUiThread {
-                    tabAdapter.notifyDataSetChanged()
+            ioScope.launch(Dispatchers.IO) {
+                try {
+                    animationPropertyOptionAdapter.addAll(
+                        alsClient?.getSupportedAnimationsNames() ?: return@launch
+                    )
+                    runOnUiThread {
+                        tabAdapter.notifyDataSetChanged()
+                    }
+                } catch (e: ConnectException) {
+                    resetIpAndClearData()
                 }
             }
 
@@ -110,44 +112,22 @@ class MainActivity : AppCompatActivity(),
         }
 
         ConnectionEventActions.clearData = { ip ->
-            fab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-            fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_not_connected))
-
             val ipFrag =
-                supportFragmentManager.findFragmentByTag(ip) as ConnectionFragment?
+                supportFragmentManager.findFragmentByTag(ip) as ServerFragment?
             runOnUiThread {
-                supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
-                ipFrag?.connectButton?.text =
-                    getString(R.string.server_list_button_disconnected)
+                supportActionBar?.title = getString(R.string.title_activity_main_no_server_selected)
+                ipFrag?.selectButton?.text =
+                    getString(R.string.server_list_button_not_selected)
             }
 
             runOnUiThread {
-                animationOptionAdapter.clear()
+                animationPropertyOptionAdapter.clear()
                 tabAdapter.notifyDataSetChanged()
             }
 
             mPreferences.edit().putString(RECENT_IP_KEY, "").apply()
         }
     }
-
-    private fun setFABOnClick() {
-        fab.setOnClickListener {
-            runBlocking(Dispatchers.IO) {
-                alsClient?.startAnimation(animParams)
-            } ?: run {
-                Toast.makeText(
-                    this@MainActivity,
-                    getString(R.string.toast_body_not_connected),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
-            val selectFrag =
-                supportFragmentManager.findFragmentByTag("anim select") as AnimationCreation?
-            selectFrag?.resetView() ?: Log.d("FAB", "Error")
-        }
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,12 +141,12 @@ class MainActivity : AppCompatActivity(),
         viewPager.adapter = tabAdapter
         tabs.setupWithViewPager(viewPager)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.title_activity_main_disconnected)
+        supportActionBar?.title = getString(R.string.title_activity_main_no_server_selected)
 
         checkPermissions()
 
         mPreferences = getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
-        animationOptionAdapter =
+        animationPropertyOptionAdapter =
             ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -177,7 +157,6 @@ class MainActivity : AppCompatActivity(),
 
         loadPreferences()
         setConnectionCallbacks()
-        setFABOnClick()
 
         val recentIp = mPreferences.getString(RECENT_IP_KEY, "")!!
 
@@ -198,26 +177,20 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_add_ip -> {
-                startActivity(Intent(this, AddConnectionActivity::class.java))
-                true
-            }
-            R.id.action_disconnect -> {
-                if (alsClient != null)
-                    resetIpAndClearData()
-                else Toast.makeText(
-                    this,
-                    getString(R.string.toast_body_not_connected),
-                    Toast.LENGTH_SHORT
-                ).show()
+                startActivity(Intent(this, AddServerActivity::class.java))
                 true
             }
             R.id.action_clear -> {
-                MainScope().launch(Dispatchers.IO) {
-                    alsClient?.clearStrip() ?: Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.toast_body_not_connected),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                ioScope.launch(Dispatchers.IO) {
+                    try {
+                        alsClient?.clearStrip() ?: Toast.makeText(
+                            this@MainActivity,
+                            getString(R.string.toast_body_no_server_selected),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e: ConnectException) {
+                        resetIpAndClearData()
+                    }
                 }
                 true
             }
@@ -273,6 +246,21 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onDoubleDialogNegativeClick(dialog: DialogFragment) {}
+
+    override fun onIDDialogPositiveClick(
+        dialog: DialogFragment,
+        newValue: String,
+        frag: IDSelect
+    ) {
+        animParams.id = newValue
+        frag.id_param_value_text.text =
+            getString(
+                R.string.run_anim_label_id_param,
+                newValue,
+            )
+    }
+
+    override fun onIDDialogNegativeClick(dialog: DialogFragment) {}
 
     override fun onLocationDialogPositiveClick(
         dialog: DialogFragment,

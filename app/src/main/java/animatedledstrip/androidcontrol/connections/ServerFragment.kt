@@ -22,23 +22,25 @@
 
 package animatedledstrip.androidcontrol.connections
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.utils.alsClient
+import animatedledstrip.androidcontrol.utils.resetIpAndClearData
+import animatedledstrip.androidcontrol.utils.selectServerAndPopulateData
 import kotlinx.android.synthetic.main.fragment_server.*
 
 /**
- * Shows a single connection in the edit servers list.
+ * Shows a single server, with a button for selecting it
  */
-class ServerFragment(private var ip: String) : Fragment() {
+class ServerFragment(private val ip: String = "", private val name: String = "") : Fragment() {
 
-    private fun showEditDialog() {
-        val dialog = ServerEditPopup(ip)
-        dialog.show(parentFragmentManager, "ServerEditPopup")
-    }
+    var selectButton: Button? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,9 +52,24 @@ class ServerFragment(private var ip: String) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        server_name.text = ip
-        server_edit.setOnClickListener {
-            showEditDialog()
+        server_ip.text = ip
+        if (name.isNotBlank()) {
+            server_name.text = name
+            server_name.setTypeface(null, Typeface.NORMAL)
+        } else {
+            server_name.text = getString(R.string.server_list_unnamed_server)
+            server_name.setTypeface(null, Typeface.ITALIC)
+        }
+        select_button.text =
+            if (alsClient?.ip == ip) getString(R.string.server_list_button_selected)
+            else getString(R.string.server_list_button_not_selected)
+        selectButton = select_button
+        select_button.setOnClickListener {
+            if (alsClient?.ip == ip) {
+                resetIpAndClearData()
+            } else {
+                selectServerAndPopulateData(ip)
+            }
         }
     }
 }

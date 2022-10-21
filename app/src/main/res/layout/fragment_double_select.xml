@@ -12,7 +12,7 @@
     app:cardBackgroundColor="@color/colorViewBack"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    tools:context=".animation.creation.DoubleSelect">
+    tools:context=".animation.creation.param.DoubleSelect">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

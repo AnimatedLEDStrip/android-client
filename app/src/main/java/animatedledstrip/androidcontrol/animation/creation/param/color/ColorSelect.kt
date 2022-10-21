@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.param.color
 
 import android.content.Context
 import android.graphics.Typeface
@@ -97,7 +97,7 @@ class ColorSelect : Fragment() {
         listOf(ColorContainer.Black, ColorContainer.Red, ColorContainer.Green, ColorContainer.Blue, ColorContainer.Yellow, ColorContainer.Cyan, ColorContainer.Magenta)
 
     private val colors =
-        (primaryColors + CCPresets.minus(primaryColors).minus(ColorContainer.Aqua))
+        (primaryColors + CCPresets.minus(primaryColors.toSet()).minus(ColorContainer.Aqua))
             .map { it.color.toARGB() }
             .toIntArray()
 

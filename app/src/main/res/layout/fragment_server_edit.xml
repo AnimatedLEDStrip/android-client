@@ -11,16 +11,17 @@
     app:cardBackgroundColor="@color/colorViewBack"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    tools:context=".connections.ServerFragment">
+    tools:context=".connections.ServerEditFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/server_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/server_edit_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textColor="@color/colorText"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,24 +29,28 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/server_ip"
-            android:layout_width="wrap_content"
+            android:id="@+id/server_edit_ip"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/server_edit_default_ip"
             android:textColor="@color/colorText"
-            android:textSize="12sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/server_name" />
+            app:layout_constraintTop_toBottomOf="@+id/server_edit_name" />
 
         <Button
-            android:id="@+id/select_button"
-            android:layout_width="wrap_content"
+            android:id="@+id/server_edit_button"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="@string/server_list_button_not_selected"
+            android:backgroundTint="#008800"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="2dp"
+            android:text="@string/server_edit_button_edit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/server_ip" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

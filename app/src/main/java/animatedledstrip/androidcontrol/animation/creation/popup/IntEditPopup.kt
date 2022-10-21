@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.popup
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -36,6 +36,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
+import animatedledstrip.androidcontrol.animation.creation.param.IntSelect
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
 
 /**
@@ -73,9 +74,9 @@ class IntEditPopup(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        checkNotNull(activity)
+        requireActivity()
         return activity.let {
-            textIn = EditText(this.context!!).apply {
+            textIn = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 if (initialValue != null) setText(initialValue.toString())
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -83,7 +84,7 @@ class IntEditPopup(
                 }
             }
 
-            val container = FrameLayout(this.context!!)
+            val container = FrameLayout(this.requireContext())
             container.addView(textIn)
 
             AlertDialog.Builder(it)

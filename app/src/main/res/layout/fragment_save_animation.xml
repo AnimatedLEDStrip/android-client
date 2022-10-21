@@ -8,21 +8,20 @@
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginBottom="5dp"
-    app:cardBackgroundColor="@color/colorViewBack"
+    app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
     tools:context=".animation.creation.param.color.AddAnotherColorFragment">
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/add_new_color_button"
+        android:id="@+id/save_anim_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        app:chipBackgroundColor="@color/colorViewBack"
-        android:text="@string/anim_add_color_button"
+        app:chipBackgroundColor="@color/colorPrimary"
+        android:text="@string/anim_create_button_save"
         android:textColor="@color/colorText"
         android:textAlignment="center"
-        android:textAppearance="@style/text18"
-        />
+        android:textAppearance="@style/text18" />
 
 </androidx.cardview.widget.CardView>

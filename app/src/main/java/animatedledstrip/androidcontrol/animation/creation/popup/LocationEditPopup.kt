@@ -20,7 +20,7 @@
  *  THE SOFTWARE.
  */
 
-package animatedledstrip.androidcontrol.animation.creation
+package animatedledstrip.androidcontrol.animation.creation.popup
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -35,42 +35,39 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.fragment.app.DialogFragment
 import animatedledstrip.androidcontrol.R
-import animatedledstrip.androidcontrol.utils.animParams
+import animatedledstrip.androidcontrol.animation.creation.param.LocationSelect
 import animatedledstrip.androidcontrol.utils.camelToCapitalizedWords
-import animatedledstrip.animations.parameters.Distance
-import animatedledstrip.animations.parameters.PercentDistance
+import animatedledstrip.leds.locationmanagement.Location
 
 /**
- * Pops up to modify a distance parameter
+ * Pops up to modify a location parameter
  */
-class DistanceEditPopup(
-    private val initialValue: Distance,
+class LocationEditPopup(
+    private val initialValue: Location,
     private val paramName: String,
-    private val frag: DistanceSelect
+    private val frag: LocationSelect
 ) : DialogFragment() {
 
-    private lateinit var listener: DistanceEditListener
+    private lateinit var listener: LocationEditListener
     private lateinit var textInX: EditText
     private lateinit var textInY: EditText
     private lateinit var textInZ: EditText
-    private lateinit var distanceTypeToggle: ToggleButton
 
-    interface DistanceEditListener {
-        fun onDistanceDialogPositiveClick(
+    interface LocationEditListener {
+        fun onLocationDialogPositiveClick(
             dialog: DialogFragment, parameter: String,
             newValueX: String, newValueY: String, newValueZ: String,
-            isPercentDistance: Boolean, frag: DistanceSelect
+            frag: LocationSelect
         )
 
-        fun onDistanceDialogNegativeClick(dialog: DialogFragment)
+        fun onLocationDialogNegativeClick(dialog: DialogFragment)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        check(context is DistanceEditListener)
+        check(context is LocationEditListener)
         listener = context
     }
 
@@ -78,27 +75,27 @@ class DistanceEditPopup(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_distance_edit, container, false)
+        return inflater.inflate(R.layout.popup_location_edit, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        checkNotNull(activity)
+        requireActivity()
         return activity.let {
-            textInX = EditText(this.context!!).apply {
+            textInX = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.x.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
-            textInY = EditText(this.context!!).apply {
+            textInY = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.y.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
                     setMargins(15, 0, 30, 0)
                 }
             }
-            textInZ = EditText(this.context!!).apply {
+            textInZ = EditText(this.requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_CLASS_TEXT
                 setText(initialValue.z.toString())
                 layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -106,88 +103,62 @@ class DistanceEditPopup(
                 }
             }
 
-            distanceTypeToggle = ToggleButton(this.context!!).apply {
-                text = context.getString(R.string.distance_absolute)
-                textOn = context.getString(R.string.distance_percent)
-                textOff = context.getString(R.string.distance_absolute)
-                isChecked = when (animParams.distanceParams[paramName]) {
-                    is PercentDistance -> true
-                    else -> false
-                }
-            }
-
-            val container = LinearLayout(this.context!!).apply {
+            val container = LinearLayout(this.requireContext()).apply {
                 orientation = LinearLayout.VERTICAL
 
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@LocationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "X")
+                    addView(TextView(this@LocationEditPopup.requireContext()).apply {
+                        text = "X: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
                     })
                     addView(textInX)
                 })
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@LocationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "Y")
+                    addView(TextView(this@LocationEditPopup.requireContext()).apply {
+                        text = "Y: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
                     })
                     addView(textInY)
                 })
-                addView(LinearLayout(this.context!!).apply {
+                addView(LinearLayout(this@LocationEditPopup.requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
-                    addView(TextView(this.context!!).apply {
-                        text = context.getString(R.string.popup_label, "Z")
+                    addView(TextView(this@LocationEditPopup.requireContext()).apply {
+                        text = "Z: "
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(30, 0, 15, 0)
                         }
                     })
                     addView(textInZ)
                 })
-                addView(distanceTypeToggle)
             }
 
             AlertDialog.Builder(it)
                 .setView(container)
-                .setTitle(
-                    getString(
-                        R.string.popup_dialog_header_edit_number,
-                        paramName.camelToCapitalizedWords()
-                    )
-                )
+                .setTitle(getString(R.string.popup_dialog_header_edit_number, paramName.camelToCapitalizedWords()))
                 .setPositiveButton(getString(R.string.popup_dialog_button_save)) { _, _ ->
-                    listener.onDistanceDialogPositiveClick(
-                        this, paramName,
+                    listener.onLocationDialogPositiveClick(
+                        this,
+                        paramName,
                         textInX.text.toString(),
                         textInY.text.toString(),
                         textInZ.text.toString(),
-                        distanceTypeToggle.isChecked,
                         frag
                     )
                 }
                 .setNegativeButton(getString(R.string.popup_dialog_button_cancel)) { _, _ ->
-                    listener.onDistanceDialogNegativeClick(this)
+                    listener.onLocationDialogNegativeClick(this)
                 }
                 .create()
                 .apply {
                     setOnShowListener {
-                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                            resources.getColor(
-                                R.color.colorText,
-                                null
-                            )
-                        )
-                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                            resources.getColor(
-                                R.color.colorText,
-                                null
-                            )
-                        )
+                        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorText, null))
+                        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorText, null))
                     }
                 }
         }
